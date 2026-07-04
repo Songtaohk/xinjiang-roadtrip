@@ -176,6 +176,41 @@ table.info-table td.label {
 .activity-item .note, .hotel-item .note {
   font-size: 13.5px;
 }
+.activity-item .intro {
+  font-size: 13.5px;
+  color: var(--text);
+  background: #F5F8F6;
+  border-left: 3px solid var(--teal-light);
+  padding: 6px 10px;
+  margin: 4px 0 6px;
+  border-radius: 4px;
+}
+.depth-box {
+  margin-top: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.depth-row {
+  font-size: 13px;
+  color: var(--text);
+}
+.depth-tag {
+  display: inline-block;
+  font-size: 11px;
+  padding: 1px 8px;
+  border-radius: 10px;
+  margin-right: 6px;
+  font-weight: 600;
+}
+.depth-tag.shallow {
+  background: #E3EDE8;
+  color: var(--teal-light);
+}
+.depth-tag.deep {
+  background: var(--teal);
+  color: white;
+}
 .food-list {
   font-size: 14px;
   padding-left: 18px;
@@ -290,12 +325,19 @@ footer.site-footer {
       <div class="activity-item">
         <div class="name">环湖自驾</div>
         <div class="meta">游览时间：约1-1.5小时</div>
+        <div class="intro">赛里木湖是新疆最大最高的高山冷水湖，环湖公路沿湖而建，雪山、草原、蓝湖层层叠映，风景随光线时刻变化。</div>
         <div class="note">从东门进入后可自驾环湖，沿途观景点较多</div>
+        <div class="depth-box">
+          <div class="depth-row"><span class="depth-tag shallow">浅度</span>沿主路停靠1-2个观景点拍照，40分钟</div>
+          <div class="depth-row"><span class="depth-tag deep">深度</span>环湖一圈，多停几个观景台，探访湖东岸等小众角度，1.5-2小时</div>
+        </div>
       </div>
       <div class="activity-item">
         <div class="name">湖畔日落</div>
         <div class="meta">游览时间：傍晚</div>
+        
         <div class="note">入住后即可在营地看日落</div>
+        
       </div>
   </div>
 
@@ -304,11 +346,22 @@ footer.site-footer {
     <div style="margin-bottom:10px;"><strong style="font-size:13.5px;color:var(--muted);">推荐饮食</strong><ul class="food-list"><li>湖畔烤全羊</li><li>哈萨克奶茶</li></ul></div>
     <div><strong style="font-size:13.5px;color:var(--muted);">当晚住宿（3-4星，推荐1-3选）</strong>
       <div class="hotel-item">
-        <div class="name">赛里木湖高端星空帐篷营地/房车</div>
-        <div class="meta">赛里木湖景区内（如"点将台"同级） · 豪华房车均价约¥3000/晚；普通营位费约¥200-400/晚（不含房车本身）</div>
-        <div class="note">推窗见湖，可观星</div>
+        <div class="name">赛里木湖瑞景度假营地</div>
+        <div class="meta">赛里木湖景区核心区 · 豪华帐篷/房车价格较高，建议携程查实时价</div>
+        <div class="note">帐篷营地，点评"帐篷大、暖和，早上能欣赏到赛里木湖美景"，每间配宽敞户外露营平台</div>
+      </div>
+      <div class="hotel-item">
+        <div class="name">赛里木湖望山一号院子（赛里木湖景区店）</div>
+        <div class="meta">赛里木湖新游客中心附近 · 建议携程查实时价</div>
+        <div class="note">携程2201条点评（2173条推荐），管家式一对一服务，房间含地暖、干湿分离卫浴、大阳台</div>
+      </div>
+      <div class="hotel-item">
+        <div class="name">赛里木湖青谷民宿</div>
+        <div class="meta">赛里木湖景区 · 建议携程查实时价</div>
+        <div class="note">2024年开业，携程评分4.9（目前搜索到评分最高的民宿）</div>
       </div></div>
   </div>
+  
 
   <div class="prevnext">
     <a href="day7.html" class="">← 上一天：D7</a>
@@ -325,8 +378,8 @@ window._AMapSecurityConfig = { securityJsCode: "f5122d0c0aae74cc4c4e8f4ce0a196cc
 (function(){
   var map = new AMap.Map("amap-day-8", { zoom: 6, resizeEnable: true });
   var routePoints = [{"keyword":"世界魔鬼城","city":"克拉玛依市"},{"keyword":"赛里木湖","city":"博尔塔拉蒙古自治州"}];
-  var hotels = [{"name":"赛里木湖高端星空帐篷营地/房车","city":"博尔塔拉蒙古自治州"}];
-  var rentalMarker = null;
+  var hotels = [{"name":"赛里木湖瑞景度假营地","city":"博尔塔拉蒙古自治州"},{"name":"赛里木湖望山一号院子（赛里木湖景区店）","city":"博尔塔拉蒙古自治州"},{"name":"赛里木湖青谷民宿","city":"博尔塔拉蒙古自治州"}];
+  var rentals = [];
 
   function geocode(address, city) {
     return new Promise(function(resolve){
@@ -356,9 +409,13 @@ window._AMapSecurityConfig = { securityJsCode: "f5122d0c0aae74cc4c4e8f4ce0a196cc
       });
     });
   }
-  function addRentalMarker(loc){
-    if (!rentalMarker || !loc) return;
-    new AMap.Marker({ position: loc, map: map, icon: rentalIcon(), title: rentalMarker.label, label: { content: rentalMarker.label, direction: "bottom" } });
+  function addRentalMarkers(){
+    rentals.forEach(function(r){
+      geocode(r.name, r.city).then(function(loc){
+        if (!loc) return;
+        new AMap.Marker({ position: loc, map: map, icon: rentalIcon(), title: r.label, label: { content: r.label, direction: "bottom" } });
+      });
+    });
   }
 
   if (routePoints.length === 1) {
@@ -367,11 +424,11 @@ window._AMapSecurityConfig = { securityJsCode: "f5122d0c0aae74cc4c4e8f4ce0a196cc
         new AMap.Marker({ position: loc, map: map, title: routePoints[0].keyword });
         map.setCenter(loc);
         map.setZoom(11);
-        if (rentalMarker && rentalMarker.pointIndex === 0) addRentalMarker(loc);
       } else {
         document.getElementById("amap-status-8").innerHTML = "定位失败，请在高德地图App中手动搜索：" + routePoints[0].keyword;
       }
       addHotelMarkers();
+      addRentalMarkers();
     });
   } else {
     Promise.all(routePoints.map(function(p){ return geocode(p.keyword, p.city); })).then(function(locs){
@@ -380,6 +437,7 @@ window._AMapSecurityConfig = { securityJsCode: "f5122d0c0aae74cc4c4e8f4ce0a196cc
       if (validIdx.length < 2) {
         document.getElementById("amap-status-8").innerHTML = "部分地点定位失败，无法规划路线，请在高德地图App中手动搜索：" + routePoints.map(function(p){ return p.keyword; }).join(" → ");
         addHotelMarkers();
+        addRentalMarkers();
         return;
       }
       var start = locs[validIdx[0]];
@@ -391,10 +449,8 @@ window._AMapSecurityConfig = { securityJsCode: "f5122d0c0aae74cc4c4e8f4ce0a196cc
           document.getElementById("amap-status-8").innerHTML = "驾车路线规划失败，请在高德地图App中手动搜索：" + routePoints.map(function(p){ return p.keyword; }).join(" → ");
         }
         map.setFitView();
-        if (rentalMarker && locs[rentalMarker.pointIndex]) {
-          addRentalMarker(locs[rentalMarker.pointIndex]);
-        }
         addHotelMarkers();
+        addRentalMarkers();
       });
     });
   }

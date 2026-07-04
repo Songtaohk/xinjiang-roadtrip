@@ -176,6 +176,41 @@ table.info-table td.label {
 .activity-item .note, .hotel-item .note {
   font-size: 13.5px;
 }
+.activity-item .intro {
+  font-size: 13.5px;
+  color: var(--text);
+  background: #F5F8F6;
+  border-left: 3px solid var(--teal-light);
+  padding: 6px 10px;
+  margin: 4px 0 6px;
+  border-radius: 4px;
+}
+.depth-box {
+  margin-top: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.depth-row {
+  font-size: 13px;
+  color: var(--text);
+}
+.depth-tag {
+  display: inline-block;
+  font-size: 11px;
+  padding: 1px 8px;
+  border-radius: 10px;
+  margin-right: 6px;
+  font-weight: 600;
+}
+.depth-tag.shallow {
+  background: #E3EDE8;
+  color: var(--teal-light);
+}
+.depth-tag.deep {
+  background: var(--teal);
+  color: white;
+}
 .food-list {
   font-size: 14px;
   padding-left: 18px;
@@ -290,12 +325,19 @@ footer.site-footer {
       <div class="activity-item">
         <div class="name">睡到自然醒，中午出发</div>
         <div class="meta">游览时间：—</div>
+        
         <div class="note">第2天，适度放松节奏</div>
+        
       </div>
       <div class="activity-item">
         <div class="name">九龙潭公园</div>
         <div class="meta">游览时间：约1小时</div>
+        <div class="intro">克拉玛依河源头景观，8米高人工瀑布配9条龙形喷水口，四周绿地环绕，是石油城里少见的水景公园。</div>
         <div class="note">克拉玛依市区人工湖景观，傍晚散步</div>
+        <div class="depth-box">
+          <div class="depth-row"><span class="depth-tag shallow">浅度</span>瀑布前拍照+环潭散步一圈，20-30分钟</div>
+          <div class="depth-row"><span class="depth-tag deep">深度</span>沿河岸步道走完全程，跨两座小拱桥，赶上有灯光秀则驻留更久，1小时</div>
+        </div>
       </div>
   </div>
 
@@ -304,16 +346,22 @@ footer.site-footer {
     <div style="margin-bottom:10px;"><strong style="font-size:13.5px;color:var(--muted);">推荐饮食</strong><ul class="food-list"><li>椒麻鸡（克拉玛依特色菜）</li><li>手抓饭</li></ul></div>
     <div><strong style="font-size:13.5px;color:var(--muted);">当晚住宿（3-4星，推荐1-3选）</strong>
       <div class="hotel-item">
-        <div class="name">克拉玛依恒隆国际酒店</div>
-        <div class="meta">克拉玛依市区（石油大厦店） · 未查到确切数字，建议携程查实时价</div>
-        <div class="note">商务型高档酒店，隔音好，市区位置驾车方便</div>
+        <div class="name">克拉玛依亚朵酒店</div>
+        <div class="meta">克拉玛依市区 · 建议携程查实时价</div>
+        <div class="note">携程评分4.8（1108条点评），克拉玛依高档酒店榜第1名，房间设施舒适整洁</div>
       </div>
       <div class="hotel-item">
-        <div class="name">龙华大酒店</div>
-        <div class="meta">克拉玛依西环路店 · 建议携程查实时价</div>
-        <div class="note">同级商务酒店选择</div>
+        <div class="name">和颐酒店(克拉玛依石油总部店)</div>
+        <div class="meta">克拉玛依市区 · 建议携程查实时价</div>
+        <div class="note">携程评分4.7（1339条点评），点评提及"停车方便、房间干净、空气清新"</div>
+      </div>
+      <div class="hotel-item">
+        <div class="name">全季酒店(克拉玛依百瑞广场店)</div>
+        <div class="meta">克拉玛依市区百瑞广场 · 建议携程查实时价</div>
+        <div class="note">点评"房间干净整洁，位置方便"，连锁标准化管理</div>
       </div></div>
   </div>
+  
 
   <div class="prevnext">
     <a href="day1.html" class="">← 上一天：D1</a>
@@ -330,8 +378,8 @@ window._AMapSecurityConfig = { securityJsCode: "f5122d0c0aae74cc4c4e8f4ce0a196cc
 (function(){
   var map = new AMap.Map("amap-day-2", { zoom: 6, resizeEnable: true });
   var routePoints = [{"keyword":"乌鲁木齐市","city":"乌鲁木齐市"},{"keyword":"克拉玛依市","city":"克拉玛依市"}];
-  var hotels = [{"name":"克拉玛依恒隆国际酒店","city":"克拉玛依市"},{"name":"龙华大酒店","city":"克拉玛依市"}];
-  var rentalMarker = null;
+  var hotels = [{"name":"克拉玛依亚朵酒店","city":"克拉玛依市"},{"name":"和颐酒店(克拉玛依石油总部店)","city":"克拉玛依市"},{"name":"全季酒店(克拉玛依百瑞广场店)","city":"克拉玛依市"}];
+  var rentals = [];
 
   function geocode(address, city) {
     return new Promise(function(resolve){
@@ -361,9 +409,13 @@ window._AMapSecurityConfig = { securityJsCode: "f5122d0c0aae74cc4c4e8f4ce0a196cc
       });
     });
   }
-  function addRentalMarker(loc){
-    if (!rentalMarker || !loc) return;
-    new AMap.Marker({ position: loc, map: map, icon: rentalIcon(), title: rentalMarker.label, label: { content: rentalMarker.label, direction: "bottom" } });
+  function addRentalMarkers(){
+    rentals.forEach(function(r){
+      geocode(r.name, r.city).then(function(loc){
+        if (!loc) return;
+        new AMap.Marker({ position: loc, map: map, icon: rentalIcon(), title: r.label, label: { content: r.label, direction: "bottom" } });
+      });
+    });
   }
 
   if (routePoints.length === 1) {
@@ -372,11 +424,11 @@ window._AMapSecurityConfig = { securityJsCode: "f5122d0c0aae74cc4c4e8f4ce0a196cc
         new AMap.Marker({ position: loc, map: map, title: routePoints[0].keyword });
         map.setCenter(loc);
         map.setZoom(11);
-        if (rentalMarker && rentalMarker.pointIndex === 0) addRentalMarker(loc);
       } else {
         document.getElementById("amap-status-2").innerHTML = "定位失败，请在高德地图App中手动搜索：" + routePoints[0].keyword;
       }
       addHotelMarkers();
+      addRentalMarkers();
     });
   } else {
     Promise.all(routePoints.map(function(p){ return geocode(p.keyword, p.city); })).then(function(locs){
@@ -385,6 +437,7 @@ window._AMapSecurityConfig = { securityJsCode: "f5122d0c0aae74cc4c4e8f4ce0a196cc
       if (validIdx.length < 2) {
         document.getElementById("amap-status-2").innerHTML = "部分地点定位失败，无法规划路线，请在高德地图App中手动搜索：" + routePoints.map(function(p){ return p.keyword; }).join(" → ");
         addHotelMarkers();
+        addRentalMarkers();
         return;
       }
       var start = locs[validIdx[0]];
@@ -396,10 +449,8 @@ window._AMapSecurityConfig = { securityJsCode: "f5122d0c0aae74cc4c4e8f4ce0a196cc
           document.getElementById("amap-status-2").innerHTML = "驾车路线规划失败，请在高德地图App中手动搜索：" + routePoints.map(function(p){ return p.keyword; }).join(" → ");
         }
         map.setFitView();
-        if (rentalMarker && locs[rentalMarker.pointIndex]) {
-          addRentalMarker(locs[rentalMarker.pointIndex]);
-        }
         addHotelMarkers();
+        addRentalMarkers();
       });
     });
   }

@@ -176,6 +176,41 @@ table.info-table td.label {
 .activity-item .note, .hotel-item .note {
   font-size: 13.5px;
 }
+.activity-item .intro {
+  font-size: 13.5px;
+  color: var(--text);
+  background: #F5F8F6;
+  border-left: 3px solid var(--teal-light);
+  padding: 6px 10px;
+  margin: 4px 0 6px;
+  border-radius: 4px;
+}
+.depth-box {
+  margin-top: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.depth-row {
+  font-size: 13px;
+  color: var(--text);
+}
+.depth-tag {
+  display: inline-block;
+  font-size: 11px;
+  padding: 1px 8px;
+  border-radius: 10px;
+  margin-right: 6px;
+  font-weight: 600;
+}
+.depth-tag.shallow {
+  background: #E3EDE8;
+  color: var(--teal-light);
+}
+.depth-tag.deep {
+  background: var(--teal);
+  color: white;
+}
 .food-list {
   font-size: 14px;
   padding-left: 18px;
@@ -290,12 +325,19 @@ footer.site-footer {
       <div class="activity-item">
         <div class="name">禾木桥、白桦林漫步</div>
         <div class="meta">游览时间：约1.5小时</div>
+        <div class="intro">跨禾木河的木桥连接村庄与对岸白桦林，秋季桦叶金黄、河水清澈见底，是禾木最经典的取景地之一。</div>
         <div class="note">下午抵达后节奏放松</div>
+        <div class="depth-box">
+          <div class="depth-row"><span class="depth-tag shallow">浅度</span>过桥拍照，白桦林边走一小段，20分钟</div>
+          <div class="depth-row"><span class="depth-tag deep">深度</span>穿过白桦林走到对岸小路，绕行村庄外围一圈，1小时</div>
+        </div>
       </div>
       <div class="activity-item">
         <div class="name">悠闲下午茶</div>
         <div class="meta">游览时间：约1小时</div>
+        
         <div class="note">村内多家咖啡馆/茶室可选</div>
+        
       </div>
   </div>
 
@@ -304,16 +346,22 @@ footer.site-footer {
     <div style="margin-bottom:10px;"><strong style="font-size:13.5px;color:var(--muted);">推荐饮食</strong><ul class="food-list"><li>图瓦人家宴（提前预订更佳）</li><li>俄式下午茶点心</li></ul></div>
     <div><strong style="font-size:13.5px;color:var(--muted);">当晚住宿（3-4星，推荐1-3选）</strong>
       <div class="hotel-item">
-        <div class="name">禾木山庄</div>
-        <div class="meta">禾木村村口 · 未查到确切数字</div>
-        <div class="note">图瓦人木屋风格，2009年开业，评价较好，控噪佳</div>
+        <div class="name">禾木安·慢民宿(禾木桥店)</div>
+        <div class="meta">禾木村，禾木桥附近 · 档次较高，建议携程查实时价</div>
+        <div class="note">携程165条点评（164条推荐），"环境优雅、设施很好，公区大但仅四个房间，不会嘈杂"，含远红外桑拿房等设施</div>
       </div>
       <div class="hotel-item">
-        <div class="name">禾木安·慢民宿</div>
-        <div class="meta">禾木村内 · 未查到确切数字，建议携程查实时价</div>
-        <div class="note">更顶级，含管家服务/私享庭院汤池，价格相应更高</div>
+        <div class="name">禾木北野民宿</div>
+        <div class="meta">禾木村，离桥头公交车站不到100米 · 建议携程查实时价</div>
+        <div class="note">2007年开业，携程评分4.6（68条点评），"位置好，房间设施齐全，卫生情况不错"</div>
+      </div>
+      <div class="hotel-item">
+        <div class="name">禾木山野一墅</div>
+        <div class="meta">禾木老村 · 建议携程查实时价</div>
+        <div class="note">点评"环境很好也很安静，清晨安静，溜达特别舒服"，工作人员提前联系接送</div>
       </div></div>
   </div>
+  
 
   <div class="prevnext">
     <a href="day4.html" class="">← 上一天：D4</a>
@@ -330,8 +378,8 @@ window._AMapSecurityConfig = { securityJsCode: "f5122d0c0aae74cc4c4e8f4ce0a196cc
 (function(){
   var map = new AMap.Map("amap-day-5", { zoom: 6, resizeEnable: true });
   var routePoints = [{"keyword":"贾登峪游客中心","city":"阿勒泰地区"},{"keyword":"禾木村","city":"阿勒泰地区"}];
-  var hotels = [{"name":"禾木山庄","city":"阿勒泰地区"},{"name":"禾木安·慢民宿","city":"阿勒泰地区"}];
-  var rentalMarker = null;
+  var hotels = [{"name":"禾木安·慢民宿(禾木桥店)","city":"阿勒泰地区"},{"name":"禾木北野民宿","city":"阿勒泰地区"},{"name":"禾木山野一墅","city":"阿勒泰地区"}];
+  var rentals = [];
 
   function geocode(address, city) {
     return new Promise(function(resolve){
@@ -361,9 +409,13 @@ window._AMapSecurityConfig = { securityJsCode: "f5122d0c0aae74cc4c4e8f4ce0a196cc
       });
     });
   }
-  function addRentalMarker(loc){
-    if (!rentalMarker || !loc) return;
-    new AMap.Marker({ position: loc, map: map, icon: rentalIcon(), title: rentalMarker.label, label: { content: rentalMarker.label, direction: "bottom" } });
+  function addRentalMarkers(){
+    rentals.forEach(function(r){
+      geocode(r.name, r.city).then(function(loc){
+        if (!loc) return;
+        new AMap.Marker({ position: loc, map: map, icon: rentalIcon(), title: r.label, label: { content: r.label, direction: "bottom" } });
+      });
+    });
   }
 
   if (routePoints.length === 1) {
@@ -372,11 +424,11 @@ window._AMapSecurityConfig = { securityJsCode: "f5122d0c0aae74cc4c4e8f4ce0a196cc
         new AMap.Marker({ position: loc, map: map, title: routePoints[0].keyword });
         map.setCenter(loc);
         map.setZoom(11);
-        if (rentalMarker && rentalMarker.pointIndex === 0) addRentalMarker(loc);
       } else {
         document.getElementById("amap-status-5").innerHTML = "定位失败，请在高德地图App中手动搜索：" + routePoints[0].keyword;
       }
       addHotelMarkers();
+      addRentalMarkers();
     });
   } else {
     Promise.all(routePoints.map(function(p){ return geocode(p.keyword, p.city); })).then(function(locs){
@@ -385,6 +437,7 @@ window._AMapSecurityConfig = { securityJsCode: "f5122d0c0aae74cc4c4e8f4ce0a196cc
       if (validIdx.length < 2) {
         document.getElementById("amap-status-5").innerHTML = "部分地点定位失败，无法规划路线，请在高德地图App中手动搜索：" + routePoints.map(function(p){ return p.keyword; }).join(" → ");
         addHotelMarkers();
+        addRentalMarkers();
         return;
       }
       var start = locs[validIdx[0]];
@@ -396,10 +449,8 @@ window._AMapSecurityConfig = { securityJsCode: "f5122d0c0aae74cc4c4e8f4ce0a196cc
           document.getElementById("amap-status-5").innerHTML = "驾车路线规划失败，请在高德地图App中手动搜索：" + routePoints.map(function(p){ return p.keyword; }).join(" → ");
         }
         map.setFitView();
-        if (rentalMarker && locs[rentalMarker.pointIndex]) {
-          addRentalMarker(locs[rentalMarker.pointIndex]);
-        }
         addHotelMarkers();
+        addRentalMarkers();
       });
     });
   }

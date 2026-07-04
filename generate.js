@@ -85,11 +85,11 @@ const HOTEL_CITY_BIAS = {
   15: null,
 };
 
-// Rental car pickup/return markers, reusing already-geocoded route point coordinates
-// (pointIndex = index into that day's WAYPOINTS_CN array).
-const RENTAL_MARKERS = {
-  1: { label: "🚗 取车点：机场租车中心", pointIndex: 0 },
-  14: { label: "🚗 还车点：机场租车中心", pointIndex: 2 },
+// Rental car pickup (Day 1) / return (Day 14) label prefixes for map markers,
+// geocoded directly by each rental company's real name+address (see data.js rentalOptions).
+const RENTAL_LABEL_PREFIX = {
+  1: "🚗 取车：",
+  14: "🚗 还车：",
 };
 
 function hotelListForDay(d) {
@@ -98,6 +98,12 @@ function hotelListForDay(d) {
   return d.hotels
     .filter(h => h.name && !h.name.startsWith("（同"))
     .map(h => ({ name: h.name, city }));
+}
+
+function rentalListForDay(d) {
+  if (!d.rentalOptions) return [];
+  const prefix = RENTAL_LABEL_PREFIX[d.num] || "🚗 ";
+  return d.rentalOptions.map(r => ({ name: r.name, city: "乌鲁木齐市", label: prefix + r.name }));
 }
 
 const CSS = `
@@ -272,6 +278,41 @@ table.info-table td.label {
 .activity-item .note, .hotel-item .note {
   font-size: 13.5px;
 }
+.activity-item .intro {
+  font-size: 13.5px;
+  color: var(--text);
+  background: #F5F8F6;
+  border-left: 3px solid var(--teal-light);
+  padding: 6px 10px;
+  margin: 4px 0 6px;
+  border-radius: 4px;
+}
+.depth-box {
+  margin-top: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.depth-row {
+  font-size: 13px;
+  color: var(--text);
+}
+.depth-tag {
+  display: inline-block;
+  font-size: 11px;
+  padding: 1px 8px;
+  border-radius: 10px;
+  margin-right: 6px;
+  font-weight: 600;
+}
+.depth-tag.shallow {
+  background: #E3EDE8;
+  color: var(--teal-light);
+}
+.depth-tag.deep {
+  background: var(--teal);
+  color: white;
+}
 .food-list {
   font-size: 14px;
   padding-left: 18px;
@@ -414,22 +455,22 @@ const JS_HELPERS = `
 
 // Builds the AMap init script for a single day's map div: real driving route
 // (via geocoded coordinates, not keyword search, for reliability), hotel markers,
-// and rental car pickup/return markers where applicable.
-function amapDayInitScript(dayNum, points, hotels, rentalMarker) {
+// and rental car pickup/return markers (geocoded by each company's real name+city).
+function amapDayInitScript(dayNum, points, hotels, rentals) {
   const mapId = `amap-day-${dayNum}`;
   const statusId = `amap-status-${dayNum}`;
   if (!points || points.length === 0) return "";
 
   const pointsJson = JSON.stringify(points);
   const hotelsJson = JSON.stringify(hotels || []);
-  const rentalJson = rentalMarker ? JSON.stringify(rentalMarker) : "null";
+  const rentalsJson = JSON.stringify(rentals || []);
 
   return `<script>
 (function(){
   var map = new AMap.Map("${mapId}", { zoom: 6, resizeEnable: true });
   var routePoints = ${pointsJson};
   var hotels = ${hotelsJson};
-  var rentalMarker = ${rentalJson};
+  var rentals = ${rentalsJson};
 ${JS_HELPERS}
   function addHotelMarkers(){
     hotels.forEach(function(h){
@@ -439,9 +480,13 @@ ${JS_HELPERS}
       });
     });
   }
-  function addRentalMarker(loc){
-    if (!rentalMarker || !loc) return;
-    new AMap.Marker({ position: loc, map: map, icon: rentalIcon(), title: rentalMarker.label, label: { content: rentalMarker.label, direction: "bottom" } });
+  function addRentalMarkers(){
+    rentals.forEach(function(r){
+      geocode(r.name, r.city).then(function(loc){
+        if (!loc) return;
+        new AMap.Marker({ position: loc, map: map, icon: rentalIcon(), title: r.label, label: { content: r.label, direction: "bottom" } });
+      });
+    });
   }
 
   if (routePoints.length === 1) {
@@ -450,11 +495,11 @@ ${JS_HELPERS}
         new AMap.Marker({ position: loc, map: map, title: routePoints[0].keyword });
         map.setCenter(loc);
         map.setZoom(11);
-        if (rentalMarker && rentalMarker.pointIndex === 0) addRentalMarker(loc);
       } else {
         document.getElementById("${statusId}").innerHTML = "定位失败，请在高德地图App中手动搜索：" + routePoints[0].keyword;
       }
       addHotelMarkers();
+      addRentalMarkers();
     });
   } else {
     Promise.all(routePoints.map(function(p){ return geocode(p.keyword, p.city); })).then(function(locs){
@@ -463,6 +508,7 @@ ${JS_HELPERS}
       if (validIdx.length < 2) {
         document.getElementById("${statusId}").innerHTML = "部分地点定位失败，无法规划路线，请在高德地图App中手动搜索：" + routePoints.map(function(p){ return p.keyword; }).join(" → ");
         addHotelMarkers();
+        addRentalMarkers();
         return;
       }
       var start = locs[validIdx[0]];
@@ -474,10 +520,8 @@ ${JS_HELPERS}
           document.getElementById("${statusId}").innerHTML = "驾车路线规划失败，请在高德地图App中手动搜索：" + routePoints.map(function(p){ return p.keyword; }).join(" → ");
         }
         map.setFitView();
-        if (rentalMarker && locs[rentalMarker.pointIndex]) {
-          addRentalMarker(locs[rentalMarker.pointIndex]);
-        }
         addHotelMarkers();
+        addRentalMarkers();
       });
     });
   }
@@ -490,12 +534,12 @@ function renderDayPage(d, idx) {
   const next = idx < DAYS.length - 1 ? DAYS[idx + 1] : null;
   const points = WAYPOINTS_CN[d.num] || [];
   const hotels = hotelListForDay(d);
-  const rentalMarker = RENTAL_MARKERS[d.num] || null;
+  const rentals = rentalListForDay(d);
 
   const legendParts = [];
   if (points.length > 1) legendParts.push("蓝色路线＝高德实时驾车路线规划");
   if (hotels.length > 0) legendParts.push("🏨红色标记＝推荐酒店");
-  if (rentalMarker) legendParts.push("🚗绿色标记＝" + rentalMarker.label.replace("🚗 ", ""));
+  if (rentals.length > 0) legendParts.push("🚗绿色标记＝租车门店");
 
   const mapSection = points.length > 0 ? `
   <div id="amap-day-${d.num}" class="map-frame-wrap"></div>
@@ -522,7 +566,12 @@ function renderDayPage(d, idx) {
       <div class="activity-item">
         <div class="name">${a.name}</div>
         <div class="meta">游览时间：${a.duration}</div>
+        ${a.intro ? `<div class="intro">${a.intro}</div>` : ""}
         <div class="note">${a.note}</div>
+        ${a.depth ? `<div class="depth-box">
+          <div class="depth-row"><span class="depth-tag shallow">浅度</span>${a.depth.shallow}</div>
+          <div class="depth-row"><span class="depth-tag deep">深度</span>${a.depth.deep}</div>
+        </div>` : ""}
       </div>`).join("")
     : `<p class="empty-note">当天无景点活动安排。</p>`;
 
@@ -538,6 +587,22 @@ function renderDayPage(d, idx) {
         <div class="note">${h.why}</div>
       </div>`).join("")
     : `<p class="empty-note">当天无住宿安排（返程日）。</p>`;
+
+  const rentalHtml = (d.rentalOptions && d.rentalOptions.length > 0)
+    ? d.rentalOptions.map(r => `
+      <div class="hotel-item">
+        <div class="name">${r.name}</div>
+        <div class="meta">${r.address}</div>
+        <div class="note">📞 ${r.phone}${r.note ? " ｜ " + r.note : ""}</div>
+      </div>`).join("")
+    : "";
+
+  const rentalCard = rentalHtml ? `
+  <div class="section-card">
+    <h3><span class="icon">🚙</span>自驾租车</h3>
+    ${rentalHtml}
+    <div class="map-note">门店地址/电话来自第三方地图POI与官网核对，建议出发前致电门店二次确认车型库存与取还车时间。</div>
+  </div>` : "";
 
   return `${headHtml(`D${d.num} ${d.title} - ${TRIP.title}`)}
 <header class="site-header">
@@ -574,6 +639,7 @@ ${navHtml(d.num)}
     <div style="margin-bottom:10px;"><strong style="font-size:13.5px;color:var(--muted);">推荐饮食</strong>${foodHtml}</div>
     <div><strong style="font-size:13.5px;color:var(--muted);">当晚住宿（3-4星，推荐1-3选）</strong>${hotelsHtml}</div>
   </div>
+  ${rentalCard}
 
   <div class="prevnext">
     <a href="${prev ? "day" + prev.num + ".html" : "#"}" class="${prev ? "" : "disabled"}">← 上一天${prev ? "：D" + prev.num : ""}</a>
@@ -583,7 +649,7 @@ ${navHtml(d.num)}
   <div class="disclaimer">${TRIP.disclaimer}</div>
 </main>
 ${amapLoaderScript()}
-${amapDayInitScript(d.num, points, hotels, rentalMarker)}
+${amapDayInitScript(d.num, points, hotels, rentals)}
 ${footHtml()}`;
 }
 

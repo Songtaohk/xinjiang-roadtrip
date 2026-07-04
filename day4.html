@@ -176,6 +176,41 @@ table.info-table td.label {
 .activity-item .note, .hotel-item .note {
   font-size: 13.5px;
 }
+.activity-item .intro {
+  font-size: 13.5px;
+  color: var(--text);
+  background: #F5F8F6;
+  border-left: 3px solid var(--teal-light);
+  padding: 6px 10px;
+  margin: 4px 0 6px;
+  border-radius: 4px;
+}
+.depth-box {
+  margin-top: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.depth-row {
+  font-size: 13px;
+  color: var(--text);
+}
+.depth-tag {
+  display: inline-block;
+  font-size: 11px;
+  padding: 1px 8px;
+  border-radius: 10px;
+  margin-right: 6px;
+  font-weight: 600;
+}
+.depth-tag.shallow {
+  background: #E3EDE8;
+  color: var(--teal-light);
+}
+.depth-tag.deep {
+  background: var(--teal);
+  color: white;
+}
 .food-list {
   font-size: 14px;
   padding-left: 18px;
@@ -290,17 +325,32 @@ footer.site-footer {
       <div class="activity-item">
         <div class="name">喀纳斯湖畔漫步</div>
         <div class="meta">游览时间：约1.5小时</div>
+        <div class="intro">中国最深的高山湖泊之一，湖水随光线呈现蓝绿渐变，被誉为"中国最美的湖"，当地流传着湖中有"水怪"的传说。</div>
         <div class="note">避开旅行团高峰时段（8-10点、12-14点）</div>
+        <div class="depth-box">
+          <div class="depth-row"><span class="depth-tag shallow">浅度</span>湖边栈道走一段拍照，20-30分钟</div>
+          <div class="depth-row"><span class="depth-tag deep">深度</span>沿湖岸多走几个观景点，结合区间车串联月亮湾/卧龙湾，半天</div>
+        </div>
       </div>
       <div class="activity-item">
         <div class="name">观鱼台（简版）</div>
         <div class="meta">游览时间：约1小时</div>
+        <div class="intro">海拔2030米的骆驼峰顶观景台，1068级台阶，可俯瞰四分之三喀纳斯湖面，是传说中观"湖怪"的最佳地点。</div>
         <div class="note">推荐区间车至半山腰＋徒步约1068级台阶（45-60分钟），不建议全程徒步版（约5小时/爬升500米，强度偏高）</div>
+        <div class="depth-box">
+          <div class="depth-row"><span class="depth-tag shallow">浅度</span>乘区间车到半山腰，剩余几百级台阶爬到台，40-60分钟</div>
+          <div class="depth-row"><span class="depth-tag deep">深度</span>从山脚全程徒步1068级台阶上下，约1.5-2小时，体力消耗较大</div>
+        </div>
       </div>
       <div class="activity-item">
         <div class="name">神仙湾/月亮湾/卧龙湾</div>
         <div class="meta">游览时间：约1小时</div>
+        <div class="intro">喀纳斯河上的三段经典河湾：神仙湾看晨雾似仙境，月亮湾呈反S形似"神仙的脚印"，卧龙湾水面平静形如卧龙。</div>
         <div class="note">区间车沿途观景点，可下车拍照；网传的"3km木栈道"细节未独立核实，建议现场向工作人员确认具体徒步路径</div>
+        <div class="depth-box">
+          <div class="depth-row"><span class="depth-tag shallow">浅度</span>区间车沿途各停留5-10分钟拍照，合计30分钟</div>
+          <div class="depth-row"><span class="depth-tag deep">深度</span>神仙湾清晨专程去看晨雾（需早起），三湾各走一段栈道，1.5-2小时</div>
+        </div>
       </div>
   </div>
 
@@ -314,6 +364,7 @@ footer.site-footer {
         <div class="note">大件行李continua留在房间</div>
       </div></div>
   </div>
+  
 
   <div class="prevnext">
     <a href="day3.html" class="">← 上一天：D3</a>
@@ -331,7 +382,7 @@ window._AMapSecurityConfig = { securityJsCode: "f5122d0c0aae74cc4c4e8f4ce0a196cc
   var map = new AMap.Map("amap-day-4", { zoom: 6, resizeEnable: true });
   var routePoints = [{"keyword":"贾登峪游客中心","city":"阿勒泰地区"},{"keyword":"喀纳斯湖","city":"阿勒泰地区"}];
   var hotels = [];
-  var rentalMarker = null;
+  var rentals = [];
 
   function geocode(address, city) {
     return new Promise(function(resolve){
@@ -361,9 +412,13 @@ window._AMapSecurityConfig = { securityJsCode: "f5122d0c0aae74cc4c4e8f4ce0a196cc
       });
     });
   }
-  function addRentalMarker(loc){
-    if (!rentalMarker || !loc) return;
-    new AMap.Marker({ position: loc, map: map, icon: rentalIcon(), title: rentalMarker.label, label: { content: rentalMarker.label, direction: "bottom" } });
+  function addRentalMarkers(){
+    rentals.forEach(function(r){
+      geocode(r.name, r.city).then(function(loc){
+        if (!loc) return;
+        new AMap.Marker({ position: loc, map: map, icon: rentalIcon(), title: r.label, label: { content: r.label, direction: "bottom" } });
+      });
+    });
   }
 
   if (routePoints.length === 1) {
@@ -372,11 +427,11 @@ window._AMapSecurityConfig = { securityJsCode: "f5122d0c0aae74cc4c4e8f4ce0a196cc
         new AMap.Marker({ position: loc, map: map, title: routePoints[0].keyword });
         map.setCenter(loc);
         map.setZoom(11);
-        if (rentalMarker && rentalMarker.pointIndex === 0) addRentalMarker(loc);
       } else {
         document.getElementById("amap-status-4").innerHTML = "定位失败，请在高德地图App中手动搜索：" + routePoints[0].keyword;
       }
       addHotelMarkers();
+      addRentalMarkers();
     });
   } else {
     Promise.all(routePoints.map(function(p){ return geocode(p.keyword, p.city); })).then(function(locs){
@@ -385,6 +440,7 @@ window._AMapSecurityConfig = { securityJsCode: "f5122d0c0aae74cc4c4e8f4ce0a196cc
       if (validIdx.length < 2) {
         document.getElementById("amap-status-4").innerHTML = "部分地点定位失败，无法规划路线，请在高德地图App中手动搜索：" + routePoints.map(function(p){ return p.keyword; }).join(" → ");
         addHotelMarkers();
+        addRentalMarkers();
         return;
       }
       var start = locs[validIdx[0]];
@@ -396,10 +452,8 @@ window._AMapSecurityConfig = { securityJsCode: "f5122d0c0aae74cc4c4e8f4ce0a196cc
           document.getElementById("amap-status-4").innerHTML = "驾车路线规划失败，请在高德地图App中手动搜索：" + routePoints.map(function(p){ return p.keyword; }).join(" → ");
         }
         map.setFitView();
-        if (rentalMarker && locs[rentalMarker.pointIndex]) {
-          addRentalMarker(locs[rentalMarker.pointIndex]);
-        }
         addHotelMarkers();
+        addRentalMarkers();
       });
     });
   }

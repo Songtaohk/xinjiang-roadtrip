@@ -176,6 +176,41 @@ table.info-table td.label {
 .activity-item .note, .hotel-item .note {
   font-size: 13.5px;
 }
+.activity-item .intro {
+  font-size: 13.5px;
+  color: var(--text);
+  background: #F5F8F6;
+  border-left: 3px solid var(--teal-light);
+  padding: 6px 10px;
+  margin: 4px 0 6px;
+  border-radius: 4px;
+}
+.depth-box {
+  margin-top: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.depth-row {
+  font-size: 13px;
+  color: var(--text);
+}
+.depth-tag {
+  display: inline-block;
+  font-size: 11px;
+  padding: 1px 8px;
+  border-radius: 10px;
+  margin-right: 6px;
+  font-weight: 600;
+}
+.depth-tag.shallow {
+  background: #E3EDE8;
+  color: var(--teal-light);
+}
+.depth-tag.deep {
+  background: var(--teal);
+  color: white;
+}
 .food-list {
   font-size: 14px;
   padding-left: 18px;
@@ -273,7 +308,7 @@ footer.site-footer {
   <div id="amap-day-1" class="map-frame-wrap"></div>
   <div id="amap-status-1" class="map-fallback-link"></div>
   <div class="map-note">地图由高德地图 JS API 驱动，路线为高德实时驾车路线规划结果（仅供参考，实际路况请以导航为准）。</div>
-  <div class="map-legend">🏨红色标记＝推荐酒店 · 🚗绿色标记＝取车点：机场租车中心</div>
+  <div class="map-legend">🏨红色标记＝推荐酒店 · 🚗绿色标记＝租车门店</div>
   
   </div>
 
@@ -290,17 +325,29 @@ footer.site-footer {
       <div class="activity-item">
         <div class="name">深度补觉</div>
         <div class="meta">游览时间：上午-中午</div>
+        
         <div class="note">红眼航班后优先休息，不建议安排晨间活动</div>
+        
       </div>
       <div class="activity-item">
         <div class="name">新疆维吾尔自治区博物馆</div>
         <div class="meta">游览时间：约2小时</div>
+        <div class="intro">馆藏"楼兰美女"干尸最负盛名，出土于若羌铁板河墓地，距今约3800年，是新疆年代最早、保存最完整的干尸，另有大量西域民族文物与丝路文书。</div>
         <div class="note">楼兰美女干尸展厅是核心看点，建议提前官网/公众号预约参观名额</div>
+        <div class="depth-box">
+          <div class="depth-row"><span class="depth-tag shallow">浅度</span>只看二楼古代干尸陈列厅（"楼兰美女"等），30-40分钟</div>
+          <div class="depth-row"><span class="depth-tag deep">深度</span>加逛丝绸之路展厅、新疆历史文物展厅，租讲解器或请讲解员，2小时以上</div>
+        </div>
       </div>
       <div class="activity-item">
         <div class="name">乌鲁木齐大巴扎</div>
         <div class="meta">游览时间：约1.5-2小时</div>
+        <div class="intro">国际大巴扎是中亚风格建筑群，集市贸易、烤肉干果、歌舞表演于一体，是乌鲁木齐最具民族风情的地标夜市。</div>
         <div class="note">民族风情建筑群+烤肉+干果市集，傍晚人气最旺，注意随身财物</div>
+        <div class="depth-box">
+          <div class="depth-row"><span class="depth-tag shallow">浅度</span>逛主楼+小吃街，吃烤包子/烤肉串，40分钟-1小时</div>
+          <div class="depth-row"><span class="depth-tag deep">深度</span>登观光塔俯瞰全景，逛地毯/手工艺品市集，赶上民族歌舞表演，1.5-2小时</div>
+        </div>
       </div>
   </div>
 
@@ -309,15 +356,36 @@ footer.site-footer {
     <div style="margin-bottom:10px;"><strong style="font-size:13.5px;color:var(--muted);">推荐饮食</strong><ul class="food-list"><li>大巴扎烤羊肉串、烤包子</li><li>新疆大盘鸡（市区老字号）</li></ul></div>
     <div><strong style="font-size:13.5px;color:var(--muted);">当晚住宿（3-4星，推荐1-3选）</strong>
       <div class="hotel-item">
-        <div class="name">乌鲁木齐康莱德酒店</div>
-        <div class="meta">沙依巴克区友好北路669号 · 价格未查到确切数字，建议携程/Booking查实时价</div>
-        <div class="note">2021年开业，希尔顿旗下奢华品牌，评分4.7，市区繁华地段但客房隔音好</div>
+        <div class="name">乌鲁木齐尚德国际酒店</div>
+        <div class="meta">市区，靠近人民广场/大巴扎商圈 · 建议携程查实时价</div>
+        <div class="note">携程点评突出"设施很新、卫生条件很好、周边环境很安静"，3-4星商务型，性价比之选</div>
       </div>
       <div class="hotel-item">
-        <div class="name">乌鲁木齐希尔顿酒店</div>
-        <div class="meta">米东区红光山路1237号 · 同上，建议实时查询</div>
-        <div class="note">毗邻红光山4A景区，评分4.7，环境相对安静</div>
+        <div class="name">乌鲁木齐环球国际大酒店</div>
+        <div class="meta">市区 · 建议携程查实时价</div>
+        <div class="note">携程2146条点评（2101条推荐），评价"很安静也很干净"，性价比超值，有地道新疆餐厅</div>
+      </div>
+      <div class="hotel-item">
+        <div class="name">全季酒店(乌鲁木齐市区分店，具体门店建议携程搜索确认)</div>
+        <div class="meta">市区多家分店可选 · 建议携程查实时价</div>
+        <div class="note">华住旗下连锁品牌，多家门店评价房间隔音好、卫生标准化程度高，适合对干净安静有稳定预期的住客</div>
       </div></div>
+  </div>
+  
+  <div class="section-card">
+    <h3><span class="icon">🚙</span>自驾租车</h3>
+    
+      <div class="hotel-item">
+        <div class="name">神州租车(地窝堡国际机场店)</div>
+        <div class="meta">乌鲁木齐市新市区迎宾路1341号乌鲁木齐国际机场天缘酒店B座1层后侧（新疆机场集团公司对面）</div>
+        <div class="note">📞 官方客服 400-616-6666（门店号码来自第三方地图POI，建议以官网/App下单前的门店确认电话为准） ｜ 全国连锁，门店在机场外围酒店区，需摆渡/步行约几分钟，非航站楼内</div>
+      </div>
+      <div class="hotel-item">
+        <div class="name">一嗨租车(地窝堡机场店)</div>
+        <div class="meta">乌鲁木齐市新市区迎宾路1341号机场宾馆1层1021室</div>
+        <div class="note">📞 官方客服 400-888-6608（港澳台/海外专线 +86-511-81886608） ｜ 全国连锁，同样在机场外围酒店区，提供港澳台专线，对香港客户咨询更方便</div>
+      </div>
+    <div class="map-note">门店地址/电话来自第三方地图POI与官网核对，建议出发前致电门店二次确认车型库存与取还车时间。</div>
   </div>
 
   <div class="prevnext">
@@ -335,8 +403,8 @@ window._AMapSecurityConfig = { securityJsCode: "f5122d0c0aae74cc4c4e8f4ce0a196cc
 (function(){
   var map = new AMap.Map("amap-day-1", { zoom: 6, resizeEnable: true });
   var routePoints = [{"keyword":"乌鲁木齐地窝堡国际机场","city":"乌鲁木齐市"}];
-  var hotels = [{"name":"乌鲁木齐康莱德酒店","city":"乌鲁木齐市"},{"name":"乌鲁木齐希尔顿酒店","city":"乌鲁木齐市"}];
-  var rentalMarker = {"label":"🚗 取车点：机场租车中心","pointIndex":0};
+  var hotels = [{"name":"乌鲁木齐尚德国际酒店","city":"乌鲁木齐市"},{"name":"乌鲁木齐环球国际大酒店","city":"乌鲁木齐市"},{"name":"全季酒店(乌鲁木齐市区分店，具体门店建议携程搜索确认)","city":"乌鲁木齐市"}];
+  var rentals = [{"name":"神州租车(地窝堡国际机场店)","city":"乌鲁木齐市","label":"🚗 取车：神州租车(地窝堡国际机场店)"},{"name":"一嗨租车(地窝堡机场店)","city":"乌鲁木齐市","label":"🚗 取车：一嗨租车(地窝堡机场店)"}];
 
   function geocode(address, city) {
     return new Promise(function(resolve){
@@ -366,9 +434,13 @@ window._AMapSecurityConfig = { securityJsCode: "f5122d0c0aae74cc4c4e8f4ce0a196cc
       });
     });
   }
-  function addRentalMarker(loc){
-    if (!rentalMarker || !loc) return;
-    new AMap.Marker({ position: loc, map: map, icon: rentalIcon(), title: rentalMarker.label, label: { content: rentalMarker.label, direction: "bottom" } });
+  function addRentalMarkers(){
+    rentals.forEach(function(r){
+      geocode(r.name, r.city).then(function(loc){
+        if (!loc) return;
+        new AMap.Marker({ position: loc, map: map, icon: rentalIcon(), title: r.label, label: { content: r.label, direction: "bottom" } });
+      });
+    });
   }
 
   if (routePoints.length === 1) {
@@ -377,11 +449,11 @@ window._AMapSecurityConfig = { securityJsCode: "f5122d0c0aae74cc4c4e8f4ce0a196cc
         new AMap.Marker({ position: loc, map: map, title: routePoints[0].keyword });
         map.setCenter(loc);
         map.setZoom(11);
-        if (rentalMarker && rentalMarker.pointIndex === 0) addRentalMarker(loc);
       } else {
         document.getElementById("amap-status-1").innerHTML = "定位失败，请在高德地图App中手动搜索：" + routePoints[0].keyword;
       }
       addHotelMarkers();
+      addRentalMarkers();
     });
   } else {
     Promise.all(routePoints.map(function(p){ return geocode(p.keyword, p.city); })).then(function(locs){
@@ -390,6 +462,7 @@ window._AMapSecurityConfig = { securityJsCode: "f5122d0c0aae74cc4c4e8f4ce0a196cc
       if (validIdx.length < 2) {
         document.getElementById("amap-status-1").innerHTML = "部分地点定位失败，无法规划路线，请在高德地图App中手动搜索：" + routePoints.map(function(p){ return p.keyword; }).join(" → ");
         addHotelMarkers();
+        addRentalMarkers();
         return;
       }
       var start = locs[validIdx[0]];
@@ -401,10 +474,8 @@ window._AMapSecurityConfig = { securityJsCode: "f5122d0c0aae74cc4c4e8f4ce0a196cc
           document.getElementById("amap-status-1").innerHTML = "驾车路线规划失败，请在高德地图App中手动搜索：" + routePoints.map(function(p){ return p.keyword; }).join(" → ");
         }
         map.setFitView();
-        if (rentalMarker && locs[rentalMarker.pointIndex]) {
-          addRentalMarker(locs[rentalMarker.pointIndex]);
-        }
         addHotelMarkers();
+        addRentalMarkers();
       });
     });
   }

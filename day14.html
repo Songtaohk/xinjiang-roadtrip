@@ -176,6 +176,41 @@ table.info-table td.label {
 .activity-item .note, .hotel-item .note {
   font-size: 13.5px;
 }
+.activity-item .intro {
+  font-size: 13.5px;
+  color: var(--text);
+  background: #F5F8F6;
+  border-left: 3px solid var(--teal-light);
+  padding: 6px 10px;
+  margin: 4px 0 6px;
+  border-radius: 4px;
+}
+.depth-box {
+  margin-top: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.depth-row {
+  font-size: 13px;
+  color: var(--text);
+}
+.depth-tag {
+  display: inline-block;
+  font-size: 11px;
+  padding: 1px 8px;
+  border-radius: 10px;
+  margin-right: 6px;
+  font-weight: 600;
+}
+.depth-tag.shallow {
+  background: #E3EDE8;
+  color: var(--teal-light);
+}
+.depth-tag.deep {
+  background: var(--teal);
+  color: white;
+}
 .food-list {
   font-size: 14px;
   padding-left: 18px;
@@ -273,7 +308,7 @@ footer.site-footer {
   <div id="amap-day-14" class="map-frame-wrap"></div>
   <div id="amap-status-14" class="map-fallback-link"></div>
   <div class="map-note">地图由高德地图 JS API 驱动，路线为高德实时驾车路线规划结果（仅供参考，实际路况请以导航为准）。</div>
-  <div class="map-legend">蓝色路线＝高德实时驾车路线规划 · 🏨红色标记＝推荐酒店 · 🚗绿色标记＝还车点：机场租车中心</div>
+  <div class="map-legend">蓝色路线＝高德实时驾车路线规划 · 🏨红色标记＝推荐酒店 · 🚗绿色标记＝租车门店</div>
   
   </div>
 
@@ -290,12 +325,19 @@ footer.site-footer {
       <div class="activity-item">
         <div class="name">天池环湖木栈道</div>
         <div class="meta">游览时间：约2-2.5小时</div>
+        <div class="intro">古称"瑶池"，相传西王母与周穆王曾在此相会；湖是200多万年前冰川堰塞形成，博格达峰（5445米）雪峰倒映湖中。</div>
         <div class="note">轻健行，远眺博格达峰</div>
+        <div class="depth-box">
+          <div class="depth-row"><span class="depth-tag shallow">浅度</span>游船横渡+湖边栈道走一段，1小时</div>
+          <div class="depth-row"><span class="depth-tag deep">深度</span>环湖木栈道走大半圈，登高处观景台看博格达峰全貌，2-2.5小时</div>
+        </div>
       </div>
       <div class="activity-item">
         <div class="name">还车、整理行李</div>
         <div class="meta">游览时间：傍晚</div>
+        
         <div class="note">抵机场附近后办理</div>
+        
       </div>
   </div>
 
@@ -304,10 +346,36 @@ footer.site-footer {
     <div style="margin-bottom:10px;"><strong style="font-size:13.5px;color:var(--muted);">推荐饮食</strong><ul class="food-list"><li>天池周边哈萨克风味餐</li></ul></div>
     <div><strong style="font-size:13.5px;color:var(--muted);">当晚住宿（3-4星，推荐1-3选）</strong>
       <div class="hotel-item">
-        <div class="name">乌鲁木齐机场附近高档静音酒店</div>
-        <div class="meta">地窝堡机场周边 · 建议携程查实时价</div>
-        <div class="note">为次日10点航班留出充分缓冲，避免早起赶路</div>
+        <div class="name">乌鲁木齐环球国际大酒店</div>
+        <div class="meta">市区，距机场约20分钟车程，紧邻机场快速路 · 建议携程查实时价</div>
+        <div class="note">携程2146条点评（2101条推荐），"很安静也很干净"，去机场方便</div>
+      </div>
+      <div class="hotel-item">
+        <div class="name">迎港酒店(乌鲁木齐天山国际机场店)</div>
+        <div class="meta">机场附近，驱车约5分钟可达 · 建议携程查实时价（评分未独立核实，建议出发前再确认）</div>
+        <div class="note">为商旅客人提供免费接送机、定点接送服务，距机场最近的选项之一</div>
+      </div>
+      <div class="hotel-item">
+        <div class="name">乌鲁木齐新标准宾馆(地窝堡国际机场店)</div>
+        <div class="meta">迎宾北路，靠近机场与火车站 · 建议携程查实时价（评分未独立核实）</div>
+        <div class="note">提供接送机服务，位置便利</div>
       </div></div>
+  </div>
+  
+  <div class="section-card">
+    <h3><span class="icon">🚙</span>自驾租车</h3>
+    
+      <div class="hotel-item">
+        <div class="name">神州租车(地窝堡国际机场店)</div>
+        <div class="meta">乌鲁木齐市新市区迎宾路1341号乌鲁木齐国际机场天缘酒店B座1层后侧（新疆机场集团公司对面）</div>
+        <div class="note">📞 官方客服 400-616-6666 ｜ 还车前建议加满油、拍照留存车况，与D1取车为同一门店</div>
+      </div>
+      <div class="hotel-item">
+        <div class="name">一嗨租车(地窝堡机场店)</div>
+        <div class="meta">乌鲁木齐市新市区迎宾路1341号机场宾馆1层1021室</div>
+        <div class="note">📞 官方客服 400-888-6608 ｜ 还车前建议加满油、拍照留存车况，与D1取车为同一门店</div>
+      </div>
+    <div class="map-note">门店地址/电话来自第三方地图POI与官网核对，建议出发前致电门店二次确认车型库存与取还车时间。</div>
   </div>
 
   <div class="prevnext">
@@ -325,8 +393,8 @@ window._AMapSecurityConfig = { securityJsCode: "f5122d0c0aae74cc4c4e8f4ce0a196cc
 (function(){
   var map = new AMap.Map("amap-day-14", { zoom: 6, resizeEnable: true });
   var routePoints = [{"keyword":"独山子区","city":"克拉玛依市"},{"keyword":"天山天池","city":"阜康市"},{"keyword":"乌鲁木齐地窝堡国际机场","city":"乌鲁木齐市"}];
-  var hotels = [{"name":"乌鲁木齐机场附近高档静音酒店","city":"乌鲁木齐市"}];
-  var rentalMarker = {"label":"🚗 还车点：机场租车中心","pointIndex":2};
+  var hotels = [{"name":"乌鲁木齐环球国际大酒店","city":"乌鲁木齐市"},{"name":"迎港酒店(乌鲁木齐天山国际机场店)","city":"乌鲁木齐市"},{"name":"乌鲁木齐新标准宾馆(地窝堡国际机场店)","city":"乌鲁木齐市"}];
+  var rentals = [{"name":"神州租车(地窝堡国际机场店)","city":"乌鲁木齐市","label":"🚗 还车：神州租车(地窝堡国际机场店)"},{"name":"一嗨租车(地窝堡机场店)","city":"乌鲁木齐市","label":"🚗 还车：一嗨租车(地窝堡机场店)"}];
 
   function geocode(address, city) {
     return new Promise(function(resolve){
@@ -356,9 +424,13 @@ window._AMapSecurityConfig = { securityJsCode: "f5122d0c0aae74cc4c4e8f4ce0a196cc
       });
     });
   }
-  function addRentalMarker(loc){
-    if (!rentalMarker || !loc) return;
-    new AMap.Marker({ position: loc, map: map, icon: rentalIcon(), title: rentalMarker.label, label: { content: rentalMarker.label, direction: "bottom" } });
+  function addRentalMarkers(){
+    rentals.forEach(function(r){
+      geocode(r.name, r.city).then(function(loc){
+        if (!loc) return;
+        new AMap.Marker({ position: loc, map: map, icon: rentalIcon(), title: r.label, label: { content: r.label, direction: "bottom" } });
+      });
+    });
   }
 
   if (routePoints.length === 1) {
@@ -367,11 +439,11 @@ window._AMapSecurityConfig = { securityJsCode: "f5122d0c0aae74cc4c4e8f4ce0a196cc
         new AMap.Marker({ position: loc, map: map, title: routePoints[0].keyword });
         map.setCenter(loc);
         map.setZoom(11);
-        if (rentalMarker && rentalMarker.pointIndex === 0) addRentalMarker(loc);
       } else {
         document.getElementById("amap-status-14").innerHTML = "定位失败，请在高德地图App中手动搜索：" + routePoints[0].keyword;
       }
       addHotelMarkers();
+      addRentalMarkers();
     });
   } else {
     Promise.all(routePoints.map(function(p){ return geocode(p.keyword, p.city); })).then(function(locs){
@@ -380,6 +452,7 @@ window._AMapSecurityConfig = { securityJsCode: "f5122d0c0aae74cc4c4e8f4ce0a196cc
       if (validIdx.length < 2) {
         document.getElementById("amap-status-14").innerHTML = "部分地点定位失败，无法规划路线，请在高德地图App中手动搜索：" + routePoints.map(function(p){ return p.keyword; }).join(" → ");
         addHotelMarkers();
+        addRentalMarkers();
         return;
       }
       var start = locs[validIdx[0]];
@@ -391,10 +464,8 @@ window._AMapSecurityConfig = { securityJsCode: "f5122d0c0aae74cc4c4e8f4ce0a196cc
           document.getElementById("amap-status-14").innerHTML = "驾车路线规划失败，请在高德地图App中手动搜索：" + routePoints.map(function(p){ return p.keyword; }).join(" → ");
         }
         map.setFitView();
-        if (rentalMarker && locs[rentalMarker.pointIndex]) {
-          addRentalMarker(locs[rentalMarker.pointIndex]);
-        }
         addHotelMarkers();
+        addRentalMarkers();
       });
     });
   }

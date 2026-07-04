@@ -176,6 +176,41 @@ table.info-table td.label {
 .activity-item .note, .hotel-item .note {
   font-size: 13.5px;
 }
+.activity-item .intro {
+  font-size: 13.5px;
+  color: var(--text);
+  background: #F5F8F6;
+  border-left: 3px solid var(--teal-light);
+  padding: 6px 10px;
+  margin: 4px 0 6px;
+  border-radius: 4px;
+}
+.depth-box {
+  margin-top: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.depth-row {
+  font-size: 13px;
+  color: var(--text);
+}
+.depth-tag {
+  display: inline-block;
+  font-size: 11px;
+  padding: 1px 8px;
+  border-radius: 10px;
+  margin-right: 6px;
+  font-weight: 600;
+}
+.depth-tag.shallow {
+  background: #E3EDE8;
+  color: var(--teal-light);
+}
+.depth-tag.deep {
+  background: var(--teal);
+  color: white;
+}
 .food-list {
   font-size: 14px;
   padding-left: 18px;
@@ -290,12 +325,22 @@ footer.site-footer {
       <div class="activity-item">
         <div class="name">翻越哈希勒根达坂</div>
         <div class="meta">游览时间：沿途</div>
+        <div class="intro">独库公路最高点，海拔约3400-3460米（不同来源数据略有差异），是奎屯河与喀什河的分水岭，终年积雪，一天之内可从盛夏穿越到寒冬。</div>
         <div class="note">"一日游四季"经典体验，短暂停留（1-3小时内）对大部分人风险较低，避免剧烈运动</div>
+        <div class="depth-box">
+          <div class="depth-row"><span class="depth-tag shallow">浅度</span>车行通过，山顶观景台停留10-15分钟拍照即下山（高海拔不宜久留）</div>
+          <div class="depth-row"><span class="depth-tag deep">深度</span>不建议久留：海拔高、气温低、无遮蔽，安全起见此处以浅度体验为宜</div>
+        </div>
       </div>
       <div class="activity-item">
         <div class="name">独山子大峡谷</div>
         <div class="meta">游览时间：约1.5-2小时</div>
+        <div class="intro">独库公路起点第一景，是奎屯河亿万年冲刷天山冰雪融水切割平原形成的峡谷，谷深约200米，曾是多部影视剧取景地。</div>
         <div class="note">抵达独山子后傍晚游览，就在市区旁边，方便</div>
+        <div class="depth-box">
+          <div class="depth-row"><span class="depth-tag shallow">浅度</span>观景台俯瞰峡谷全貌，拍照，20-30分钟</div>
+          <div class="depth-row"><span class="depth-tag deep">深度</span>沿栈道下到谷底近观岩壁纹理，走玻璃观景台，1-1.5小时</div>
+        </div>
       </div>
   </div>
 
@@ -304,16 +349,22 @@ footer.site-footer {
     <div style="margin-bottom:10px;"><strong style="font-size:13.5px;color:var(--muted);">推荐饮食</strong><ul class="food-list"><li>奎屯本地面食（拌面/炒米粉）</li></ul></div>
     <div><strong style="font-size:13.5px;color:var(--muted);">当晚住宿（3-4星，推荐1-3选）</strong>
       <div class="hotel-item">
-        <div class="name">奎屯豪丰国际大酒店</div>
-        <div class="meta">喀什东路28幢 · 未查到确切数字</div>
-        <div class="note">2018年开业，四钻商务型</div>
+        <div class="name">丽枫酒店(奎屯中心公园店)</div>
+        <div class="meta">奎屯市区中心公园附近 · 建议携程查实时价</div>
+        <div class="note">携程评分4.7（1295条点评），"停车方便，有自助早餐，服务规范"</div>
       </div>
       <div class="hotel-item">
-        <div class="name">奎屯锦汇国际</div>
+        <div class="name">奎屯柏曼假日酒店</div>
         <div class="meta">奎屯市区 · 建议携程查实时价</div>
-        <div class="note">同级选择</div>
+        <div class="note">携程评分4.5（552条点评），"环境干净舒适，提供丰富早餐"</div>
+      </div>
+      <div class="hotel-item">
+        <div class="name">星程酒店(奎屯天北新区天西路店)</div>
+        <div class="meta">奎屯市区 · 建议携程查实时价</div>
+        <div class="note">携程评分4.7（995条点评）</div>
       </div></div>
   </div>
+  
 
   <div class="prevnext">
     <a href="day12.html" class="">← 上一天：D12</a>
@@ -330,8 +381,8 @@ window._AMapSecurityConfig = { securityJsCode: "f5122d0c0aae74cc4c4e8f4ce0a196cc
 (function(){
   var map = new AMap.Map("amap-day-13", { zoom: 6, resizeEnable: true });
   var routePoints = [{"keyword":"那拉提镇","city":"伊犁哈萨克自治州"},{"keyword":"独山子区","city":"克拉玛依市"}];
-  var hotels = [{"name":"奎屯豪丰国际大酒店","city":"奎屯市"},{"name":"奎屯锦汇国际","city":"奎屯市"}];
-  var rentalMarker = null;
+  var hotels = [{"name":"丽枫酒店(奎屯中心公园店)","city":"奎屯市"},{"name":"奎屯柏曼假日酒店","city":"奎屯市"},{"name":"星程酒店(奎屯天北新区天西路店)","city":"奎屯市"}];
+  var rentals = [];
 
   function geocode(address, city) {
     return new Promise(function(resolve){
@@ -361,9 +412,13 @@ window._AMapSecurityConfig = { securityJsCode: "f5122d0c0aae74cc4c4e8f4ce0a196cc
       });
     });
   }
-  function addRentalMarker(loc){
-    if (!rentalMarker || !loc) return;
-    new AMap.Marker({ position: loc, map: map, icon: rentalIcon(), title: rentalMarker.label, label: { content: rentalMarker.label, direction: "bottom" } });
+  function addRentalMarkers(){
+    rentals.forEach(function(r){
+      geocode(r.name, r.city).then(function(loc){
+        if (!loc) return;
+        new AMap.Marker({ position: loc, map: map, icon: rentalIcon(), title: r.label, label: { content: r.label, direction: "bottom" } });
+      });
+    });
   }
 
   if (routePoints.length === 1) {
@@ -372,11 +427,11 @@ window._AMapSecurityConfig = { securityJsCode: "f5122d0c0aae74cc4c4e8f4ce0a196cc
         new AMap.Marker({ position: loc, map: map, title: routePoints[0].keyword });
         map.setCenter(loc);
         map.setZoom(11);
-        if (rentalMarker && rentalMarker.pointIndex === 0) addRentalMarker(loc);
       } else {
         document.getElementById("amap-status-13").innerHTML = "定位失败，请在高德地图App中手动搜索：" + routePoints[0].keyword;
       }
       addHotelMarkers();
+      addRentalMarkers();
     });
   } else {
     Promise.all(routePoints.map(function(p){ return geocode(p.keyword, p.city); })).then(function(locs){
@@ -385,6 +440,7 @@ window._AMapSecurityConfig = { securityJsCode: "f5122d0c0aae74cc4c4e8f4ce0a196cc
       if (validIdx.length < 2) {
         document.getElementById("amap-status-13").innerHTML = "部分地点定位失败，无法规划路线，请在高德地图App中手动搜索：" + routePoints.map(function(p){ return p.keyword; }).join(" → ");
         addHotelMarkers();
+        addRentalMarkers();
         return;
       }
       var start = locs[validIdx[0]];
@@ -396,10 +452,8 @@ window._AMapSecurityConfig = { securityJsCode: "f5122d0c0aae74cc4c4e8f4ce0a196cc
           document.getElementById("amap-status-13").innerHTML = "驾车路线规划失败，请在高德地图App中手动搜索：" + routePoints.map(function(p){ return p.keyword; }).join(" → ");
         }
         map.setFitView();
-        if (rentalMarker && locs[rentalMarker.pointIndex]) {
-          addRentalMarker(locs[rentalMarker.pointIndex]);
-        }
         addHotelMarkers();
+        addRentalMarkers();
       });
     });
   }

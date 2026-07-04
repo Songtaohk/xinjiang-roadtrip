@@ -176,6 +176,41 @@ table.info-table td.label {
 .activity-item .note, .hotel-item .note {
   font-size: 13.5px;
 }
+.activity-item .intro {
+  font-size: 13.5px;
+  color: var(--text);
+  background: #F5F8F6;
+  border-left: 3px solid var(--teal-light);
+  padding: 6px 10px;
+  margin: 4px 0 6px;
+  border-radius: 4px;
+}
+.depth-box {
+  margin-top: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.depth-row {
+  font-size: 13px;
+  color: var(--text);
+}
+.depth-tag {
+  display: inline-block;
+  font-size: 11px;
+  padding: 1px 8px;
+  border-radius: 10px;
+  margin-right: 6px;
+  font-weight: 600;
+}
+.depth-tag.shallow {
+  background: #E3EDE8;
+  color: var(--teal-light);
+}
+.depth-tag.deep {
+  background: var(--teal);
+  color: white;
+}
 .food-list {
   font-size: 14px;
   padding-left: 18px;
@@ -290,17 +325,29 @@ footer.site-footer {
       <div class="activity-item">
         <div class="name">清晨看日出</div>
         <div class="meta">游览时间：日出前后约1小时</div>
+        <div class="intro">赛里木湖东岸是观日出的经典机位，阳光洒在湖面形成金色光带，雪山剪影倒映湖中，宁静壮美。</div>
         <div class="note">东岸视野较佳</div>
+        <div class="depth-box">
+          <div class="depth-row"><span class="depth-tag shallow">浅度</span>湖边找个位置等日出，30分钟</div>
+          <div class="depth-row"><span class="depth-tag deep">深度</span>提前到东岸制高点占位，拍摄日出全过程+晨雾，1小时以上</div>
+        </div>
       </div>
       <div class="activity-item">
         <div class="name">松树头轻徒步</div>
         <div class="meta">游览时间：约1.5-2小时</div>
-        <div class="note">低难度步道，俯瞰湖景与松林</div>
+        <div class="intro">科古尔琴山垭口，900余级木栈道穿行百年云杉林，可同时望见雪山、森林、湖泊三重景观，6月杜鹃花开时最美。</div>
+        <div class="note">低难度步道，俯瞰湖景与松林（官方数据约900余级木栈道、往返4km、爬升500米，全程约3小时，若只走前段则强度大幅降低）</div>
+        <div class="depth-box">
+          <div class="depth-row"><span class="depth-tag shallow">浅度</span>走前段栈道到半山观景点即返回，1-1.5小时</div>
+          <div class="depth-row"><span class="depth-tag deep">深度</span>全程往返约4公里、爬升500米登顶垭口，约3小时，体力要求中等偏高</div>
+        </div>
       </div>
       <div class="activity-item">
         <div class="name">湖畔发呆/观星</div>
         <div class="meta">游览时间：全天弹性</div>
+        
         <div class="note">连住第2晚</div>
+        
       </div>
   </div>
 
@@ -314,6 +361,7 @@ footer.site-footer {
         <div class="note">—</div>
       </div></div>
   </div>
+  
 
   <div class="prevnext">
     <a href="day8.html" class="">← 上一天：D8</a>
@@ -331,7 +379,7 @@ window._AMapSecurityConfig = { securityJsCode: "f5122d0c0aae74cc4c4e8f4ce0a196cc
   var map = new AMap.Map("amap-day-9", { zoom: 6, resizeEnable: true });
   var routePoints = [{"keyword":"赛里木湖","city":"博尔塔拉蒙古自治州"}];
   var hotels = [];
-  var rentalMarker = null;
+  var rentals = [];
 
   function geocode(address, city) {
     return new Promise(function(resolve){
@@ -361,9 +409,13 @@ window._AMapSecurityConfig = { securityJsCode: "f5122d0c0aae74cc4c4e8f4ce0a196cc
       });
     });
   }
-  function addRentalMarker(loc){
-    if (!rentalMarker || !loc) return;
-    new AMap.Marker({ position: loc, map: map, icon: rentalIcon(), title: rentalMarker.label, label: { content: rentalMarker.label, direction: "bottom" } });
+  function addRentalMarkers(){
+    rentals.forEach(function(r){
+      geocode(r.name, r.city).then(function(loc){
+        if (!loc) return;
+        new AMap.Marker({ position: loc, map: map, icon: rentalIcon(), title: r.label, label: { content: r.label, direction: "bottom" } });
+      });
+    });
   }
 
   if (routePoints.length === 1) {
@@ -372,11 +424,11 @@ window._AMapSecurityConfig = { securityJsCode: "f5122d0c0aae74cc4c4e8f4ce0a196cc
         new AMap.Marker({ position: loc, map: map, title: routePoints[0].keyword });
         map.setCenter(loc);
         map.setZoom(11);
-        if (rentalMarker && rentalMarker.pointIndex === 0) addRentalMarker(loc);
       } else {
         document.getElementById("amap-status-9").innerHTML = "定位失败，请在高德地图App中手动搜索：" + routePoints[0].keyword;
       }
       addHotelMarkers();
+      addRentalMarkers();
     });
   } else {
     Promise.all(routePoints.map(function(p){ return geocode(p.keyword, p.city); })).then(function(locs){
@@ -385,6 +437,7 @@ window._AMapSecurityConfig = { securityJsCode: "f5122d0c0aae74cc4c4e8f4ce0a196cc
       if (validIdx.length < 2) {
         document.getElementById("amap-status-9").innerHTML = "部分地点定位失败，无法规划路线，请在高德地图App中手动搜索：" + routePoints.map(function(p){ return p.keyword; }).join(" → ");
         addHotelMarkers();
+        addRentalMarkers();
         return;
       }
       var start = locs[validIdx[0]];
@@ -396,10 +449,8 @@ window._AMapSecurityConfig = { securityJsCode: "f5122d0c0aae74cc4c4e8f4ce0a196cc
           document.getElementById("amap-status-9").innerHTML = "驾车路线规划失败，请在高德地图App中手动搜索：" + routePoints.map(function(p){ return p.keyword; }).join(" → ");
         }
         map.setFitView();
-        if (rentalMarker && locs[rentalMarker.pointIndex]) {
-          addRentalMarker(locs[rentalMarker.pointIndex]);
-        }
         addHotelMarkers();
+        addRentalMarkers();
       });
     });
   }
