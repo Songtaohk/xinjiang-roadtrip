@@ -116,15 +116,21 @@ main {
   border: 1px solid var(--border);
   margin-bottom: 8px;
   width: 100%;
-  height: 360px;
+  height: 380px;
   background: #eef1ec;
 }
 .map-fallback-link {
   font-size: 13px;
   color: var(--muted);
+  min-height: 16px;
 }
 .map-fallback-link a { color: var(--teal-light); }
 .map-note {
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 4px;
+}
+.map-legend {
   font-size: 12px;
   color: var(--muted);
   margin-top: 4px;
@@ -259,7 +265,7 @@ footer.site-footer {
     <h3><span class="icon">🗺️</span>全程路线总览</h3>
     <div id="amap-index" class="map-frame-wrap"></div>
     <div id="amap-index-status" class="map-fallback-link"></div>
-    <div class="map-note">示意图：按每日终点顺序用虚线连接，仅表示大致行进方向，非实际道路轨迹。每日详细页内为高德实时驾车路线。</div>
+    <div class="map-note">每日路段均为高德实时驾车路线规划结果（真实道路轨迹），首次加载需依次请求15天路线，可能需要几秒钟。</div>
   </div>
   <div class="section-card">
     <h3><span class="icon">📅</span>逐日行程</h3>
@@ -349,54 +355,64 @@ window._AMapSecurityConfig = { securityJsCode: "f5122d0c0aae74cc4c4e8f4ce0a196cc
 <script>
 (function(){
   var map = new AMap.Map("amap-index", { zoom: 6, resizeEnable: true });
-  var stops = [{"keyword":"乌鲁木齐地窝堡国际机场","city":"乌鲁木齐市","day":1},{"keyword":"克拉玛依市","city":"克拉玛依市","day":2},{"keyword":"喀纳斯景区贾登峪游客中心","city":"布尔津县","day":3},{"keyword":"喀纳斯湖","city":"布尔津县","day":4},{"keyword":"禾木村","city":"布尔津县","day":5},{"keyword":"布尔津县","city":"布尔津县","day":6},{"keyword":"世界魔鬼城","city":"克拉玛依市","day":7},{"keyword":"赛里木湖","city":"博乐市","day":8},{"keyword":"那拉提镇","city":"新源县","day":10},{"keyword":"那拉提草原景区","city":"新源县","day":11},{"keyword":"唐布拉草原","city":"尼勒克县","day":12},{"keyword":"独山子区","city":"克拉玛依市","day":13},{"keyword":"乌鲁木齐地窝堡国际机场","city":"乌鲁木齐市","day":14}];
-  var geocoder = new AMap.Geocoder({});
-  var results = new Array(stops.length);
-  var done = 0;
-  function finishOne(i, lnglat){
-    results[i] = lnglat;
-    done++;
-    if (done === stops.length) {
-      var path = [];
-      var markers = [];
-      results.forEach(function(pos, idx){
-        if (!pos) return;
-        path.push(pos);
-        var marker = new AMap.Marker({
-          position: pos,
-          map: map,
-          label: { content: "D" + stops[idx].day, direction: "top" },
-          title: stops[idx].keyword
-        });
-        markers.push(marker);
-      });
-      if (path.length > 1) {
-        new AMap.Polyline({
-          path: path,
-          map: map,
-          strokeColor: "#1F4E5F",
-          strokeWeight: 3,
-          strokeStyle: "dashed"
-        });
-      }
-      if (path.length > 0) {
-        map.setFitView();
-      } else {
-        document.getElementById("amap-index-status").innerHTML = "地图标注加载失败，请刷新页面重试。";
-      }
-    }
-  }
-  stops.forEach(function(stop, i){
-    AMap.plugin("AMap.Geocoder", function(){
-      var g = new AMap.Geocoder({ city: stop.city });
-      g.getLocation(stop.keyword, function(status, result){
+  var days = [{"num":1,"points":[{"keyword":"乌鲁木齐地窝堡国际机场","city":"乌鲁木齐市"}]},{"num":2,"points":[{"keyword":"乌鲁木齐市","city":"乌鲁木齐市"},{"keyword":"克拉玛依市","city":"克拉玛依市"}]},{"num":3,"points":[{"keyword":"克拉玛依市","city":"克拉玛依市"},{"keyword":"布尔津县","city":"阿勒泰地区"},{"keyword":"喀纳斯景区贾登峪游客中心","city":"阿勒泰地区"}]},{"num":4,"points":[{"keyword":"贾登峪游客中心","city":"阿勒泰地区"},{"keyword":"喀纳斯湖","city":"阿勒泰地区"}]},{"num":5,"points":[{"keyword":"贾登峪游客中心","city":"阿勒泰地区"},{"keyword":"禾木村","city":"阿勒泰地区"}]},{"num":6,"points":[{"keyword":"禾木村","city":"阿勒泰地区"},{"keyword":"贾登峪游客中心","city":"阿勒泰地区"},{"keyword":"布尔津县","city":"阿勒泰地区"}]},{"num":7,"points":[{"keyword":"布尔津县","city":"阿勒泰地区"},{"keyword":"世界魔鬼城","city":"克拉玛依市"}]},{"num":8,"points":[{"keyword":"世界魔鬼城","city":"克拉玛依市"},{"keyword":"赛里木湖","city":"博尔塔拉蒙古自治州"}]},{"num":9,"points":[{"keyword":"赛里木湖","city":"博尔塔拉蒙古自治州"}]},{"num":10,"points":[{"keyword":"赛里木湖","city":"博尔塔拉蒙古自治州"},{"keyword":"伊宁市六星街","city":"伊宁市"},{"keyword":"那拉提镇","city":"伊犁哈萨克自治州"}]},{"num":11,"points":[{"keyword":"那拉提草原景区","city":"伊犁哈萨克自治州"}]},{"num":12,"points":[{"keyword":"那拉提镇","city":"伊犁哈萨克自治州"},{"keyword":"唐布拉草原","city":"伊犁哈萨克自治州"}]},{"num":13,"points":[{"keyword":"那拉提镇","city":"伊犁哈萨克自治州"},{"keyword":"独山子区","city":"克拉玛依市"}]},{"num":14,"points":[{"keyword":"独山子区","city":"克拉玛依市"},{"keyword":"天山天池","city":"阜康市"},{"keyword":"乌鲁木齐地窝堡国际机场","city":"乌鲁木齐市"}]},{"num":15,"points":[{"keyword":"乌鲁木齐地窝堡国际机场","city":"乌鲁木齐市"}]}];
+  var pending = days.length;
+
+  function geocode(address, city) {
+    return new Promise(function(resolve){
+      var opts = city ? { city: city } : {};
+      var g = new AMap.Geocoder(opts);
+      g.getLocation(address, function(status, result){
         if (status === "complete" && result.geocodes && result.geocodes.length) {
-          finishOne(i, result.geocodes[0].location);
+          resolve(result.geocodes[0].location);
         } else {
-          finishOne(i, null);
+          resolve(null);
         }
       });
     });
+  }
+  function hotelIcon(){
+    return new AMap.Icon({ size: new AMap.Size(25,34), image: "https://webapi.amap.com/theme/v1.3/markers/n/mark_r.png", imageSize: new AMap.Size(25,34) });
+  }
+  function rentalIcon(){
+    return new AMap.Icon({ size: new AMap.Size(25,34), image: "https://webapi.amap.com/theme/v1.3/markers/n/mark_g.png", imageSize: new AMap.Size(25,34) });
+  }
+
+  function markDone(){
+    pending--;
+    if (pending <= 0) {
+      map.setFitView();
+      var el = document.getElementById("amap-index-status");
+      if (el) el.innerHTML = "";
+    }
+  }
+
+  document.getElementById("amap-index-status").innerHTML = "正在加载全程15天真实驾车路线，请稍候…";
+
+  days.forEach(function(day){
+    var pts = day.points;
+    if (pts.length === 1) {
+      geocode(pts[0].keyword, pts[0].city).then(function(loc){
+        if (loc) {
+          new AMap.Marker({ position: loc, map: map, label: { content: "D" + day.num, direction: "top" }, title: pts[0].keyword });
+        }
+        markDone();
+      });
+    } else {
+      Promise.all(pts.map(function(p){ return geocode(p.keyword, p.city); })).then(function(locs){
+        var validIdx = [];
+        locs.forEach(function(l, i){ if (l) validIdx.push(i); });
+        if (validIdx.length < 2) { markDone(); return; }
+        var start = locs[validIdx[0]];
+        var end = locs[validIdx[validIdx.length - 1]];
+        var mid = validIdx.slice(1, -1).map(function(i){ return locs[i]; });
+        var driving = new AMap.Driving({ map: map, policy: 0 });
+        driving.search(start, end, { waypoints: mid }, function(status, result){
+          new AMap.Marker({ position: end, map: map, label: { content: "D" + day.num, direction: "top" }, title: pts[pts.length - 1].keyword });
+          markDone();
+        });
+      });
+    }
   });
 })();
 </script>

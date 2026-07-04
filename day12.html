@@ -116,15 +116,21 @@ main {
   border: 1px solid var(--border);
   margin-bottom: 8px;
   width: 100%;
-  height: 360px;
+  height: 380px;
   background: #eef1ec;
 }
 .map-fallback-link {
   font-size: 13px;
   color: var(--muted);
+  min-height: 16px;
 }
 .map-fallback-link a { color: var(--teal-light); }
 .map-note {
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 4px;
+}
+.map-legend {
   font-size: 12px;
   color: var(--muted);
   margin-top: 4px;
@@ -267,6 +273,7 @@ footer.site-footer {
   <div id="amap-day-12" class="map-frame-wrap"></div>
   <div id="amap-status-12" class="map-fallback-link"></div>
   <div class="map-note">地图由高德地图 JS API 驱动，路线为高德实时驾车路线规划结果（仅供参考，实际路况请以导航为准）。</div>
+  <div class="map-legend">蓝色路线＝高德实时驾车路线规划</div>
   
   </div>
 
@@ -316,17 +323,81 @@ window._AMapSecurityConfig = { securityJsCode: "f5122d0c0aae74cc4c4e8f4ce0a196cc
 <script src="https://webapi.amap.com/maps?v=2.0&key=1e292eeef1aae1b6eb63c7989ae14dbb&plugin=AMap.Driving,AMap.Geocoder,AMap.PlaceSearch"></script>
 <script>
 (function(){
-  var map = new AMap.Map("amap-day-12", { zoom: 8, resizeEnable: true });
-  var points = [{"keyword":"那拉提镇","city":"新源县"},{"keyword":"唐布拉草原","city":"尼勒克县"}];
-  AMap.plugin("AMap.Driving", function(){
-    var driving = new AMap.Driving({ map: map, policy: 0 });
-    driving.search(points, function(status, result){
-      if (status !== "complete") {
-        var names = points.map(function(p){ return p.keyword; }).join(" → ");
-        document.getElementById("amap-status-12").innerHTML = "路线自动规划失败（可能是坐标解析问题），请在高德地图App中手动搜索：" + names;
-      }
+  var map = new AMap.Map("amap-day-12", { zoom: 6, resizeEnable: true });
+  var routePoints = [{"keyword":"那拉提镇","city":"伊犁哈萨克自治州"},{"keyword":"唐布拉草原","city":"伊犁哈萨克自治州"}];
+  var hotels = [];
+  var rentalMarker = null;
+
+  function geocode(address, city) {
+    return new Promise(function(resolve){
+      var opts = city ? { city: city } : {};
+      var g = new AMap.Geocoder(opts);
+      g.getLocation(address, function(status, result){
+        if (status === "complete" && result.geocodes && result.geocodes.length) {
+          resolve(result.geocodes[0].location);
+        } else {
+          resolve(null);
+        }
+      });
     });
-  });
+  }
+  function hotelIcon(){
+    return new AMap.Icon({ size: new AMap.Size(25,34), image: "https://webapi.amap.com/theme/v1.3/markers/n/mark_r.png", imageSize: new AMap.Size(25,34) });
+  }
+  function rentalIcon(){
+    return new AMap.Icon({ size: new AMap.Size(25,34), image: "https://webapi.amap.com/theme/v1.3/markers/n/mark_g.png", imageSize: new AMap.Size(25,34) });
+  }
+
+  function addHotelMarkers(){
+    hotels.forEach(function(h){
+      geocode(h.name, h.city).then(function(loc){
+        if (!loc) return;
+        new AMap.Marker({ position: loc, map: map, icon: hotelIcon(), title: h.name, label: { content: "🏨 " + h.name, direction: "top" } });
+      });
+    });
+  }
+  function addRentalMarker(loc){
+    if (!rentalMarker || !loc) return;
+    new AMap.Marker({ position: loc, map: map, icon: rentalIcon(), title: rentalMarker.label, label: { content: rentalMarker.label, direction: "bottom" } });
+  }
+
+  if (routePoints.length === 1) {
+    geocode(routePoints[0].keyword, routePoints[0].city).then(function(loc){
+      if (loc) {
+        new AMap.Marker({ position: loc, map: map, title: routePoints[0].keyword });
+        map.setCenter(loc);
+        map.setZoom(11);
+        if (rentalMarker && rentalMarker.pointIndex === 0) addRentalMarker(loc);
+      } else {
+        document.getElementById("amap-status-12").innerHTML = "定位失败，请在高德地图App中手动搜索：" + routePoints[0].keyword;
+      }
+      addHotelMarkers();
+    });
+  } else {
+    Promise.all(routePoints.map(function(p){ return geocode(p.keyword, p.city); })).then(function(locs){
+      var validIdx = [];
+      locs.forEach(function(l, i){ if (l) validIdx.push(i); });
+      if (validIdx.length < 2) {
+        document.getElementById("amap-status-12").innerHTML = "部分地点定位失败，无法规划路线，请在高德地图App中手动搜索：" + routePoints.map(function(p){ return p.keyword; }).join(" → ");
+        addHotelMarkers();
+        return;
+      }
+      var start = locs[validIdx[0]];
+      var end = locs[validIdx[validIdx.length - 1]];
+      var mid = validIdx.slice(1, -1).map(function(i){ return locs[i]; });
+      var driving = new AMap.Driving({ map: map, policy: 0 });
+      driving.search(start, end, { waypoints: mid }, function(status, result){
+        if (status !== "complete") {
+          document.getElementById("amap-status-12").innerHTML = "驾车路线规划失败，请在高德地图App中手动搜索：" + routePoints.map(function(p){ return p.keyword; }).join(" → ");
+        }
+        map.setFitView();
+        if (rentalMarker && locs[rentalMarker.pointIndex]) {
+          addRentalMarker(locs[rentalMarker.pointIndex]);
+        }
+        addHotelMarkers();
+      });
+    });
+  }
 })();
 </script>
 <footer class="site-footer">北疆15日自驾行程 · 生成于本次行程规划对话 · 出行前请务必核实实时信息</footer>

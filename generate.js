@@ -8,9 +8,9 @@ const OUT = __dirname;
 const AMAP_KEY = "1e292eeef1aae1b6eb63c7989ae14dbb";
 const AMAP_SECURITY = "f5122d0c0aae74cc4c4e8f4ce0a196cc";
 
-// ---- Per-day waypoints for AMap driving/marker queries ----
-// Each entry: { keyword, city } — matches AMap.Driving's keyword-search input format.
-// Days with a single point render as a marker only (no driving route).
+// ---- Per-day route waypoints for AMap driving/marker queries ----
+// city values use prefecture-level (地级) administrative names for reliable AMap geocoding bias:
+// 阿勒泰地区 (Altay), 伊犁哈萨克自治州 (Ili), 博尔塔拉蒙古自治州 (Bortala), 克拉玛依市, 乌鲁木齐市, 伊宁市, 阜康市, 奎屯市.
 const WAYPOINTS_CN = {
   1: [{ keyword: "乌鲁木齐地窝堡国际机场", city: "乌鲁木齐市" }],
   2: [
@@ -19,43 +19,43 @@ const WAYPOINTS_CN = {
   ],
   3: [
     { keyword: "克拉玛依市", city: "克拉玛依市" },
-    { keyword: "布尔津县", city: "布尔津县" },
-    { keyword: "喀纳斯景区贾登峪游客中心", city: "布尔津县" },
+    { keyword: "布尔津县", city: "阿勒泰地区" },
+    { keyword: "喀纳斯景区贾登峪游客中心", city: "阿勒泰地区" },
   ],
   4: [
-    { keyword: "贾登峪游客中心", city: "布尔津县" },
-    { keyword: "喀纳斯湖", city: "布尔津县" },
+    { keyword: "贾登峪游客中心", city: "阿勒泰地区" },
+    { keyword: "喀纳斯湖", city: "阿勒泰地区" },
   ],
   5: [
-    { keyword: "贾登峪游客中心", city: "布尔津县" },
-    { keyword: "禾木村", city: "布尔津县" },
+    { keyword: "贾登峪游客中心", city: "阿勒泰地区" },
+    { keyword: "禾木村", city: "阿勒泰地区" },
   ],
   6: [
-    { keyword: "禾木村", city: "布尔津县" },
-    { keyword: "贾登峪游客中心", city: "布尔津县" },
-    { keyword: "布尔津县", city: "布尔津县" },
+    { keyword: "禾木村", city: "阿勒泰地区" },
+    { keyword: "贾登峪游客中心", city: "阿勒泰地区" },
+    { keyword: "布尔津县", city: "阿勒泰地区" },
   ],
   7: [
-    { keyword: "布尔津县", city: "布尔津县" },
+    { keyword: "布尔津县", city: "阿勒泰地区" },
     { keyword: "世界魔鬼城", city: "克拉玛依市" },
   ],
   8: [
     { keyword: "世界魔鬼城", city: "克拉玛依市" },
-    { keyword: "赛里木湖", city: "博乐市" },
+    { keyword: "赛里木湖", city: "博尔塔拉蒙古自治州" },
   ],
-  9: [{ keyword: "赛里木湖", city: "博乐市" }],
+  9: [{ keyword: "赛里木湖", city: "博尔塔拉蒙古自治州" }],
   10: [
-    { keyword: "赛里木湖", city: "博乐市" },
+    { keyword: "赛里木湖", city: "博尔塔拉蒙古自治州" },
     { keyword: "伊宁市六星街", city: "伊宁市" },
-    { keyword: "那拉提镇", city: "新源县" },
+    { keyword: "那拉提镇", city: "伊犁哈萨克自治州" },
   ],
-  11: [{ keyword: "那拉提草原景区", city: "新源县" }],
+  11: [{ keyword: "那拉提草原景区", city: "伊犁哈萨克自治州" }],
   12: [
-    { keyword: "那拉提镇", city: "新源县" },
-    { keyword: "唐布拉草原", city: "尼勒克县" },
+    { keyword: "那拉提镇", city: "伊犁哈萨克自治州" },
+    { keyword: "唐布拉草原", city: "伊犁哈萨克自治州" },
   ],
   13: [
-    { keyword: "那拉提镇", city: "新源县" },
+    { keyword: "那拉提镇", city: "伊犁哈萨克自治州" },
     { keyword: "独山子区", city: "克拉玛依市" },
   ],
   14: [
@@ -65,6 +65,40 @@ const WAYPOINTS_CN = {
   ],
   15: [{ keyword: "乌鲁木齐地窝堡国际机场", city: "乌鲁木齐市" }],
 };
+
+// City bias for geocoding each day's hotel names (POI-name lookup).
+const HOTEL_CITY_BIAS = {
+  1: "乌鲁木齐市",
+  2: "克拉玛依市",
+  3: "阿勒泰地区",
+  4: "阿勒泰地区",
+  5: "阿勒泰地区",
+  6: "阿勒泰地区",
+  7: "克拉玛依市",
+  8: "博尔塔拉蒙古自治州",
+  9: "博尔塔拉蒙古自治州",
+  10: "伊犁哈萨克自治州",
+  11: "伊犁哈萨克自治州",
+  12: "伊犁哈萨克自治州",
+  13: "奎屯市",
+  14: "乌鲁木齐市",
+  15: null,
+};
+
+// Rental car pickup/return markers, reusing already-geocoded route point coordinates
+// (pointIndex = index into that day's WAYPOINTS_CN array).
+const RENTAL_MARKERS = {
+  1: { label: "🚗 取车点：机场租车中心", pointIndex: 0 },
+  14: { label: "🚗 还车点：机场租车中心", pointIndex: 2 },
+};
+
+function hotelListForDay(d) {
+  const city = HOTEL_CITY_BIAS[d.num];
+  if (!city || !d.hotels) return [];
+  return d.hotels
+    .filter(h => h.name && !h.name.startsWith("（同"))
+    .map(h => ({ name: h.name, city }));
+}
 
 const CSS = `
 :root {
@@ -178,15 +212,21 @@ main {
   border: 1px solid var(--border);
   margin-bottom: 8px;
   width: 100%;
-  height: 360px;
+  height: 380px;
   background: #eef1ec;
 }
 .map-fallback-link {
   font-size: 13px;
   color: var(--muted);
+  min-height: 16px;
 }
 .map-fallback-link a { color: var(--teal-light); }
 .map-note {
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 4px;
+}
+.map-legend {
   font-size: 12px;
   color: var(--muted);
   margin-top: 4px;
@@ -349,46 +389,98 @@ function renderTransportRow(label, value) {
   return `<tr><td class="label">${label}</td><td>${value}</td></tr>`;
 }
 
-// Builds the AMap init script for a single day's map div.
-function amapDayInitScript(dayNum, points) {
+// Shared geocode/marker helper functions, inlined into every page's map script.
+const JS_HELPERS = `
+  function geocode(address, city) {
+    return new Promise(function(resolve){
+      var opts = city ? { city: city } : {};
+      var g = new AMap.Geocoder(opts);
+      g.getLocation(address, function(status, result){
+        if (status === "complete" && result.geocodes && result.geocodes.length) {
+          resolve(result.geocodes[0].location);
+        } else {
+          resolve(null);
+        }
+      });
+    });
+  }
+  function hotelIcon(){
+    return new AMap.Icon({ size: new AMap.Size(25,34), image: "https://webapi.amap.com/theme/v1.3/markers/n/mark_r.png", imageSize: new AMap.Size(25,34) });
+  }
+  function rentalIcon(){
+    return new AMap.Icon({ size: new AMap.Size(25,34), image: "https://webapi.amap.com/theme/v1.3/markers/n/mark_g.png", imageSize: new AMap.Size(25,34) });
+  }
+`;
+
+// Builds the AMap init script for a single day's map div: real driving route
+// (via geocoded coordinates, not keyword search, for reliability), hotel markers,
+// and rental car pickup/return markers where applicable.
+function amapDayInitScript(dayNum, points, hotels, rentalMarker) {
   const mapId = `amap-day-${dayNum}`;
   const statusId = `amap-status-${dayNum}`;
+  if (!points || points.length === 0) return "";
+
   const pointsJson = JSON.stringify(points);
-
-  if (!points || points.length === 0) {
-    return "";
-  }
-
-  if (points.length === 1) {
-    const p = points[0];
-    return `<script>
-(function(){
-  var map = new AMap.Map("${mapId}", { zoom: 10, resizeEnable: true });
-  AMap.plugin("AMap.PlaceSearch", function(){
-    var ps = new AMap.PlaceSearch({ city: ${JSON.stringify(p.city)}, map: map });
-    ps.search(${JSON.stringify(p.keyword)}, function(status, result){
-      if (status !== "complete" || !result.poiList || !result.poiList.pois.length) {
-        document.getElementById("${statusId}").innerHTML = "地图定位失败，可在高德地图App中手动搜索：${p.keyword.replace(/"/g, '\\"')}";
-      }
-    });
-  });
-})();
-</script>`;
-  }
+  const hotelsJson = JSON.stringify(hotels || []);
+  const rentalJson = rentalMarker ? JSON.stringify(rentalMarker) : "null";
 
   return `<script>
 (function(){
-  var map = new AMap.Map("${mapId}", { zoom: 8, resizeEnable: true });
-  var points = ${pointsJson};
-  AMap.plugin("AMap.Driving", function(){
-    var driving = new AMap.Driving({ map: map, policy: 0 });
-    driving.search(points, function(status, result){
-      if (status !== "complete") {
-        var names = points.map(function(p){ return p.keyword; }).join(" → ");
-        document.getElementById("${statusId}").innerHTML = "路线自动规划失败（可能是坐标解析问题），请在高德地图App中手动搜索：" + names;
-      }
+  var map = new AMap.Map("${mapId}", { zoom: 6, resizeEnable: true });
+  var routePoints = ${pointsJson};
+  var hotels = ${hotelsJson};
+  var rentalMarker = ${rentalJson};
+${JS_HELPERS}
+  function addHotelMarkers(){
+    hotels.forEach(function(h){
+      geocode(h.name, h.city).then(function(loc){
+        if (!loc) return;
+        new AMap.Marker({ position: loc, map: map, icon: hotelIcon(), title: h.name, label: { content: "🏨 " + h.name, direction: "top" } });
+      });
     });
-  });
+  }
+  function addRentalMarker(loc){
+    if (!rentalMarker || !loc) return;
+    new AMap.Marker({ position: loc, map: map, icon: rentalIcon(), title: rentalMarker.label, label: { content: rentalMarker.label, direction: "bottom" } });
+  }
+
+  if (routePoints.length === 1) {
+    geocode(routePoints[0].keyword, routePoints[0].city).then(function(loc){
+      if (loc) {
+        new AMap.Marker({ position: loc, map: map, title: routePoints[0].keyword });
+        map.setCenter(loc);
+        map.setZoom(11);
+        if (rentalMarker && rentalMarker.pointIndex === 0) addRentalMarker(loc);
+      } else {
+        document.getElementById("${statusId}").innerHTML = "定位失败，请在高德地图App中手动搜索：" + routePoints[0].keyword;
+      }
+      addHotelMarkers();
+    });
+  } else {
+    Promise.all(routePoints.map(function(p){ return geocode(p.keyword, p.city); })).then(function(locs){
+      var validIdx = [];
+      locs.forEach(function(l, i){ if (l) validIdx.push(i); });
+      if (validIdx.length < 2) {
+        document.getElementById("${statusId}").innerHTML = "部分地点定位失败，无法规划路线，请在高德地图App中手动搜索：" + routePoints.map(function(p){ return p.keyword; }).join(" → ");
+        addHotelMarkers();
+        return;
+      }
+      var start = locs[validIdx[0]];
+      var end = locs[validIdx[validIdx.length - 1]];
+      var mid = validIdx.slice(1, -1).map(function(i){ return locs[i]; });
+      var driving = new AMap.Driving({ map: map, policy: 0 });
+      driving.search(start, end, { waypoints: mid }, function(status, result){
+        if (status !== "complete") {
+          document.getElementById("${statusId}").innerHTML = "驾车路线规划失败，请在高德地图App中手动搜索：" + routePoints.map(function(p){ return p.keyword; }).join(" → ");
+        }
+        map.setFitView();
+        if (rentalMarker && locs[rentalMarker.pointIndex]) {
+          addRentalMarker(locs[rentalMarker.pointIndex]);
+        }
+        addHotelMarkers();
+      });
+    });
+  }
 })();
 </script>`;
 }
@@ -397,11 +489,19 @@ function renderDayPage(d, idx) {
   const prev = idx > 0 ? DAYS[idx - 1] : null;
   const next = idx < DAYS.length - 1 ? DAYS[idx + 1] : null;
   const points = WAYPOINTS_CN[d.num] || [];
+  const hotels = hotelListForDay(d);
+  const rentalMarker = RENTAL_MARKERS[d.num] || null;
+
+  const legendParts = [];
+  if (points.length > 1) legendParts.push("蓝色路线＝高德实时驾车路线规划");
+  if (hotels.length > 0) legendParts.push("🏨红色标记＝推荐酒店");
+  if (rentalMarker) legendParts.push("🚗绿色标记＝" + rentalMarker.label.replace("🚗 ", ""));
 
   const mapSection = points.length > 0 ? `
   <div id="amap-day-${d.num}" class="map-frame-wrap"></div>
   <div id="amap-status-${d.num}" class="map-fallback-link"></div>
-  <div class="map-note">地图由高德地图 JS API 驱动，${points.length > 1 ? "路线为高德实时驾车路线规划结果（仅供参考，实际路况请以导航为准）" : "此为定位标注，当天无自驾里程"}。</div>
+  <div class="map-note">地图由高德地图 JS API 驱动，路线为高德实时驾车路线规划结果（仅供参考，实际路况请以导航为准）。</div>
+  ${legendParts.length > 0 ? `<div class="map-legend">${legendParts.join(" · ")}</div>` : ""}
   ` : `<p class="empty-note">当天无自驾/位置移动。</p>`;
 
   const t = d.transport || {};
@@ -483,82 +583,60 @@ ${navHtml(d.num)}
   <div class="disclaimer">${TRIP.disclaimer}</div>
 </main>
 ${amapLoaderScript()}
-${amapDayInitScript(d.num, points)}
+${amapDayInitScript(d.num, points, hotels, rentalMarker)}
 ${footHtml()}`;
 }
 
-// Overview map: plots a numbered marker for each day's first waypoint (geocoded),
-// then connects them with a straight schematic polyline (NOT a real driving route —
-// each day page has the real routed map). This avoids AMap.Driving's waypoint limits
-// and avoids nonsensical "driving" queries across days that use shuttle-only access (e.g. Kanas).
+// Overview map: chains all 15 days' REAL AMap driving routes onto one map
+// (each day's segment independently geocoded + routed, all drawn on the same map object),
+// with a "D{n}" labeled marker at each day's destination.
 function amapIndexInitScript() {
-  const seq = [];
-  for (const d of DAYS) {
-    const pts = WAYPOINTS_CN[d.num];
-    if (pts && pts.length > 0) {
-      const first = pts[0];
-      const last = pts[pts.length - 1];
-      // Use the day's last point as the representative "arrival" location for that day,
-      // except day 1 which has only an arrival point.
-      const rep = last;
-      const prevRep = seq.length > 0 ? seq[seq.length - 1].keyword : null;
-      if (rep.keyword !== prevRep) {
-        seq.push({ keyword: rep.keyword, city: rep.city, day: d.num });
-      }
-    }
-  }
-  const seqJson = JSON.stringify(seq);
+  const dayList = DAYS
+    .filter(d => (WAYPOINTS_CN[d.num] || []).length > 0)
+    .map(d => ({ num: d.num, points: WAYPOINTS_CN[d.num] }));
+  const dayListJson = JSON.stringify(dayList);
+
   return `<script>
 (function(){
   var map = new AMap.Map("amap-index", { zoom: 6, resizeEnable: true });
-  var stops = ${seqJson};
-  var geocoder = new AMap.Geocoder({});
-  var results = new Array(stops.length);
-  var done = 0;
-  function finishOne(i, lnglat){
-    results[i] = lnglat;
-    done++;
-    if (done === stops.length) {
-      var path = [];
-      var markers = [];
-      results.forEach(function(pos, idx){
-        if (!pos) return;
-        path.push(pos);
-        var marker = new AMap.Marker({
-          position: pos,
-          map: map,
-          label: { content: "D" + stops[idx].day, direction: "top" },
-          title: stops[idx].keyword
-        });
-        markers.push(marker);
-      });
-      if (path.length > 1) {
-        new AMap.Polyline({
-          path: path,
-          map: map,
-          strokeColor: "#1F4E5F",
-          strokeWeight: 3,
-          strokeStyle: "dashed"
-        });
-      }
-      if (path.length > 0) {
-        map.setFitView();
-      } else {
-        document.getElementById("amap-index-status").innerHTML = "地图标注加载失败，请刷新页面重试。";
-      }
+  var days = ${dayListJson};
+  var pending = days.length;
+${JS_HELPERS}
+  function markDone(){
+    pending--;
+    if (pending <= 0) {
+      map.setFitView();
+      var el = document.getElementById("amap-index-status");
+      if (el) el.innerHTML = "";
     }
   }
-  stops.forEach(function(stop, i){
-    AMap.plugin("AMap.Geocoder", function(){
-      var g = new AMap.Geocoder({ city: stop.city });
-      g.getLocation(stop.keyword, function(status, result){
-        if (status === "complete" && result.geocodes && result.geocodes.length) {
-          finishOne(i, result.geocodes[0].location);
-        } else {
-          finishOne(i, null);
+
+  document.getElementById("amap-index-status").innerHTML = "正在加载全程15天真实驾车路线，请稍候…";
+
+  days.forEach(function(day){
+    var pts = day.points;
+    if (pts.length === 1) {
+      geocode(pts[0].keyword, pts[0].city).then(function(loc){
+        if (loc) {
+          new AMap.Marker({ position: loc, map: map, label: { content: "D" + day.num, direction: "top" }, title: pts[0].keyword });
         }
+        markDone();
       });
-    });
+    } else {
+      Promise.all(pts.map(function(p){ return geocode(p.keyword, p.city); })).then(function(locs){
+        var validIdx = [];
+        locs.forEach(function(l, i){ if (l) validIdx.push(i); });
+        if (validIdx.length < 2) { markDone(); return; }
+        var start = locs[validIdx[0]];
+        var end = locs[validIdx[validIdx.length - 1]];
+        var mid = validIdx.slice(1, -1).map(function(i){ return locs[i]; });
+        var driving = new AMap.Driving({ map: map, policy: 0 });
+        driving.search(start, end, { waypoints: mid }, function(status, result){
+          new AMap.Marker({ position: end, map: map, label: { content: "D" + day.num, direction: "top" }, title: pts[pts.length - 1].keyword });
+          markDone();
+        });
+      });
+    }
   });
 })();
 </script>`;
@@ -583,7 +661,7 @@ ${navHtml(0)}
     <h3><span class="icon">🗺️</span>全程路线总览</h3>
     <div id="amap-index" class="map-frame-wrap"></div>
     <div id="amap-index-status" class="map-fallback-link"></div>
-    <div class="map-note">示意图：按每日终点顺序用虚线连接，仅表示大致行进方向，非实际道路轨迹。每日详细页内为高德实时驾车路线。</div>
+    <div class="map-note">每日路段均为高德实时驾车路线规划结果（真实道路轨迹），首次加载需依次请求15天路线，可能需要几秒钟。</div>
   </div>
   <div class="section-card">
     <h3><span class="icon">📅</span>逐日行程</h3>
