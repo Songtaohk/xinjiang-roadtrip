@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>D2 乌鲁木齐 → 克拉玛依 - 北疆15日自驾行程</title>
+<style>
+:root {
+  --teal: #1F4E5F;
+  --teal-light: #2E6F86;
+  --sand: #F5EFE6;
+  --warn-bg: #FCEFC7;
+  --warn-border: #E0B94D;
+  --text: #2B2B2B;
+  --muted: #6B6B6B;
+  --card-bg: #FFFFFF;
+  --border: #E3DED3;
+  --radius: 10px;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: "PingFang SC", "Microsoft YaHei", "Helvetica Neue", Arial, sans-serif;
+  background: var(--sand);
+  color: var(--text);
+  line-height: 1.6;
+}
+header.site-header {
+  background: var(--teal);
+  color: white;
+  padding: 20px 24px;
+}
+header.site-header h1 {
+  margin: 0 0 4px 0;
+  font-size: 22px;
+}
+header.site-header p {
+  margin: 0;
+  opacity: 0.85;
+  font-size: 14px;
+}
+nav.day-nav {
+  background: var(--teal-light);
+  padding: 10px 16px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+}
+nav.day-nav a {
+  color: white;
+  text-decoration: none;
+  background: rgba(255,255,255,0.15);
+  padding: 5px 10px;
+  border-radius: 6px;
+  font-size: 13px;
+  white-space: nowrap;
+}
+nav.day-nav a.active {
+  background: white;
+  color: var(--teal);
+  font-weight: 600;
+}
+main {
+  max-width: 920px;
+  margin: 0 auto;
+  padding: 20px 16px 60px;
+}
+.day-title-block {
+  margin-bottom: 20px;
+}
+.day-title-block .day-num {
+  display: inline-block;
+  background: var(--teal);
+  color: white;
+  padding: 3px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  margin-bottom: 8px;
+}
+.day-title-block h2 {
+  margin: 6px 0 4px;
+  font-size: 24px;
+  color: var(--teal);
+}
+.day-title-block .date-line {
+  color: var(--muted);
+  font-size: 14px;
+}
+.day-title-block .summary {
+  margin-top: 8px;
+  font-size: 15px;
+  color: var(--text);
+}
+.section-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 18px 20px;
+  margin-bottom: 18px;
+}
+.section-card h3 {
+  margin: 0 0 12px 0;
+  font-size: 16px;
+  color: var(--teal);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.section-card h3 .icon {
+  font-size: 18px;
+}
+.map-frame-wrap {
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  margin-bottom: 8px;
+  width: 100%;
+  height: 360px;
+  background: #eef1ec;
+}
+.map-fallback-link {
+  font-size: 13px;
+  color: var(--muted);
+}
+.map-fallback-link a { color: var(--teal-light); }
+.map-note {
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 4px;
+}
+table.info-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+table.info-table td {
+  padding: 7px 6px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+}
+table.info-table td.label {
+  width: 92px;
+  color: var(--muted);
+  white-space: nowrap;
+  font-weight: 600;
+}
+.warn-box {
+  background: var(--warn-bg);
+  border: 1px solid var(--warn-border);
+  border-radius: 8px;
+  padding: 10px 14px;
+  margin-top: 10px;
+  font-size: 13.5px;
+}
+.activity-item, .hotel-item {
+  padding: 10px 0;
+  border-bottom: 1px dashed var(--border);
+}
+.activity-item:last-child, .hotel-item:last-child { border-bottom: none; }
+.activity-item .name, .hotel-item .name {
+  font-weight: 600;
+  font-size: 14.5px;
+}
+.activity-item .meta, .hotel-item .meta {
+  color: var(--muted);
+  font-size: 12.5px;
+  margin: 2px 0 4px;
+}
+.activity-item .note, .hotel-item .note {
+  font-size: 13.5px;
+}
+.food-list {
+  font-size: 14px;
+  padding-left: 18px;
+  margin: 0;
+}
+.food-list li { margin-bottom: 4px; }
+.empty-note {
+  color: var(--muted);
+  font-style: italic;
+  font-size: 14px;
+}
+.disclaimer {
+  font-size: 12.5px;
+  color: var(--muted);
+  background: #FBF8F2;
+  border: 1px dashed var(--border);
+  border-radius: 8px;
+  padding: 12px 14px;
+  margin-top: 24px;
+}
+.index-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.index-list li {
+  margin-bottom: 10px;
+}
+.index-list a {
+  display: block;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+  text-decoration: none;
+  color: var(--text);
+}
+.index-list a:hover { border-color: var(--teal-light); }
+.index-list .idx-day {
+  font-size: 12px;
+  color: white;
+  background: var(--teal);
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 12px;
+  margin-bottom: 4px;
+}
+.index-list .idx-title { font-weight: 600; font-size: 15px; color: var(--teal); }
+.index-list .idx-summary { font-size: 13px; color: var(--muted); margin-top: 2px; }
+.prevnext {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 24px;
+  gap: 10px;
+}
+.prevnext a {
+  flex: 1;
+  text-align: center;
+  padding: 12px;
+  background: var(--teal);
+  color: white;
+  text-decoration: none;
+  border-radius: 8px;
+  font-size: 14px;
+}
+.prevnext a.disabled {
+  background: var(--border);
+  color: var(--muted);
+  pointer-events: none;
+}
+footer.site-footer {
+  text-align: center;
+  color: var(--muted);
+  font-size: 12px;
+  padding: 20px;
+}
+</style>
+</head>
+<body>
+<header class="site-header">
+  <h1>北疆15日自驾行程</h1>
+  <p>香港 ⇄ 乌鲁木齐 · 8月16日–8月30日 · 全自驾 · 2人</p>
+</header>
+<nav class="day-nav"><a href="index.html" class="">总览</a><a href="day1.html" class="">D1</a><a href="day2.html" class="active">D2</a><a href="day3.html" class="">D3</a><a href="day4.html" class="">D4</a><a href="day5.html" class="">D5</a><a href="day6.html" class="">D6</a><a href="day7.html" class="">D7</a><a href="day8.html" class="">D8</a><a href="day9.html" class="">D9</a><a href="day10.html" class="">D10</a><a href="day11.html" class="">D11</a><a href="day12.html" class="">D12</a><a href="day13.html" class="">D13</a><a href="day14.html" class="">D14</a><a href="day15.html" class="">D15</a></nav>
+<main>
+  <div class="day-title-block">
+    <span class="day-num">Day 2 · 8月17日（周日）</span>
+    <h2>乌鲁木齐 → 克拉玛依</h2>
+    <div class="summary">全程高速，轻松巡航，午后到达石油城</div>
+  </div>
+
+  <div class="section-card">
+    <h3><span class="icon">🗺️</span>路线图</h3>
+    
+  <div id="amap-day-2" class="map-frame-wrap"></div>
+  <div id="amap-status-2" class="map-fallback-link"></div>
+  <div class="map-note">地图由高德地图 JS API 驱动，路线为高德实时驾车路线规划结果（仅供参考，实际路况请以导航为准）。</div>
+  
+  </div>
+
+  <div class="section-card">
+    <h3><span class="icon">🚗</span>交通</h3>
+    <table class="info-table"><tr><td class="label">路线</td><td>乌奎高速（G3013/S40）+ 连霍高速（G30）</td></tr><tr><td class="label">里程</td><td>约300-320 km</td></tr><tr><td class="label">车程</td><td>约3.5-4.5小时（全程高速）</td></tr><tr><td class="label">海拔变化</td><td>乌鲁木齐 ~800m → 克拉玛依 ~400m（下降约400m，平缓）</td></tr><tr><td class="label">历史天气参考</td><td>8月克拉玛依日间常达30℃以上，干燥少雨，夜间约18-20℃</td></tr><tr><td class="label">是否需预约</td><td>自驾，无需预约</td></tr></table>
+    
+    <div class="warn-box"><strong>驾车注意事项：</strong>全程高速路况好，唯一注意点是戈壁段风大，注意侧风；服务区间隔较长，建议出发前加满油</div>
+  </div>
+
+  <div class="section-card">
+    <h3><span class="icon">📍</span>活动安排</h3>
+    
+      <div class="activity-item">
+        <div class="name">睡到自然醒，中午出发</div>
+        <div class="meta">游览时间：—</div>
+        <div class="note">第2天，适度放松节奏</div>
+      </div>
+      <div class="activity-item">
+        <div class="name">九龙潭公园</div>
+        <div class="meta">游览时间：约1小时</div>
+        <div class="note">克拉玛依市区人工湖景观，傍晚散步</div>
+      </div>
+  </div>
+
+  <div class="section-card">
+    <h3><span class="icon">🍽️</span>饮食 / 住宿</h3>
+    <div style="margin-bottom:10px;"><strong style="font-size:13.5px;color:var(--muted);">推荐饮食</strong><ul class="food-list"><li>椒麻鸡（克拉玛依特色菜）</li><li>手抓饭</li></ul></div>
+    <div><strong style="font-size:13.5px;color:var(--muted);">当晚住宿（3-4星，推荐1-3选）</strong>
+      <div class="hotel-item">
+        <div class="name">克拉玛依恒隆国际酒店</div>
+        <div class="meta">克拉玛依市区（石油大厦店） · 未查到确切数字，建议携程查实时价</div>
+        <div class="note">商务型高档酒店，隔音好，市区位置驾车方便</div>
+      </div>
+      <div class="hotel-item">
+        <div class="name">龙华大酒店</div>
+        <div class="meta">克拉玛依西环路店 · 建议携程查实时价</div>
+        <div class="note">同级商务酒店选择</div>
+      </div></div>
+  </div>
+
+  <div class="prevnext">
+    <a href="day1.html" class="">← 上一天：D1</a>
+    <a href="day3.html" class="">下一天：D3 →</a>
+  </div>
+
+  <div class="disclaimer">本网站所有里程、车程、预约规则、价格均为出行前整理的参考信息，存在多来源冲突或未查实的字段已逐一标注。请出发前用高德/百度地图核实实时路况，并通过官方渠道确认最新预约与门票政策。</div>
+</main>
+<script>
+window._AMapSecurityConfig = { securityJsCode: "f5122d0c0aae74cc4c4e8f4ce0a196cc" };
+</script>
+<script src="https://webapi.amap.com/maps?v=2.0&key=1e292eeef1aae1b6eb63c7989ae14dbb&plugin=AMap.Driving,AMap.Geocoder,AMap.PlaceSearch"></script>
+<script>
+(function(){
+  var map = new AMap.Map("amap-day-2", { zoom: 8, resizeEnable: true });
+  var points = [{"keyword":"乌鲁木齐市","city":"乌鲁木齐市"},{"keyword":"克拉玛依市","city":"克拉玛依市"}];
+  AMap.plugin("AMap.Driving", function(){
+    var driving = new AMap.Driving({ map: map, policy: 0 });
+    driving.search(points, function(status, result){
+      if (status !== "complete") {
+        var names = points.map(function(p){ return p.keyword; }).join(" → ");
+        document.getElementById("amap-status-2").innerHTML = "路线自动规划失败（可能是坐标解析问题），请在高德地图App中手动搜索：" + names;
+      }
+    });
+  });
+})();
+</script>
+<footer class="site-footer">北疆15日自驾行程 · 生成于本次行程规划对话 · 出行前请务必核实实时信息</footer>
+</body></html>

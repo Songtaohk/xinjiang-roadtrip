@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>北疆15日自驾行程</title>
+<style>
+:root {
+  --teal: #1F4E5F;
+  --teal-light: #2E6F86;
+  --sand: #F5EFE6;
+  --warn-bg: #FCEFC7;
+  --warn-border: #E0B94D;
+  --text: #2B2B2B;
+  --muted: #6B6B6B;
+  --card-bg: #FFFFFF;
+  --border: #E3DED3;
+  --radius: 10px;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: "PingFang SC", "Microsoft YaHei", "Helvetica Neue", Arial, sans-serif;
+  background: var(--sand);
+  color: var(--text);
+  line-height: 1.6;
+}
+header.site-header {
+  background: var(--teal);
+  color: white;
+  padding: 20px 24px;
+}
+header.site-header h1 {
+  margin: 0 0 4px 0;
+  font-size: 22px;
+}
+header.site-header p {
+  margin: 0;
+  opacity: 0.85;
+  font-size: 14px;
+}
+nav.day-nav {
+  background: var(--teal-light);
+  padding: 10px 16px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+}
+nav.day-nav a {
+  color: white;
+  text-decoration: none;
+  background: rgba(255,255,255,0.15);
+  padding: 5px 10px;
+  border-radius: 6px;
+  font-size: 13px;
+  white-space: nowrap;
+}
+nav.day-nav a.active {
+  background: white;
+  color: var(--teal);
+  font-weight: 600;
+}
+main {
+  max-width: 920px;
+  margin: 0 auto;
+  padding: 20px 16px 60px;
+}
+.day-title-block {
+  margin-bottom: 20px;
+}
+.day-title-block .day-num {
+  display: inline-block;
+  background: var(--teal);
+  color: white;
+  padding: 3px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  margin-bottom: 8px;
+}
+.day-title-block h2 {
+  margin: 6px 0 4px;
+  font-size: 24px;
+  color: var(--teal);
+}
+.day-title-block .date-line {
+  color: var(--muted);
+  font-size: 14px;
+}
+.day-title-block .summary {
+  margin-top: 8px;
+  font-size: 15px;
+  color: var(--text);
+}
+.section-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 18px 20px;
+  margin-bottom: 18px;
+}
+.section-card h3 {
+  margin: 0 0 12px 0;
+  font-size: 16px;
+  color: var(--teal);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.section-card h3 .icon {
+  font-size: 18px;
+}
+.map-frame-wrap {
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  margin-bottom: 8px;
+  width: 100%;
+  height: 360px;
+  background: #eef1ec;
+}
+.map-fallback-link {
+  font-size: 13px;
+  color: var(--muted);
+}
+.map-fallback-link a { color: var(--teal-light); }
+.map-note {
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 4px;
+}
+table.info-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+table.info-table td {
+  padding: 7px 6px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+}
+table.info-table td.label {
+  width: 92px;
+  color: var(--muted);
+  white-space: nowrap;
+  font-weight: 600;
+}
+.warn-box {
+  background: var(--warn-bg);
+  border: 1px solid var(--warn-border);
+  border-radius: 8px;
+  padding: 10px 14px;
+  margin-top: 10px;
+  font-size: 13.5px;
+}
+.activity-item, .hotel-item {
+  padding: 10px 0;
+  border-bottom: 1px dashed var(--border);
+}
+.activity-item:last-child, .hotel-item:last-child { border-bottom: none; }
+.activity-item .name, .hotel-item .name {
+  font-weight: 600;
+  font-size: 14.5px;
+}
+.activity-item .meta, .hotel-item .meta {
+  color: var(--muted);
+  font-size: 12.5px;
+  margin: 2px 0 4px;
+}
+.activity-item .note, .hotel-item .note {
+  font-size: 13.5px;
+}
+.food-list {
+  font-size: 14px;
+  padding-left: 18px;
+  margin: 0;
+}
+.food-list li { margin-bottom: 4px; }
+.empty-note {
+  color: var(--muted);
+  font-style: italic;
+  font-size: 14px;
+}
+.disclaimer {
+  font-size: 12.5px;
+  color: var(--muted);
+  background: #FBF8F2;
+  border: 1px dashed var(--border);
+  border-radius: 8px;
+  padding: 12px 14px;
+  margin-top: 24px;
+}
+.index-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.index-list li {
+  margin-bottom: 10px;
+}
+.index-list a {
+  display: block;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+  text-decoration: none;
+  color: var(--text);
+}
+.index-list a:hover { border-color: var(--teal-light); }
+.index-list .idx-day {
+  font-size: 12px;
+  color: white;
+  background: var(--teal);
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 12px;
+  margin-bottom: 4px;
+}
+.index-list .idx-title { font-weight: 600; font-size: 15px; color: var(--teal); }
+.index-list .idx-summary { font-size: 13px; color: var(--muted); margin-top: 2px; }
+.prevnext {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 24px;
+  gap: 10px;
+}
+.prevnext a {
+  flex: 1;
+  text-align: center;
+  padding: 12px;
+  background: var(--teal);
+  color: white;
+  text-decoration: none;
+  border-radius: 8px;
+  font-size: 14px;
+}
+.prevnext a.disabled {
+  background: var(--border);
+  color: var(--muted);
+  pointer-events: none;
+}
+footer.site-footer {
+  text-align: center;
+  color: var(--muted);
+  font-size: 12px;
+  padding: 20px;
+}
+</style>
+</head>
+<body>
+<header class="site-header">
+  <h1>北疆15日自驾行程</h1>
+  <p>香港 ⇄ 乌鲁木齐 · 8月16日–8月30日 · 全自驾 · 2人</p>
+</header>
+<nav class="day-nav"><a href="index.html" class="active">总览</a><a href="day1.html" class="">D1</a><a href="day2.html" class="">D2</a><a href="day3.html" class="">D3</a><a href="day4.html" class="">D4</a><a href="day5.html" class="">D5</a><a href="day6.html" class="">D6</a><a href="day7.html" class="">D7</a><a href="day8.html" class="">D8</a><a href="day9.html" class="">D9</a><a href="day10.html" class="">D10</a><a href="day11.html" class="">D11</a><a href="day12.html" class="">D12</a><a href="day13.html" class="">D13</a><a href="day14.html" class="">D14</a><a href="day15.html" class="">D15</a></nav>
+<main>
+  <div class="section-card">
+    <h3><span class="icon">🗺️</span>全程路线总览</h3>
+    <div id="amap-index" class="map-frame-wrap"></div>
+    <div id="amap-index-status" class="map-fallback-link"></div>
+    <div class="map-note">示意图：按每日终点顺序用虚线连接，仅表示大致行进方向，非实际道路轨迹。每日详细页内为高德实时驾车路线。</div>
+  </div>
+  <div class="section-card">
+    <h3><span class="icon">📅</span>逐日行程</h3>
+    <ul class="index-list">
+    <li><a href="day1.html">
+      <span class="idx-day">Day 1 · 8月16日（周六）</span>
+      <div class="idx-title">香港 → 乌鲁木齐</div>
+      <div class="idx-summary">红眼航班抵达，深度补觉＋市区人文半日</div>
+    </a></li>
+    <li><a href="day2.html">
+      <span class="idx-day">Day 2 · 8月17日（周日）</span>
+      <div class="idx-title">乌鲁木齐 → 克拉玛依</div>
+      <div class="idx-summary">全程高速，轻松巡航，午后到达石油城</div>
+    </a></li>
+    <li><a href="day3.html">
+      <span class="idx-day">Day 3 · 8月18日（周一）</span>
+      <div class="idx-title">克拉玛依 → 布尔津 → 贾登峪（阿勒泰大本营）</div>
+      <div class="idx-summary">进驻阿勒泰基地，接下来3晚以此为中心</div>
+    </a></li>
+    <li><a href="day4.html">
+      <span class="idx-day">Day 4 · 8月19日（周二）</span>
+      <div class="idx-title">贾登峪 ⇄ 喀纳斯湖区（0自驾里程）</div>
+      <div class="idx-summary">轻装换乘进核心景区，车留在基地</div>
+    </a></li>
+    <li><a href="day5.html">
+      <span class="idx-day">Day 5 · 8月20日（周三）</span>
+      <div class="idx-title">贾登峪 → 禾木（轻装夜宿一晚）</div>
+      <div class="idx-summary">大行李寄存基地，轻装赴禾木过夜看晨雾</div>
+    </a></li>
+    <li><a href="day6.html">
+      <span class="idx-day">Day 6 · 8月21日（周四）</span>
+      <div class="idx-title">禾木 → 贾登峪（取车） → 布尔津</div>
+      <div class="idx-summary">清晨看晨雾，午后取车赶在天黑前抵布尔津</div>
+    </a></li>
+    <li><a href="day7.html">
+      <span class="idx-day">Day 7 · 8月22日（周五）</span>
+      <div class="idx-title">布尔津 → 世界魔鬼城 → 乌尔禾/克拉玛依外围</div>
+      <div class="idx-summary">纯平路好开，傍晚拍雅丹地貌日落</div>
+    </a></li>
+    <li><a href="day8.html">
+      <span class="idx-day">Day 8 · 8月23日（周六）</span>
+      <div class="idx-title">乌尔禾 → 赛里木湖 ⚠ 刚性长途日</div>
+      <div class="idx-summary">全程唯一超长驾驶日，接受它，早发轻松抵达</div>
+    </a></li>
+    <li><a href="day9.html">
+      <span class="idx-day">Day 9 · 8月24日（周日）</span>
+      <div class="idx-title">赛里木湖静享（0驾车）</div>
+      <div class="idx-summary">全程唯一"零驾驶"休整日，彻底回血</div>
+    </a></li>
+    <li><a href="day10.html">
+      <span class="idx-day">Day 10 · 8月25日（周一）</span>
+      <div class="idx-title">赛里木湖 → 伊宁（六星街） → 那拉提</div>
+      <div class="idx-summary">果子沟大桥+俄式老街+抵达草原大本营</div>
+    </a></li>
+    <li><a href="day11.html">
+      <span class="idx-day">Day 11 · 8月26日（周二）</span>
+      <div class="idx-title">那拉提草原深度游 + 傍晚盘龙谷自驾</div>
+      <div class="idx-summary">空中草原轻徒步，傍晚幽静森林公路自驾</div>
+    </a></li>
+    <li><a href="day12.html">
+      <span class="idx-day">Day 12 · 8月27日（周三）</span>
+      <div class="idx-title">那拉提 ⇄ 唐布拉核心区（经S316+G218，不经独库公路）</div>
+      <div class="idx-summary">零风险日：山谷公路直达唐布拉，无需任何独库预约</div>
+    </a></li>
+    <li><a href="day13.html">
+      <span class="idx-day">Day 13 · 8月28日（周四）</span>
+      <div class="idx-title">那拉提 → 独库公路北段 → 奎屯/独山子 ⚠ 史诗级长途日</div>
+      <div class="idx-summary">全程最震撼的一天：翻越哈希勒根达坂，一日看四季</div>
+    </a></li>
+    <li><a href="day14.html">
+      <span class="idx-day">Day 14 · 8月29日（周五）</span>
+      <div class="idx-title">奎屯 → 天山天池 → 乌鲁木齐机场</div>
+      <div class="idx-summary">最后一站，环湖轻健行后回城备战返程</div>
+    </a></li>
+    <li><a href="day15.html">
+      <span class="idx-day">Day 15 · 8月30日（周六）</span>
+      <div class="idx-title">乌鲁木齐 → 香港</div>
+      <div class="idx-summary">无游玩安排，从容返程</div>
+    </a></li></ul>
+  </div>
+  <div class="disclaimer">本网站所有里程、车程、预约规则、价格均为出行前整理的参考信息，存在多来源冲突或未查实的字段已逐一标注。请出发前用高德/百度地图核实实时路况，并通过官方渠道确认最新预约与门票政策。</div>
+</main>
+<script>
+window._AMapSecurityConfig = { securityJsCode: "f5122d0c0aae74cc4c4e8f4ce0a196cc" };
+</script>
+<script src="https://webapi.amap.com/maps?v=2.0&key=1e292eeef1aae1b6eb63c7989ae14dbb&plugin=AMap.Driving,AMap.Geocoder,AMap.PlaceSearch"></script>
+<script>
+(function(){
+  var map = new AMap.Map("amap-index", { zoom: 6, resizeEnable: true });
+  var stops = [{"keyword":"乌鲁木齐地窝堡国际机场","city":"乌鲁木齐市","day":1},{"keyword":"克拉玛依市","city":"克拉玛依市","day":2},{"keyword":"喀纳斯景区贾登峪游客中心","city":"布尔津县","day":3},{"keyword":"喀纳斯湖","city":"布尔津县","day":4},{"keyword":"禾木村","city":"布尔津县","day":5},{"keyword":"布尔津县","city":"布尔津县","day":6},{"keyword":"世界魔鬼城","city":"克拉玛依市","day":7},{"keyword":"赛里木湖","city":"博乐市","day":8},{"keyword":"那拉提镇","city":"新源县","day":10},{"keyword":"那拉提草原景区","city":"新源县","day":11},{"keyword":"唐布拉草原","city":"尼勒克县","day":12},{"keyword":"独山子区","city":"克拉玛依市","day":13},{"keyword":"乌鲁木齐地窝堡国际机场","city":"乌鲁木齐市","day":14}];
+  var geocoder = new AMap.Geocoder({});
+  var results = new Array(stops.length);
+  var done = 0;
+  function finishOne(i, lnglat){
+    results[i] = lnglat;
+    done++;
+    if (done === stops.length) {
+      var path = [];
+      var markers = [];
+      results.forEach(function(pos, idx){
+        if (!pos) return;
+        path.push(pos);
+        var marker = new AMap.Marker({
+          position: pos,
+          map: map,
+          label: { content: "D" + stops[idx].day, direction: "top" },
+          title: stops[idx].keyword
+        });
+        markers.push(marker);
+      });
+      if (path.length > 1) {
+        new AMap.Polyline({
+          path: path,
+          map: map,
+          strokeColor: "#1F4E5F",
+          strokeWeight: 3,
+          strokeStyle: "dashed"
+        });
+      }
+      if (path.length > 0) {
+        map.setFitView();
+      } else {
+        document.getElementById("amap-index-status").innerHTML = "地图标注加载失败，请刷新页面重试。";
+      }
+    }
+  }
+  stops.forEach(function(stop, i){
+    AMap.plugin("AMap.Geocoder", function(){
+      var g = new AMap.Geocoder({ city: stop.city });
+      g.getLocation(stop.keyword, function(status, result){
+        if (status === "complete" && result.geocodes && result.geocodes.length) {
+          finishOne(i, result.geocodes[0].location);
+        } else {
+          finishOne(i, null);
+        }
+      });
+    });
+  });
+})();
+</script>
+<footer class="site-footer">北疆15日自驾行程 · 生成于本次行程规划对话 · 出行前请务必核实实时信息</footer>
+</body></html>

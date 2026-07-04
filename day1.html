@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>D1 香港 → 乌鲁木齐 - 北疆15日自驾行程</title>
+<style>
+:root {
+  --teal: #1F4E5F;
+  --teal-light: #2E6F86;
+  --sand: #F5EFE6;
+  --warn-bg: #FCEFC7;
+  --warn-border: #E0B94D;
+  --text: #2B2B2B;
+  --muted: #6B6B6B;
+  --card-bg: #FFFFFF;
+  --border: #E3DED3;
+  --radius: 10px;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: "PingFang SC", "Microsoft YaHei", "Helvetica Neue", Arial, sans-serif;
+  background: var(--sand);
+  color: var(--text);
+  line-height: 1.6;
+}
+header.site-header {
+  background: var(--teal);
+  color: white;
+  padding: 20px 24px;
+}
+header.site-header h1 {
+  margin: 0 0 4px 0;
+  font-size: 22px;
+}
+header.site-header p {
+  margin: 0;
+  opacity: 0.85;
+  font-size: 14px;
+}
+nav.day-nav {
+  background: var(--teal-light);
+  padding: 10px 16px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+}
+nav.day-nav a {
+  color: white;
+  text-decoration: none;
+  background: rgba(255,255,255,0.15);
+  padding: 5px 10px;
+  border-radius: 6px;
+  font-size: 13px;
+  white-space: nowrap;
+}
+nav.day-nav a.active {
+  background: white;
+  color: var(--teal);
+  font-weight: 600;
+}
+main {
+  max-width: 920px;
+  margin: 0 auto;
+  padding: 20px 16px 60px;
+}
+.day-title-block {
+  margin-bottom: 20px;
+}
+.day-title-block .day-num {
+  display: inline-block;
+  background: var(--teal);
+  color: white;
+  padding: 3px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  margin-bottom: 8px;
+}
+.day-title-block h2 {
+  margin: 6px 0 4px;
+  font-size: 24px;
+  color: var(--teal);
+}
+.day-title-block .date-line {
+  color: var(--muted);
+  font-size: 14px;
+}
+.day-title-block .summary {
+  margin-top: 8px;
+  font-size: 15px;
+  color: var(--text);
+}
+.section-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 18px 20px;
+  margin-bottom: 18px;
+}
+.section-card h3 {
+  margin: 0 0 12px 0;
+  font-size: 16px;
+  color: var(--teal);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.section-card h3 .icon {
+  font-size: 18px;
+}
+.map-frame-wrap {
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  margin-bottom: 8px;
+  width: 100%;
+  height: 360px;
+  background: #eef1ec;
+}
+.map-fallback-link {
+  font-size: 13px;
+  color: var(--muted);
+}
+.map-fallback-link a { color: var(--teal-light); }
+.map-note {
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 4px;
+}
+table.info-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+table.info-table td {
+  padding: 7px 6px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+}
+table.info-table td.label {
+  width: 92px;
+  color: var(--muted);
+  white-space: nowrap;
+  font-weight: 600;
+}
+.warn-box {
+  background: var(--warn-bg);
+  border: 1px solid var(--warn-border);
+  border-radius: 8px;
+  padding: 10px 14px;
+  margin-top: 10px;
+  font-size: 13.5px;
+}
+.activity-item, .hotel-item {
+  padding: 10px 0;
+  border-bottom: 1px dashed var(--border);
+}
+.activity-item:last-child, .hotel-item:last-child { border-bottom: none; }
+.activity-item .name, .hotel-item .name {
+  font-weight: 600;
+  font-size: 14.5px;
+}
+.activity-item .meta, .hotel-item .meta {
+  color: var(--muted);
+  font-size: 12.5px;
+  margin: 2px 0 4px;
+}
+.activity-item .note, .hotel-item .note {
+  font-size: 13.5px;
+}
+.food-list {
+  font-size: 14px;
+  padding-left: 18px;
+  margin: 0;
+}
+.food-list li { margin-bottom: 4px; }
+.empty-note {
+  color: var(--muted);
+  font-style: italic;
+  font-size: 14px;
+}
+.disclaimer {
+  font-size: 12.5px;
+  color: var(--muted);
+  background: #FBF8F2;
+  border: 1px dashed var(--border);
+  border-radius: 8px;
+  padding: 12px 14px;
+  margin-top: 24px;
+}
+.index-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.index-list li {
+  margin-bottom: 10px;
+}
+.index-list a {
+  display: block;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+  text-decoration: none;
+  color: var(--text);
+}
+.index-list a:hover { border-color: var(--teal-light); }
+.index-list .idx-day {
+  font-size: 12px;
+  color: white;
+  background: var(--teal);
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 12px;
+  margin-bottom: 4px;
+}
+.index-list .idx-title { font-weight: 600; font-size: 15px; color: var(--teal); }
+.index-list .idx-summary { font-size: 13px; color: var(--muted); margin-top: 2px; }
+.prevnext {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 24px;
+  gap: 10px;
+}
+.prevnext a {
+  flex: 1;
+  text-align: center;
+  padding: 12px;
+  background: var(--teal);
+  color: white;
+  text-decoration: none;
+  border-radius: 8px;
+  font-size: 14px;
+}
+.prevnext a.disabled {
+  background: var(--border);
+  color: var(--muted);
+  pointer-events: none;
+}
+footer.site-footer {
+  text-align: center;
+  color: var(--muted);
+  font-size: 12px;
+  padding: 20px;
+}
+</style>
+</head>
+<body>
+<header class="site-header">
+  <h1>北疆15日自驾行程</h1>
+  <p>香港 ⇄ 乌鲁木齐 · 8月16日–8月30日 · 全自驾 · 2人</p>
+</header>
+<nav class="day-nav"><a href="index.html" class="">总览</a><a href="day1.html" class="active">D1</a><a href="day2.html" class="">D2</a><a href="day3.html" class="">D3</a><a href="day4.html" class="">D4</a><a href="day5.html" class="">D5</a><a href="day6.html" class="">D6</a><a href="day7.html" class="">D7</a><a href="day8.html" class="">D8</a><a href="day9.html" class="">D9</a><a href="day10.html" class="">D10</a><a href="day11.html" class="">D11</a><a href="day12.html" class="">D12</a><a href="day13.html" class="">D13</a><a href="day14.html" class="">D14</a><a href="day15.html" class="">D15</a></nav>
+<main>
+  <div class="day-title-block">
+    <span class="day-num">Day 1 · 8月16日（周六）</span>
+    <h2>香港 → 乌鲁木齐</h2>
+    <div class="summary">红眼航班抵达，深度补觉＋市区人文半日</div>
+  </div>
+
+  <div class="section-card">
+    <h3><span class="icon">🗺️</span>路线图</h3>
+    
+  <div id="amap-day-1" class="map-frame-wrap"></div>
+  <div id="amap-status-1" class="map-fallback-link"></div>
+  <div class="map-note">地图由高德地图 JS API 驱动，此为定位标注，当天无自驾里程。</div>
+  
+  </div>
+
+  <div class="section-card">
+    <h3><span class="icon">🚗</span>交通</h3>
+    <table class="info-table"><tr><td class="label">路线</td><td>机场高速</td></tr><tr><td class="label">里程</td><td>约25 km（机场→市区）</td></tr><tr><td class="label">车程</td><td>飞行约6小时（01:00香港起飞，约07:00抵乌鲁木齐，两地同时区）；落地后市区车程约30分钟</td></tr><tr><td class="label">海拔变化</td><td>香港 ~10m → 乌鲁木齐 ~800m（爬升约790m，飞行途中完成，无自驾爬升）</td></tr><tr><td class="label">历史天气参考</td><td>8月乌鲁木齐日间气温约25-30℃，夜间约15-18℃，晴朗干燥为主</td></tr><tr><td class="label">是否需预约</td><td>机票已确认；租车建议提前1-2个月锁定中高端SUV</td></tr></table>
+    
+    <div class="warn-box"><strong>驾车注意事项：</strong>红眼航班后精神较弱，机场取车时仔细检查车况、油量、备胎，双人共同确认后再签字</div>
+  </div>
+
+  <div class="section-card">
+    <h3><span class="icon">📍</span>活动安排</h3>
+    
+      <div class="activity-item">
+        <div class="name">深度补觉</div>
+        <div class="meta">游览时间：上午-中午</div>
+        <div class="note">红眼航班后优先休息，不建议安排晨间活动</div>
+      </div>
+      <div class="activity-item">
+        <div class="name">新疆维吾尔自治区博物馆</div>
+        <div class="meta">游览时间：约2小时</div>
+        <div class="note">楼兰美女干尸展厅是核心看点，建议提前官网/公众号预约参观名额</div>
+      </div>
+      <div class="activity-item">
+        <div class="name">乌鲁木齐大巴扎</div>
+        <div class="meta">游览时间：约1.5-2小时</div>
+        <div class="note">民族风情建筑群+烤肉+干果市集，傍晚人气最旺，注意随身财物</div>
+      </div>
+  </div>
+
+  <div class="section-card">
+    <h3><span class="icon">🍽️</span>饮食 / 住宿</h3>
+    <div style="margin-bottom:10px;"><strong style="font-size:13.5px;color:var(--muted);">推荐饮食</strong><ul class="food-list"><li>大巴扎烤羊肉串、烤包子</li><li>新疆大盘鸡（市区老字号）</li></ul></div>
+    <div><strong style="font-size:13.5px;color:var(--muted);">当晚住宿（3-4星，推荐1-3选）</strong>
+      <div class="hotel-item">
+        <div class="name">乌鲁木齐康莱德酒店</div>
+        <div class="meta">沙依巴克区友好北路669号 · 价格未查到确切数字，建议携程/Booking查实时价</div>
+        <div class="note">2021年开业，希尔顿旗下奢华品牌，评分4.7，市区繁华地段但客房隔音好</div>
+      </div>
+      <div class="hotel-item">
+        <div class="name">乌鲁木齐希尔顿酒店</div>
+        <div class="meta">米东区红光山路1237号 · 同上，建议实时查询</div>
+        <div class="note">毗邻红光山4A景区，评分4.7，环境相对安静</div>
+      </div></div>
+  </div>
+
+  <div class="prevnext">
+    <a href="#" class="disabled">← 上一天</a>
+    <a href="day2.html" class="">下一天：D2 →</a>
+  </div>
+
+  <div class="disclaimer">本网站所有里程、车程、预约规则、价格均为出行前整理的参考信息，存在多来源冲突或未查实的字段已逐一标注。请出发前用高德/百度地图核实实时路况，并通过官方渠道确认最新预约与门票政策。</div>
+</main>
+<script>
+window._AMapSecurityConfig = { securityJsCode: "f5122d0c0aae74cc4c4e8f4ce0a196cc" };
+</script>
+<script src="https://webapi.amap.com/maps?v=2.0&key=1e292eeef1aae1b6eb63c7989ae14dbb&plugin=AMap.Driving,AMap.Geocoder,AMap.PlaceSearch"></script>
+<script>
+(function(){
+  var map = new AMap.Map("amap-day-1", { zoom: 10, resizeEnable: true });
+  AMap.plugin("AMap.PlaceSearch", function(){
+    var ps = new AMap.PlaceSearch({ city: "乌鲁木齐市", map: map });
+    ps.search("乌鲁木齐地窝堡国际机场", function(status, result){
+      if (status !== "complete" || !result.poiList || !result.poiList.pois.length) {
+        document.getElementById("amap-status-1").innerHTML = "地图定位失败，可在高德地图App中手动搜索：乌鲁木齐地窝堡国际机场";
+      }
+    });
+  });
+})();
+</script>
+<footer class="site-footer">北疆15日自驾行程 · 生成于本次行程规划对话 · 出行前请务必核实实时信息</footer>
+</body></html>
