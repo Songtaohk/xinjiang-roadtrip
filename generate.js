@@ -16,6 +16,7 @@ const WAYPOINTS_CN = {
   1: [{ keyword: "乌鲁木齐市", city: "乌鲁木齐市" }],
   2: [
     { keyword: "乌鲁木齐市", city: "乌鲁木齐市" },
+    { keyword: "阿勒泰市", city: "阿勒泰地区" },
     { keyword: "布尔津县", city: "阿勒泰地区" },
   ],
   3: [
@@ -682,7 +683,7 @@ ${JS_HELPERS}
     }
   }
 
-  document.getElementById("amap-index-status").innerHTML = "正在加载全程15天真实驾车路线，请稍候…";
+  document.getElementById("amap-index-status").innerHTML = "正在加载全程" + days.length + "天真实驾车路线，请稍候…";
 
   days.forEach(function(day){
     var pts = day.points;
@@ -701,8 +702,18 @@ ${JS_HELPERS}
         var start = locs[validIdx[0]];
         var end = locs[validIdx[validIdx.length - 1]];
         var mid = validIdx.slice(1, -1).map(function(i){ return locs[i]; });
-        var driving = new AMap.Driving({ map: map, policy: 0 });
+        // Note: no map option passed to the constructor here on purpose -- AMap.Driving
+        // auto-renders its own default start/end marker pair whenever a map is supplied, and
+        // with 16 separate day-routes chained onto one shared overview map that produced
+        // multiple stray marker labels. We draw the route manually as a plain polyline
+        // instead, so the only markers on this map are our intentional day-number labels.
+        var driving = new AMap.Driving({ policy: 0 });
         driving.search(start, end, { waypoints: mid }, function(status, result){
+          if (status === "complete" && result && result.routes && result.routes[0]) {
+            var path = [];
+            result.routes[0].steps.forEach(function(step){ path = path.concat(step.path); });
+            new AMap.Polyline({ map: map, path: path, strokeColor: "#2E6F86", strokeWeight: 4, strokeOpacity: 0.85 });
+          }
           new AMap.Marker({ position: end, map: map, label: { content: "D" + day.num, direction: "top" }, title: pts[pts.length - 1].keyword });
           markDone();
         });
@@ -732,7 +743,7 @@ ${navHtml(0)}
     <h3><span class="icon">🗺️</span>全程路线总览</h3>
     <div id="amap-index" class="map-frame-wrap"></div>
     <div id="amap-index-status" class="map-fallback-link"></div>
-    <div class="map-note">每日路段均为高德实时驾车路线规划结果（真实道路轨迹），首次加载需依次请求15天路线，可能需要几秒钟。</div>
+    <div class="map-note">每日路段均为高德实时驾车路线规划结果（真实道路轨迹），首次加载需依次请求${DAYS.length}天路线，可能需要几秒钟。</div>
   </div>
   <div class="section-card">
     <h3><span class="icon">📅</span>逐日行程</h3>

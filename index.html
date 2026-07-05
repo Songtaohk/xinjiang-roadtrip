@@ -300,7 +300,7 @@ footer.site-footer {
     <h3><span class="icon">🗺️</span>全程路线总览</h3>
     <div id="amap-index" class="map-frame-wrap"></div>
     <div id="amap-index-status" class="map-fallback-link"></div>
-    <div class="map-note">每日路段均为高德实时驾车路线规划结果（真实道路轨迹），首次加载需依次请求15天路线，可能需要几秒钟。</div>
+    <div class="map-note">每日路段均为高德实时驾车路线规划结果（真实道路轨迹），首次加载需依次请求16天路线，可能需要几秒钟。</div>
   </div>
   <div class="section-card">
     <h3><span class="icon">📅</span>逐日行程</h3>
@@ -317,8 +317,8 @@ footer.site-footer {
     </a></li>
     <li><a href="day2.html">
       <span class="idx-day">Day 2 · 8月17日（周日）</span>
-      <div class="idx-title">乌鲁木齐 → 布尔津 ⚠ 全程最长驾驶日（取车日）</div>
-      <div class="idx-summary">早晨取车后直奔北疆，全天几乎都在赶路，不进克拉玛依市区，傍晚抵布尔津看五彩滩日落</div>
+      <div class="idx-title">乌鲁木齐 → 布尔津（经S21沙漠公路+阿勒泰市，取车日）</div>
+      <div class="idx-summary">早晨取车后走沙漠高速直插北疆，路过克拉美丽沙漠公园和阿勒泰市，比原西线更省心，傍晚抵布尔津看五彩滩日落</div>
     </a></li>
     <li><a href="day3.html">
       <span class="idx-day">Day 3 · 8月18日（周一）</span>
@@ -395,7 +395,7 @@ window._AMapSecurityConfig = { securityJsCode: "f5122d0c0aae74cc4c4e8f4ce0a196cc
 <script>
 (function(){
   var map = new AMap.Map("amap-index", { zoom: 6, resizeEnable: true });
-  var days = [{"num":0,"points":[{"keyword":"乌鲁木齐地窝堡国际机场","city":"乌鲁木齐市"}]},{"num":1,"points":[{"keyword":"乌鲁木齐市","city":"乌鲁木齐市"}]},{"num":2,"points":[{"keyword":"乌鲁木齐市","city":"乌鲁木齐市"},{"keyword":"布尔津县","city":"阿勒泰地区"}]},{"num":3,"points":[{"keyword":"布尔津县","city":"阿勒泰地区"},{"keyword":"喀纳斯景区贾登峪游客中心","city":"阿勒泰地区"}]},{"num":4,"points":[{"keyword":"贾登峪游客中心","city":"阿勒泰地区"},{"keyword":"喀纳斯湖","city":"阿勒泰地区"}]},{"num":5,"points":[{"keyword":"贾登峪游客中心","city":"阿勒泰地区"},{"keyword":"白哈巴村","city":"阿勒泰地区"}]},{"num":6,"points":[{"keyword":"贾登峪游客中心","city":"阿勒泰地区"},{"keyword":"禾木村","city":"阿勒泰地区"}]},{"num":7,"points":[{"keyword":"禾木村","city":"阿勒泰地区"},{"keyword":"贾登峪游客中心","city":"阿勒泰地区"},{"keyword":"布尔津县","city":"阿勒泰地区"}]},{"num":8,"points":[{"keyword":"布尔津县","city":"阿勒泰地区"},{"keyword":"世界魔鬼城","city":"克拉玛依市"}]},{"num":9,"points":[{"keyword":"世界魔鬼城","city":"克拉玛依市"},{"keyword":"赛里木湖","city":"博尔塔拉蒙古自治州"}]},{"num":10,"points":[{"keyword":"赛里木湖","city":"博尔塔拉蒙古自治州"},{"keyword":"伊宁市六星街","city":"伊宁市"},{"keyword":"库尔德宁风景区","city":"伊犁哈萨克自治州"},{"keyword":"那拉提镇","city":"伊犁哈萨克自治州"}]},{"num":11,"points":[{"keyword":"那拉提草原景区","city":"伊犁哈萨克自治州"}]},{"num":12,"points":[{"keyword":"那拉提镇","city":"伊犁哈萨克自治州"},{"keyword":"唐布拉草原","city":"伊犁哈萨克自治州"}]},{"num":13,"points":[{"keyword":"那拉提镇","city":"伊犁哈萨克自治州"},{"keyword":"独山子区","city":"克拉玛依市"}]},{"num":14,"points":[{"keyword":"独山子区","city":"克拉玛依市"},{"keyword":"天山天池","city":"阜康市"},{"keyword":"乌鲁木齐地窝堡国际机场","city":"乌鲁木齐市"}]},{"num":15,"points":[{"keyword":"乌鲁木齐地窝堡国际机场","city":"乌鲁木齐市"}]}];
+  var days = [{"num":0,"points":[{"keyword":"乌鲁木齐地窝堡国际机场","city":"乌鲁木齐市"}]},{"num":1,"points":[{"keyword":"乌鲁木齐市","city":"乌鲁木齐市"}]},{"num":2,"points":[{"keyword":"乌鲁木齐市","city":"乌鲁木齐市"},{"keyword":"阿勒泰市","city":"阿勒泰地区"},{"keyword":"布尔津县","city":"阿勒泰地区"}]},{"num":3,"points":[{"keyword":"布尔津县","city":"阿勒泰地区"},{"keyword":"喀纳斯景区贾登峪游客中心","city":"阿勒泰地区"}]},{"num":4,"points":[{"keyword":"贾登峪游客中心","city":"阿勒泰地区"},{"keyword":"喀纳斯湖","city":"阿勒泰地区"}]},{"num":5,"points":[{"keyword":"贾登峪游客中心","city":"阿勒泰地区"},{"keyword":"白哈巴村","city":"阿勒泰地区"}]},{"num":6,"points":[{"keyword":"贾登峪游客中心","city":"阿勒泰地区"},{"keyword":"禾木村","city":"阿勒泰地区"}]},{"num":7,"points":[{"keyword":"禾木村","city":"阿勒泰地区"},{"keyword":"贾登峪游客中心","city":"阿勒泰地区"},{"keyword":"布尔津县","city":"阿勒泰地区"}]},{"num":8,"points":[{"keyword":"布尔津县","city":"阿勒泰地区"},{"keyword":"世界魔鬼城","city":"克拉玛依市"}]},{"num":9,"points":[{"keyword":"世界魔鬼城","city":"克拉玛依市"},{"keyword":"赛里木湖","city":"博尔塔拉蒙古自治州"}]},{"num":10,"points":[{"keyword":"赛里木湖","city":"博尔塔拉蒙古自治州"},{"keyword":"伊宁市六星街","city":"伊宁市"},{"keyword":"库尔德宁风景区","city":"伊犁哈萨克自治州"},{"keyword":"那拉提镇","city":"伊犁哈萨克自治州"}]},{"num":11,"points":[{"keyword":"那拉提草原景区","city":"伊犁哈萨克自治州"}]},{"num":12,"points":[{"keyword":"那拉提镇","city":"伊犁哈萨克自治州"},{"keyword":"唐布拉草原","city":"伊犁哈萨克自治州"}]},{"num":13,"points":[{"keyword":"那拉提镇","city":"伊犁哈萨克自治州"},{"keyword":"独山子区","city":"克拉玛依市"}]},{"num":14,"points":[{"keyword":"独山子区","city":"克拉玛依市"},{"keyword":"天山天池","city":"阜康市"},{"keyword":"乌鲁木齐地窝堡国际机场","city":"乌鲁木齐市"}]},{"num":15,"points":[{"keyword":"乌鲁木齐地窝堡国际机场","city":"乌鲁木齐市"}]}];
   var pending = days.length;
 
   function geocode(address, city) {
@@ -427,7 +427,7 @@ window._AMapSecurityConfig = { securityJsCode: "f5122d0c0aae74cc4c4e8f4ce0a196cc
     }
   }
 
-  document.getElementById("amap-index-status").innerHTML = "正在加载全程15天真实驾车路线，请稍候…";
+  document.getElementById("amap-index-status").innerHTML = "正在加载全程" + days.length + "天真实驾车路线，请稍候…";
 
   days.forEach(function(day){
     var pts = day.points;
@@ -446,8 +446,18 @@ window._AMapSecurityConfig = { securityJsCode: "f5122d0c0aae74cc4c4e8f4ce0a196cc
         var start = locs[validIdx[0]];
         var end = locs[validIdx[validIdx.length - 1]];
         var mid = validIdx.slice(1, -1).map(function(i){ return locs[i]; });
-        var driving = new AMap.Driving({ map: map, policy: 0 });
+        // Note: no map option passed to the constructor here on purpose -- AMap.Driving
+        // auto-renders its own default start/end marker pair whenever a map is supplied, and
+        // with 16 separate day-routes chained onto one shared overview map that produced
+        // multiple stray marker labels. We draw the route manually as a plain polyline
+        // instead, so the only markers on this map are our intentional day-number labels.
+        var driving = new AMap.Driving({ policy: 0 });
         driving.search(start, end, { waypoints: mid }, function(status, result){
+          if (status === "complete" && result && result.routes && result.routes[0]) {
+            var path = [];
+            result.routes[0].steps.forEach(function(step){ path = path.concat(step.path); });
+            new AMap.Polyline({ map: map, path: path, strokeColor: "#2E6F86", strokeWeight: 4, strokeOpacity: 0.85 });
+          }
           new AMap.Marker({ position: end, map: map, label: { content: "D" + day.num, direction: "top" }, title: pts[pts.length - 1].keyword });
           markDone();
         });
