@@ -14,7 +14,7 @@ const TRIP = {
 
 const DAYS = [
 {
-  num: 0, date: "8月15日（周五）", weekday: "五",
+  num: 0, date: "8月15日（周六）", weekday: "六",
   title: "香港 → 乌鲁木齐（抵达日）",
   summary: "傍晚航班抵达，直接入住酒店，不取车，无游览安排",
   mapPoints: ["Hong Kong International Airport", "Urumqi Diwopu International Airport", "Urumqi, Xinjiang, China"],
@@ -38,7 +38,7 @@ const DAYS = [
   ]
 },
 {
-  num: 1, date: "8月16日（周六）", weekday: "六",
+  num: 1, date: "8月16日（周日）", weekday: "日",
   title: "乌鲁木齐 → 布尔津（经S21沙漠公路+阿勒泰市，取车日）",
   summary: "早晨取车后走沙漠高速直插北疆，路过克拉美丽沙漠公园和阿勒泰市，比原西线更省心，傍晚抵布尔津看五彩滩日落",
   mapPoints: ["Urumqi, Xinjiang, China", "Altay, Xinjiang, China", "Burqin, Xinjiang, China"],
@@ -72,7 +72,7 @@ const DAYS = [
   ]
 },
 {
-  num: 2, date: "8月17日（周日）", weekday: "日",
+  num: 2, date: "8月17日（周一）", weekday: "一",
   title: "布尔津 → 贾登峪（轻松短途，进驻阿勒泰基地）",
   summary: "睡到自然醒，短途山路直达基地，接下来3晚以此为中心",
   mapPoints: ["Burqin, Xinjiang, China", "Jiadengyu, Xinjiang, China"],
@@ -99,7 +99,7 @@ const DAYS = [
   ]
 },
 {
-  num: 3, date: "8月18日（周一）", weekday: "一",
+  num: 3, date: "8月18日（周二）", weekday: "二",
   title: "贾登峪 ⇄ 喀纳斯湖区（0自驾里程）",
   summary: "轻装换乘进核心景区，车留在基地",
   mapPoints: ["Jiadengyu, Xinjiang, China", "Kanas Lake, Xinjiang, China"],
@@ -131,7 +131,7 @@ const DAYS = [
   ]
 },
 {
-  num: 4, date: "8月19日（周二）", weekday: "二",
+  num: 4, date: "8月19日（周三）", weekday: "三",
   title: "贾登峪 ⇄ 白哈巴（中哈边境第一村，0自驾里程）",
   summary: "换乘专线进中哈边境第一村，图瓦人木屋+白桦林，新增行程",
   mapPoints: ["Jiadengyu, Xinjiang, China", "Baihaba Village, Xinjiang, China"],
@@ -158,7 +158,7 @@ const DAYS = [
   ]
 },
 {
-  num: 5, date: "8月20日（周三）", weekday: "三",
+  num: 5, date: "8月20日（周四）", weekday: "四",
   title: "贾登峪 → 禾木（轻装夜宿一晚）",
   summary: "大行李寄存基地，轻装赴禾木过夜看晨雾",
   mapPoints: ["Jiadengyu, Xinjiang, China", "Hemu Village, Xinjiang, China"],
@@ -187,7 +187,7 @@ const DAYS = [
   ]
 },
 {
-  num: 6, date: "8月21日（周四）", weekday: "四",
+  num: 6, date: "8月21日（周五）", weekday: "五",
   title: "禾木 → 贾登峪（取车） → 布尔津",
   summary: "清晨看晨雾，午后取车赶在天黑前抵布尔津",
   mapPoints: ["Hemu Village, Xinjiang, China", "Jiadengyu, Xinjiang, China", "Burqin, Xinjiang, China"],
@@ -216,7 +216,7 @@ const DAYS = [
   ]
 },
 {
-  num: 7, date: "8月22日（周五）", weekday: "五",
+  num: 7, date: "8月22日（周六）", weekday: "六",
   title: "布尔津 → 世界魔鬼城 → 乌尔禾/克拉玛依外围",
   summary: "纯平路好开，傍晚拍雅丹地貌日落",
   mapPoints: ["Burqin, Xinjiang, China", "Urho Ghost City, Xinjiang, China"],
@@ -245,7 +245,7 @@ const DAYS = [
   ]
 },
 {
-  num: 8, date: "8月23日（周六）", weekday: "六",
+  num: 8, date: "8月23日（周日）", weekday: "日",
   title: "乌尔禾 → 赛里木湖 ⚠ 刚性长途日",
   summary: "全程唯一超长驾驶日，接受它，早发轻松抵达（本次只住1晚，行程已调整为不再连住2晚）",
   mapPoints: ["Urho Ghost City, Xinjiang, China", "Sayram Lake, Xinjiang, China"],
@@ -275,7 +275,7 @@ const DAYS = [
   reservationAlert: "⚠须提前通过\"赛里木湖旅游\"微信小程序预约营位，建议提前2-3周锁定"
 },
 {
-  num: 9, date: "8月24日（周日）", weekday: "日",
+  num: 9, date: "8月24日（周一）", weekday: "一",
   title: "赛里木湖 → 伊宁（六星街） → 库尔德宁 → 那拉提 ⚠ 内容较满",
   summary: "清晨看日出后即出发，途经伊宁六星街与库尔德宁雪岭云杉，抵达草原大本营",
   mapPoints: ["Sayram Lake, Xinjiang, China", "Yining, Xinjiang, China", "Kurdening, Gongliu, Xinjiang, China", "Nalati Grassland, Xinjiang, China"],
@@ -310,7 +310,7 @@ const DAYS = [
   ]
 },
 {
-  num: 10, date: "8月25日（周一）", weekday: "一",
+  num: 10, date: "8月25日（周二）", weekday: "二",
   title: "那拉提草原深度游 + 傍晚盘龙谷自驾",
   summary: "空中草原轻徒步，傍晚幽静森林公路自驾",
   mapPoints: ["Nalati Grassland, Xinjiang, China"],
@@ -337,7 +337,7 @@ const DAYS = [
   hotels: [{ name: "（同Day9，连住第2晚）", loc: "那拉提", why: "—", price: "—" }]
 },
 {
-  num: 11, date: "8月26日（周二）", weekday: "二",
+  num: 11, date: "8月26日（周三）", weekday: "三",
   title: "那拉提 ⇄ 唐布拉核心区（经S316+G218，不经独库公路）",
   summary: "零风险日：山谷公路直达唐布拉，无需任何独库预约",
   mapPoints: ["Nalati Grassland, Xinjiang, China", "Tangbula Grassland, Nilka County, Xinjiang, China"],
@@ -362,7 +362,7 @@ const DAYS = [
   hotels: [{ name: "（同Day9，连住第3晚，那拉提最后一晚）", loc: "那拉提", why: "—", price: "—" }]
 },
 {
-  num: 12, date: "8月27日（周三）", weekday: "三",
+  num: 12, date: "8月27日（周四）", weekday: "四",
   title: "那拉提 → 独库公路北段 → 奎屯/独山子 ⚠ 史诗级长途日",
   summary: "全程最震撼的一天：翻越哈希勒根达坂，一日看四季",
   mapPoints: ["Nalati Grassland, Xinjiang, China", "Dushanzi, Karamay, Xinjiang, China"],
@@ -393,7 +393,7 @@ const DAYS = [
   ]
 },
 {
-  num: 13, date: "8月28日（周四）", weekday: "四",
+  num: 13, date: "8月28日（周五）", weekday: "五",
   title: "奎屯 → 天山天池 → 乌鲁木齐（还车，入住市区）",
   summary: "全程最后一个自驾日，环湖轻健行后还车入住市区，明天还有一整天缓冲/深度游",
   mapPoints: ["Dushanzi, Karamay, Xinjiang, China", "Tianshan Tianchi, Fukang, Xinjiang, China", "Urumqi Diwopu International Airport"],
@@ -426,7 +426,7 @@ const DAYS = [
   ]
 },
 {
-  num: 14, date: "8月29日（周五）", weekday: "五",
+  num: 14, date: "8月29日（周六）", weekday: "六",
   title: "乌鲁木齐深度游（全程机动缓冲日）",
   summary: "已还车，睡眠充足后从容游览市区；若前面行程一切顺利就当深度游，万一路上有延误也可压缩/替换，不影响明天航班",
   mapPoints: ["Urumqi, Xinjiang, China"],
@@ -457,7 +457,7 @@ const DAYS = [
   ]
 },
 {
-  num: 15, date: "8月30日（周六）", weekday: "六",
+  num: 15, date: "8月30日（周日）", weekday: "日",
   title: "乌鲁木齐 → 香港",
   summary: "无游玩安排，从容返程",
   mapPoints: ["Urumqi Diwopu International Airport", "Hong Kong International Airport"],

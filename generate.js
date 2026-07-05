@@ -752,56 +752,97 @@ function amapIndexInitScript() {
 
   return `<script>
 (function(){
-  var map = new AMap.Map("amap-index", { zoom: 6, resizeEnable: true });
+  // Explicit initial center on Urumqi/Xinjiang -- without this AMap.Map falls back to its
+  // own default (roughly Beijing) until setFitView() runs, which briefly (or, if something
+  // downstream hangs, permanently) shows the wrong part of the country.
+  var map = new AMap.Map("amap-index", { zoom: 6, center: [87.62, 43.82], resizeEnable: true });
   var days = ${dayListJson};
   var pending = days.length;
+  var doneCalled = {};
 ${JS_HELPERS}
-  function markDone(){
+  function markDone(dayNum){
+    if (doneCalled[dayNum]) return; // guard against double-calling for the same day
+    doneCalled[dayNum] = true;
     pending--;
+    var el = document.getElementById("amap-index-status");
+    if (el) el.innerHTML = "正在加载全程" + days.length + "天真实驾车路线，已完成 " + (days.length - pending) + "/" + days.length + "…";
     if (pending <= 0) {
       map.setFitView();
-      var el = document.getElementById("amap-index-status");
       if (el) el.innerHTML = "";
     }
   }
 
   document.getElementById("amap-index-status").innerHTML = "正在加载全程" + days.length + "天真实驾车路线，请稍候…";
 
-  days.forEach(function(day){
+  // Processed ONE day at a time (not all fired in parallel) with a short gap between each --
+  // firing 13-16 concurrent AMap.Geocoder + AMap.Driving requests at once was overloading the
+  // API and causing some individual day segments to silently fail to draw. A per-day timeout
+  // also guarantees we move on (and eventually call setFitView) even if one request hangs.
+  function processDay(i){
+    if (i >= days.length) return;
+    var day = days[i];
     var pts = day.points;
-    if (pts.length === 1) {
-      geocode(pts[0].keyword, pts[0].city).then(function(loc){
-        if (loc) {
-          new AMap.Marker({ position: loc, map: map, label: { content: "D" + day.num, direction: "top" }, title: pts[0].keyword });
-        }
-        markDone();
-      });
-    } else {
-      Promise.all(pts.map(function(p){ return geocode(p.keyword, p.city); })).then(function(locs){
-        var validIdx = [];
-        locs.forEach(function(l, i){ if (l) validIdx.push(i); });
-        if (validIdx.length < 2) { markDone(); return; }
-        var start = locs[validIdx[0]];
-        var end = locs[validIdx[validIdx.length - 1]];
-        var mid = validIdx.slice(1, -1).map(function(i){ return locs[i]; });
-        // Note: no map option passed to the constructor here on purpose -- AMap.Driving
-        // auto-renders its own default start/end marker pair whenever a map is supplied, and
-        // with 16 separate day-routes chained onto one shared overview map that produced
-        // multiple stray marker labels. We draw the route manually as a plain polyline
-        // instead, so the only markers on this map are our intentional day-number labels.
-        var driving = new AMap.Driving({ policy: 0 });
-        driving.search(start, end, { waypoints: mid }, function(status, result){
-          if (status === "complete" && result && result.routes && result.routes[0]) {
-            var path = [];
-            result.routes[0].steps.forEach(function(step){ path = path.concat(step.path); });
-            new AMap.Polyline({ map: map, path: path, strokeColor: "#2E6F86", strokeWeight: 4, strokeOpacity: 0.85 });
-          }
-          new AMap.Marker({ position: end, map: map, label: { content: "D" + day.num, direction: "top" }, title: pts[pts.length - 1].keyword });
-          markDone();
-        });
-      });
+    var settled = false;
+    var timeoutId = setTimeout(function(){
+      if (settled) return;
+      settled = true;
+      markDone(day.num);
+      setTimeout(function(){ processDay(i + 1); }, 150);
+    }, 8000);
+    function finish(){
+      if (settled) return;
+      settled = true;
+      clearTimeout(timeoutId);
+      markDone(day.num);
+      setTimeout(function(){ processDay(i + 1); }, 150);
     }
-  });
+    try {
+      if (pts.length === 1) {
+        geocode(pts[0].keyword, pts[0].city).then(function(loc){
+          if (loc) {
+            new AMap.Marker({ position: loc, map: map, label: { content: "D" + day.num, direction: "top" }, title: pts[0].keyword });
+          }
+          finish();
+        }).catch(finish);
+      } else {
+        Promise.all(pts.map(function(p){ return geocode(p.keyword, p.city); })).then(function(locs){
+          var validIdx = [];
+          locs.forEach(function(l, idx){ if (l) validIdx.push(idx); });
+          if (validIdx.length < 2) { finish(); return; }
+          var start = locs[validIdx[0]];
+          var end = locs[validIdx[validIdx.length - 1]];
+          var mid = validIdx.slice(1, -1).map(function(idx){ return locs[idx]; });
+          // Note: no map option passed to the constructor here on purpose -- AMap.Driving
+          // auto-renders its own default start/end marker pair whenever a map is supplied, and
+          // with many day-routes chained onto one shared overview map that produced multiple
+          // stray marker labels. We draw the route manually as a plain polyline instead, so the
+          // only markers on this map are our intentional day-number labels.
+          var driving = new AMap.Driving({ policy: 0 });
+          try {
+            driving.search(start, end, { waypoints: mid }, function(status, result){
+              if (status === "complete" && result && result.routes && result.routes[0]) {
+                var path = [];
+                result.routes[0].steps.forEach(function(step){ path = path.concat(step.path); });
+                new AMap.Polyline({ map: map, path: path, strokeColor: "#2E6F86", strokeWeight: 4, strokeOpacity: 0.85 });
+              }
+              new AMap.Marker({ position: end, map: map, label: { content: "D" + day.num, direction: "top" }, title: pts[pts.length - 1].keyword });
+              finish();
+            });
+          } catch (e) { finish(); }
+        }).catch(finish);
+      }
+    } catch (e) { finish(); }
+  }
+  processDay(0);
+  // Absolute safety net: whatever else happens, don't leave the map stuck showing the
+  // default view forever if some request never resolves.
+  setTimeout(function(){
+    if (pending > 0) {
+      map.setFitView();
+      var el = document.getElementById("amap-index-status");
+      if (el) el.innerHTML = "部分路线加载超时，已显示已完成的部分，可刷新页面重试。";
+    }
+  }, 60000);
 })();
 </script>`;
 }
