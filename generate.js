@@ -29,7 +29,7 @@ const WAYPOINTS_CN = {
   ],
   5: [
     { keyword: "贾登峪游客中心", city: "阿勒泰地区" },
-    { keyword: "白哈巴村", city: "阿勒泰地区" },
+    { keyword: "白哈巴", city: "阿勒泰地区" },
   ],
   6: [
     { keyword: "贾登峪游客中心", city: "阿勒泰地区" },
@@ -51,7 +51,7 @@ const WAYPOINTS_CN = {
   10: [
     { keyword: "赛里木湖", city: "博尔塔拉蒙古自治州" },
     { keyword: "伊宁市六星街", city: "伊宁市" },
-    { keyword: "库尔德宁风景区", city: "伊犁哈萨克自治州" },
+    { keyword: "库尔德宁", city: "伊犁哈萨克自治州" },
     { keyword: "那拉提镇", city: "伊犁哈萨克自治州" },
   ],
   11: [{ keyword: "那拉提草原景区", city: "伊犁哈萨克自治州" }],
@@ -395,7 +395,60 @@ footer.site-footer {
   font-size: 12px;
   padding: 20px;
 }
+.terrain-box {
+  background: #F1F6F3;
+  border-left: 3px solid var(--teal-light);
+  border-radius: 6px;
+  padding: 10px 14px;
+  font-size: 13.5px;
+  color: var(--text);
+  margin-top: 10px;
+  line-height: 1.6;
+}
+.terrain-box strong { color: var(--teal); }
+.elev-chart-wrap { margin-top: 10px; }
+.elev-chart { width: 100%; height: auto; display: block; }
+.elev-chart-note {
+  font-size: 11.5px;
+  color: var(--muted);
+  margin-top: 2px;
+}
 `;
+
+// Renders a simplified elevation profile as an inline SVG line/area chart.
+// This is NOT a continuous surveyed elevation trace -- it only plots the elevation
+// figures already stated in each day's transport.elevation text (start / named
+// pass-or-peak / end), connected with straight segments. Clearly labeled as a
+// schematic in the surrounding UI so it isn't mistaken for real GPS elevation data.
+function elevChartSvg(profile) {
+  if (!profile || profile.length < 2) return "";
+  const w = 640, h = 130, padL = 8, padR = 8, padT = 26, padB = 30;
+  const ms = profile.map(p => p.m);
+  const minM = Math.min(...ms), maxM = Math.max(...ms);
+  const range = Math.max(maxM - minM, 1);
+  const n = profile.length;
+  const stepX = n > 1 ? (w - padL - padR) / (n - 1) : 0;
+  const pts = profile.map((p, i) => ({
+    x: padL + i * stepX,
+    y: padT + (1 - (p.m - minM) / range) * (h - padT - padB),
+    label: p.label, m: p.m
+  }));
+  const poly = pts.map(p => `${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(" ");
+  const area = `${pts[0].x.toFixed(1)},${h - padB} ${poly} ${pts[pts.length - 1].x.toFixed(1)},${h - padB}`;
+  const dots = pts.map(p => `<circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="4" fill="#2E6F86" stroke="white" stroke-width="1.5"/>`).join("");
+  const labels = pts.map((p, i) => {
+    const anchor = i === 0 ? "start" : (i === pts.length - 1 ? "end" : "middle");
+    const lx = i === 0 ? p.x + 2 : (i === pts.length - 1 ? p.x - 2 : p.x);
+    return `<text x="${lx.toFixed(1)}" y="${(h - 10).toFixed(1)}" font-size="11" text-anchor="${anchor}" fill="#5b6b70">${p.label}</text>
+      <text x="${lx.toFixed(1)}" y="${Math.max(p.y - 10, 12).toFixed(1)}" font-size="11" font-weight="600" text-anchor="${anchor}" fill="#1F4E5F">${p.m}m</text>`;
+  }).join("");
+  return `<svg viewBox="0 0 ${w} ${h}" class="elev-chart" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <polygon points="${area}" fill="#2E6F86" fill-opacity="0.12"/>
+    <polyline points="${poly}" fill="none" stroke="#2E6F86" stroke-width="2.5"/>
+    ${dots}
+    ${labels}
+  </svg>`;
+}
 
 function navHtml(activeNum) {
   let items = `<a href="index.html" class="${activeNum === 0 ? "active" : ""}">总览</a>`;
@@ -554,6 +607,15 @@ function renderDayPage(d, idx) {
   ${legendParts.length > 0 ? `<div class="map-legend">${legendParts.join(" · ")}</div>` : ""}
   ` : `<p class="empty-note">当天无自驾/位置移动。</p>`;
 
+  const elevSvg = elevChartSvg(d.elevProfile);
+  const elevSection = elevSvg ? `
+  <div class="elev-chart-wrap">
+    ${elevSvg}
+    <div class="elev-chart-note">海拔变化示意图：仅标注已知的起点/关键垭口或水域/终点海拔，用直线连接，并非连续实测曲线，具体请见下方"交通"表格的海拔变化说明。</div>
+  </div>` : "";
+
+  const terrainSection = d.terrain ? `<div class="terrain-box"><strong>🏔️ 地形地貌：</strong>${d.terrain}</div>` : "";
+
   const t = d.transport || {};
   const transportRows = [
     renderTransportRow("路线", t.roads),
@@ -626,6 +688,8 @@ ${navHtml(d.num)}
   <div class="section-card">
     <h3><span class="icon">🗺️</span>路线图</h3>
     ${mapSection}
+    ${elevSection}
+    ${terrainSection}
   </div>
 
   <div class="section-card">

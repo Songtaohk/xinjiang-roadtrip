@@ -287,6 +287,24 @@ footer.site-footer {
   font-size: 12px;
   padding: 20px;
 }
+.terrain-box {
+  background: #F1F6F3;
+  border-left: 3px solid var(--teal-light);
+  border-radius: 6px;
+  padding: 10px 14px;
+  font-size: 13.5px;
+  color: var(--text);
+  margin-top: 10px;
+  line-height: 1.6;
+}
+.terrain-box strong { color: var(--teal); }
+.elev-chart-wrap { margin-top: 10px; }
+.elev-chart { width: 100%; height: auto; display: block; }
+.elev-chart-note {
+  font-size: 11.5px;
+  color: var(--muted);
+  margin-top: 2px;
+}
 </style>
 </head>
 <body>
@@ -395,7 +413,7 @@ window._AMapSecurityConfig = { securityJsCode: "f5122d0c0aae74cc4c4e8f4ce0a196cc
 <script>
 (function(){
   var map = new AMap.Map("amap-index", { zoom: 6, resizeEnable: true });
-  var days = [{"num":0,"points":[{"keyword":"乌鲁木齐地窝堡国际机场","city":"乌鲁木齐市"}]},{"num":1,"points":[{"keyword":"乌鲁木齐市","city":"乌鲁木齐市"}]},{"num":2,"points":[{"keyword":"乌鲁木齐市","city":"乌鲁木齐市"},{"keyword":"阿勒泰市","city":"阿勒泰地区"},{"keyword":"布尔津县","city":"阿勒泰地区"}]},{"num":3,"points":[{"keyword":"布尔津县","city":"阿勒泰地区"},{"keyword":"喀纳斯景区贾登峪游客中心","city":"阿勒泰地区"}]},{"num":4,"points":[{"keyword":"贾登峪游客中心","city":"阿勒泰地区"},{"keyword":"喀纳斯湖","city":"阿勒泰地区"}]},{"num":5,"points":[{"keyword":"贾登峪游客中心","city":"阿勒泰地区"},{"keyword":"白哈巴村","city":"阿勒泰地区"}]},{"num":6,"points":[{"keyword":"贾登峪游客中心","city":"阿勒泰地区"},{"keyword":"禾木村","city":"阿勒泰地区"}]},{"num":7,"points":[{"keyword":"禾木村","city":"阿勒泰地区"},{"keyword":"贾登峪游客中心","city":"阿勒泰地区"},{"keyword":"布尔津县","city":"阿勒泰地区"}]},{"num":8,"points":[{"keyword":"布尔津县","city":"阿勒泰地区"},{"keyword":"世界魔鬼城","city":"克拉玛依市"}]},{"num":9,"points":[{"keyword":"世界魔鬼城","city":"克拉玛依市"},{"keyword":"赛里木湖","city":"博尔塔拉蒙古自治州"}]},{"num":10,"points":[{"keyword":"赛里木湖","city":"博尔塔拉蒙古自治州"},{"keyword":"伊宁市六星街","city":"伊宁市"},{"keyword":"库尔德宁风景区","city":"伊犁哈萨克自治州"},{"keyword":"那拉提镇","city":"伊犁哈萨克自治州"}]},{"num":11,"points":[{"keyword":"那拉提草原景区","city":"伊犁哈萨克自治州"}]},{"num":12,"points":[{"keyword":"那拉提镇","city":"伊犁哈萨克自治州"},{"keyword":"唐布拉草原","city":"伊犁哈萨克自治州"}]},{"num":13,"points":[{"keyword":"那拉提镇","city":"伊犁哈萨克自治州"},{"keyword":"独山子区","city":"克拉玛依市"}]},{"num":14,"points":[{"keyword":"独山子区","city":"克拉玛依市"},{"keyword":"天山天池","city":"阜康市"},{"keyword":"乌鲁木齐地窝堡国际机场","city":"乌鲁木齐市"}]},{"num":15,"points":[{"keyword":"乌鲁木齐地窝堡国际机场","city":"乌鲁木齐市"}]}];
+  var days = [{"num":0,"points":[{"keyword":"乌鲁木齐地窝堡国际机场","city":"乌鲁木齐市"}]},{"num":1,"points":[{"keyword":"乌鲁木齐市","city":"乌鲁木齐市"}]},{"num":2,"points":[{"keyword":"乌鲁木齐市","city":"乌鲁木齐市"},{"keyword":"阿勒泰市","city":"阿勒泰地区"},{"keyword":"布尔津县","city":"阿勒泰地区"}]},{"num":3,"points":[{"keyword":"布尔津县","city":"阿勒泰地区"},{"keyword":"喀纳斯景区贾登峪游客中心","city":"阿勒泰地区"}]},{"num":4,"points":[{"keyword":"贾登峪游客中心","city":"阿勒泰地区"},{"keyword":"喀纳斯湖","city":"阿勒泰地区"}]},{"num":5,"points":[{"keyword":"贾登峪游客中心","city":"阿勒泰地区"},{"keyword":"白哈巴","city":"阿勒泰地区"}]},{"num":6,"points":[{"keyword":"贾登峪游客中心","city":"阿勒泰地区"},{"keyword":"禾木村","city":"阿勒泰地区"}]},{"num":7,"points":[{"keyword":"禾木村","city":"阿勒泰地区"},{"keyword":"贾登峪游客中心","city":"阿勒泰地区"},{"keyword":"布尔津县","city":"阿勒泰地区"}]},{"num":8,"points":[{"keyword":"布尔津县","city":"阿勒泰地区"},{"keyword":"世界魔鬼城","city":"克拉玛依市"}]},{"num":9,"points":[{"keyword":"世界魔鬼城","city":"克拉玛依市"},{"keyword":"赛里木湖","city":"博尔塔拉蒙古自治州"}]},{"num":10,"points":[{"keyword":"赛里木湖","city":"博尔塔拉蒙古自治州"},{"keyword":"伊宁市六星街","city":"伊宁市"},{"keyword":"库尔德宁","city":"伊犁哈萨克自治州"},{"keyword":"那拉提镇","city":"伊犁哈萨克自治州"}]},{"num":11,"points":[{"keyword":"那拉提草原景区","city":"伊犁哈萨克自治州"}]},{"num":12,"points":[{"keyword":"那拉提镇","city":"伊犁哈萨克自治州"},{"keyword":"唐布拉草原","city":"伊犁哈萨克自治州"}]},{"num":13,"points":[{"keyword":"那拉提镇","city":"伊犁哈萨克自治州"},{"keyword":"独山子区","city":"克拉玛依市"}]},{"num":14,"points":[{"keyword":"独山子区","city":"克拉玛依市"},{"keyword":"天山天池","city":"阜康市"},{"keyword":"乌鲁木齐地窝堡国际机场","city":"乌鲁木齐市"}]},{"num":15,"points":[{"keyword":"乌鲁木齐地窝堡国际机场","city":"乌鲁木齐市"}]}];
   var pending = days.length;
 
   function geocode(address, city) {

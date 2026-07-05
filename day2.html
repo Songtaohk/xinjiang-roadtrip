@@ -287,6 +287,24 @@ footer.site-footer {
   font-size: 12px;
   padding: 20px;
 }
+.terrain-box {
+  background: #F1F6F3;
+  border-left: 3px solid var(--teal-light);
+  border-radius: 6px;
+  padding: 10px 14px;
+  font-size: 13.5px;
+  color: var(--text);
+  margin-top: 10px;
+  line-height: 1.6;
+}
+.terrain-box strong { color: var(--teal); }
+.elev-chart-wrap { margin-top: 10px; }
+.elev-chart { width: 100%; height: auto; display: block; }
+.elev-chart-note {
+  font-size: 11.5px;
+  color: var(--muted);
+  margin-top: 2px;
+}
 </style>
 </head>
 <body>
@@ -310,6 +328,19 @@ footer.site-footer {
   <div class="map-note">地图由高德地图 JS API 驱动，路线为高德实时驾车路线规划结果（仅供参考，实际路况请以导航为准）。</div>
   <div class="map-legend">蓝色路线＝高德实时驾车路线规划 · 🏨红色标记＝推荐酒店 · 🚗绿色标记＝租车门店</div>
   
+    
+  <div class="elev-chart-wrap">
+    <svg viewBox="0 0 640 130" class="elev-chart" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <polygon points="8.0,100 8.0,26.0 632.0,100.0 632.0,100" fill="#2E6F86" fill-opacity="0.12"/>
+    <polyline points="8.0,26.0 632.0,100.0" fill="none" stroke="#2E6F86" stroke-width="2.5"/>
+    <circle cx="8.0" cy="26.0" r="4" fill="#2E6F86" stroke="white" stroke-width="1.5"/><circle cx="632.0" cy="100.0" r="4" fill="#2E6F86" stroke="white" stroke-width="1.5"/>
+    <text x="10.0" y="120.0" font-size="11" text-anchor="start" fill="#5b6b70">乌鲁木齐</text>
+      <text x="10.0" y="16.0" font-size="11" font-weight="600" text-anchor="start" fill="#1F4E5F">800m</text><text x="630.0" y="120.0" font-size="11" text-anchor="end" fill="#5b6b70">布尔津</text>
+      <text x="630.0" y="90.0" font-size="11" font-weight="600" text-anchor="end" fill="#1F4E5F">480m</text>
+  </svg>
+    <div class="elev-chart-note">海拔变化示意图：仅标注已知的起点/关键垭口或水域/终点海拔，用直线连接，并非连续实测曲线，具体请见下方"交通"表格的海拔变化说明。</div>
+  </div>
+    <div class="terrain-box"><strong>🏔️ 地形地貌：</strong>沿S21沙漠公路一路向北，穿越准噶尔盆地腹地的古尔班通古特沙漠（中国第二大沙漠，四周高山环抱、地形闭塞，以固定/半固定沙丘为主），过阿勒泰市后进入阿尔泰山南麓的额尔齐斯河谷平原，抵达布尔津。</div>
   </div>
 
   <div class="section-card">

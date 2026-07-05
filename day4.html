@@ -287,6 +287,24 @@ footer.site-footer {
   font-size: 12px;
   padding: 20px;
 }
+.terrain-box {
+  background: #F1F6F3;
+  border-left: 3px solid var(--teal-light);
+  border-radius: 6px;
+  padding: 10px 14px;
+  font-size: 13.5px;
+  color: var(--text);
+  margin-top: 10px;
+  line-height: 1.6;
+}
+.terrain-box strong { color: var(--teal); }
+.elev-chart-wrap { margin-top: 10px; }
+.elev-chart { width: 100%; height: auto; display: block; }
+.elev-chart-note {
+  font-size: 11.5px;
+  color: var(--muted);
+  margin-top: 2px;
+}
 </style>
 </head>
 <body>
@@ -310,6 +328,19 @@ footer.site-footer {
   <div class="map-note">地图由高德地图 JS API 驱动，路线为高德实时驾车路线规划结果（仅供参考，实际路况请以导航为准）。</div>
   <div class="map-legend">蓝色路线＝高德实时驾车路线规划</div>
   
+    
+  <div class="elev-chart-wrap">
+    <svg viewBox="0 0 640 130" class="elev-chart" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <polygon points="8.0,100 8.0,100.0 632.0,26.0 632.0,100" fill="#2E6F86" fill-opacity="0.12"/>
+    <polyline points="8.0,100.0 632.0,26.0" fill="none" stroke="#2E6F86" stroke-width="2.5"/>
+    <circle cx="8.0" cy="100.0" r="4" fill="#2E6F86" stroke="white" stroke-width="1.5"/><circle cx="632.0" cy="26.0" r="4" fill="#2E6F86" stroke="white" stroke-width="1.5"/>
+    <text x="10.0" y="120.0" font-size="11" text-anchor="start" fill="#5b6b70">贾登峪</text>
+      <text x="10.0" y="90.0" font-size="11" font-weight="600" text-anchor="start" fill="#1F4E5F">1350m</text><text x="630.0" y="120.0" font-size="11" text-anchor="end" fill="#5b6b70">喀纳斯湖</text>
+      <text x="630.0" y="16.0" font-size="11" font-weight="600" text-anchor="end" fill="#1F4E5F">1374m</text>
+  </svg>
+    <div class="elev-chart-note">海拔变化示意图：仅标注已知的起点/关键垭口或水域/终点海拔，用直线连接，并非连续实测曲线，具体请见下方"交通"表格的海拔变化说明。</div>
+  </div>
+    <div class="terrain-box"><strong>🏔️ 地形地貌：</strong>喀纳斯湖是第四纪冰川作用的产物：阿尔泰山冰川刨蚀山谷形成U形谷，冰川消退后冰碛物堵塞谷口积水成湖，湖区周边保留着典型的冰川侵蚀/堆积地貌遗迹。</div>
   </div>
 
   <div class="section-card">

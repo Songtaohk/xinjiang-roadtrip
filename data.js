@@ -16,6 +16,8 @@ const DAYS = [
   title: "香港 → 乌鲁木齐（抵达日）",
   summary: "傍晚航班抵达，直接入住酒店，不取车，无游览安排",
   mapPoints: ["Hong Kong International Airport", "Urumqi Diwopu International Airport", "Urumqi, Xinjiang, China"],
+  terrain: "从珠江口海滨飞越大陆腹地，乌鲁木齐地处天山山脉中段北麓、准噶尔盆地南缘的山前冲积扇上，是世界上距海洋最远的大城市之一。",
+  elevProfile: [{ label: "香港", m: 10 }, { label: "乌鲁木齐", m: 800 }],
   transport: {
     roads: "机场高速（乘出租车/网约车前往酒店，暂不涉及自驾）",
     distance: "约25 km（机场→市区）",
@@ -38,6 +40,8 @@ const DAYS = [
   title: "乌鲁木齐深度游",
   summary: "睡眠充足后从容开启的第一个完整游览日，无需赶路",
   mapPoints: ["Urumqi, Xinjiang, China"],
+  terrain: "乌鲁木齐城区坐落在天山北坡的山麓冲积扇地带，向北即是准噶尔盆地南缘的古尔班通古特沙漠，向南数十公里便可见天山雪线，是典型的\"背山面漠\"绿洲城市。",
+  elevProfile: [{ label: "乌鲁木齐市区", m: 800 }],
   transport: {
     roads: "市内道路",
     distance: "市区内代步，无长途驾车",
@@ -63,6 +67,8 @@ const DAYS = [
   title: "乌鲁木齐 → 布尔津（经S21沙漠公路+阿勒泰市，取车日）",
   summary: "早晨取车后走沙漠高速直插北疆，路过克拉美丽沙漠公园和阿勒泰市，比原西线更省心，傍晚抵布尔津看五彩滩日落",
   mapPoints: ["Urumqi, Xinjiang, China", "Altay, Xinjiang, China", "Burqin, Xinjiang, China"],
+  terrain: "沿S21沙漠公路一路向北，穿越准噶尔盆地腹地的古尔班通古特沙漠（中国第二大沙漠，四周高山环抱、地形闭塞，以固定/半固定沙丘为主），过阿勒泰市后进入阿尔泰山南麓的额尔齐斯河谷平原，抵达布尔津。",
+  elevProfile: [{ label: "乌鲁木齐", m: 800 }, { label: "布尔津", m: 480 }],
   transport: {
     roads: "S21阿勒泰-乌鲁木齐沙漠高速公路（经克拉美丽沙漠公园）+ 阿勒泰市→布尔津段G217国道",
     distance: "约560-610 km（乌鲁木齐-阿勒泰市方向经S21约450-500km + 阿勒泰市-布尔津约108km，S21与市区衔接段的确切公里数暂未逐段核实，建议出发前用高德核实实时路线）",
@@ -95,6 +101,8 @@ const DAYS = [
   title: "布尔津 → 贾登峪（轻松短途，进驻阿勒泰基地）",
   summary: "睡到自然醒，短途山路直达基地，接下来3晚以此为中心",
   mapPoints: ["Burqin, Xinjiang, China", "Jiadengyu, Xinjiang, China"],
+  terrain: "沿额尔齐斯河支流溯源而上，从阿尔泰山南麓的河谷平原逐渐进入山地地带，贾登峪地处阿尔泰山腹地，是喀纳斯、禾木两大冰川湖泊/河谷景区的门户。",
+  elevProfile: [{ label: "布尔津", m: 480 }, { label: "贾登峪", m: 1350 }],
   transport: {
     roads: "布尔津-贾登峪山区公路",
     distance: "约130 km",
@@ -120,6 +128,8 @@ const DAYS = [
   title: "贾登峪 ⇄ 喀纳斯湖区（0自驾里程）",
   summary: "轻装换乘进核心景区，车留在基地",
   mapPoints: ["Jiadengyu, Xinjiang, China", "Kanas Lake, Xinjiang, China"],
+  terrain: "喀纳斯湖是第四纪冰川作用的产物：阿尔泰山冰川刨蚀山谷形成U形谷，冰川消退后冰碛物堵塞谷口积水成湖，湖区周边保留着典型的冰川侵蚀/堆积地貌遗迹。",
+  elevProfile: [{ label: "贾登峪", m: 1350 }, { label: "喀纳斯湖", m: 1374 }],
   transport: {
     roads: "换乘区间车（私家车不可驶入）",
     distance: "贾登峪-喀纳斯换乘中心约30km",
@@ -150,6 +160,8 @@ const DAYS = [
   title: "贾登峪 ⇄ 白哈巴（中哈边境第一村，0自驾里程）",
   summary: "换乘专线进中哈边境第一村，图瓦人木屋+白桦林，新增行程",
   mapPoints: ["Jiadengyu, Xinjiang, China", "Baihaba Village, Xinjiang, China"],
+  terrain: "白哈巴地处阿尔泰山西段中哈边境的一处山间谷地，与喀纳斯同属阿尔泰山地槽褶皱带，村落坐落在河谷阶地上，四周雪山与白桦林环绕。",
+  elevProfile: [{ label: "贾登峪", m: 1350 }, { label: "白哈巴（村落起伏区间约1600-2000m）", m: 1700 }],
   transport: {
     roads: "换乘景区专线（私家车不可驶入，需在贾登峪换乘中心购白哈巴专线票）",
     distance: "贾登峪-白哈巴约70km",
@@ -175,6 +187,8 @@ const DAYS = [
   title: "贾登峪 → 禾木（轻装夜宿一晚）",
   summary: "大行李寄存基地，轻装赴禾木过夜看晨雾",
   mapPoints: ["Jiadengyu, Xinjiang, China", "Hemu Village, Xinjiang, China"],
+  terrain: "禾木村地处阿尔泰山南坡的禾木河谷盆地（村落所在区间约1124-2300m），四面雪山环抱，河谷两岸生长着茂密的白桦林与泰加针叶林，是典型的阿尔泰山寒温带山地森林景观。",
+  elevProfile: [{ label: "贾登峪", m: 1350 }, { label: "禾木村", m: 1200 }],
   transport: {
     roads: "换乘大巴（私家车不可驶入）",
     distance: "贾登峪-禾木约70-130km（不同路书差异较大）",
@@ -202,6 +216,8 @@ const DAYS = [
   title: "禾木 → 贾登峪（取车） → 布尔津",
   summary: "清晨看晨雾，午后取车赶在天黑前抵布尔津",
   mapPoints: ["Hemu Village, Xinjiang, China", "Jiadengyu, Xinjiang, China", "Burqin, Xinjiang, China"],
+  terrain: "沿禾木河谷下行返回阿尔泰山南麓，再顺额尔齐斯河支流下降至布尔津河谷平原，地势总体从高山盆地向河谷平原过渡。",
+  elevProfile: [{ label: "禾木", m: 1200 }, { label: "贾登峪", m: 1350 }, { label: "布尔津", m: 480 }],
   transport: {
     roads: "贾登峪↔禾木换乘大巴 + 布尔津方向省道",
     distance: "贾登峪-布尔津约130 km",
@@ -229,6 +245,8 @@ const DAYS = [
   title: "布尔津 → 世界魔鬼城 → 乌尔禾/克拉玛依外围",
   summary: "纯平路好开，傍晚拍雅丹地貌日落",
   mapPoints: ["Burqin, Xinjiang, China", "Urho Ghost City, Xinjiang, China"],
+  terrain: "从阿尔泰山南麓的额尔齐斯河谷进入准噶尔盆地西北缘的戈壁荒漠带，乌尔禾魔鬼城是典型的风蚀雅丹地貌——古湖相沉积岩层经亿万年风蚀水蚀塑造成城堡状土丘群。",
+  elevProfile: [{ label: "布尔津", m: 480 }, { label: "乌尔禾", m: 400 }],
   transport: {
     roads: "G217国道",
     distance: "约220 km",
@@ -256,6 +274,8 @@ const DAYS = [
   title: "乌尔禾 → 赛里木湖 ⚠ 刚性长途日",
   summary: "全程唯一超长驾驶日，接受它，早发轻松抵达（本次只住1晚，行程已调整为不再连住2晚）",
   mapPoints: ["Urho Ghost City, Xinjiang, China", "Sayram Lake, Xinjiang, China"],
+  terrain: "从准噶尔盆地西缘一路南行，翻越天山西段婆罗科努山北坡进入伊犁地块；赛里木湖是天山山系间的构造断陷湖（地质上又称\"地堑湖\"），湖面海拔2073米，是新疆海拔最高、面积最大的高山冷水湖。",
+  elevProfile: [{ label: "乌尔禾", m: 400 }, { label: "赛里木湖", m: 2073 }],
   transport: {
     roads: "克拉玛依-独山子-精河方向高速",
     distance: "约410 km",
@@ -284,6 +304,8 @@ const DAYS = [
   title: "赛里木湖 → 伊宁（六星街） → 库尔德宁 → 那拉提 ⚠ 内容较满",
   summary: "清晨看日出后即出发，途经伊宁六星街与库尔德宁雪岭云杉，抵达草原大本营",
   mapPoints: ["Sayram Lake, Xinjiang, China", "Yining, Xinjiang, China", "Kurdening, Gongliu, Xinjiang, China", "Nalati Grassland, Xinjiang, China"],
+  terrain: "经果子沟（古称塔勒奇达坂，长约28公里，是通往中亚的丝路古道咽喉\"铁关\"）翻下天山进入伊犁河谷——一个被天山北支婆罗科努山、南支哈尔克山夹峙、向西敞开呈喇叭状的半封闭山间谷地；库尔德宁地处那拉提山雪岭云杉带（海拔1800-2600米），是世界自然遗产地。",
+  elevProfile: [{ label: "赛里木湖", m: 2073 }, { label: "伊宁", m: 660 }, { label: "库尔德宁", m: 1500 }, { label: "那拉提", m: 1500 }],
   transport: {
     roads: "果子沟大桥高速（赛里木湖-伊宁）+ 伊宁-巩留-库尔德宁-那拉提山谷公路（新增经库尔德宁，不再走伊宁直达那拉提的更短路线）",
     distance: "赛里木湖-伊宁约140km；伊宁-那拉提（经库尔德宁）约250-280km（不同路书数据有出入，比直达路线约110km明显更长，建议出发前用高德核实实时路况）",
@@ -317,6 +339,8 @@ const DAYS = [
   title: "那拉提草原深度游 + 傍晚盘龙谷自驾",
   summary: "空中草原轻徒步，傍晚幽静森林公路自驾",
   mapPoints: ["Nalati Grassland, Xinjiang, China"],
+  terrain: "那拉提草原地处伊犁河谷东端的天山腹地，是欧亚大陆四大草原之一，山地草甸随海拔从谷地一路抬升至海拔约2200米的\"空中草原\"带，是天山山地垂直景观带的典型呈现。",
+  elevProfile: [{ label: "那拉提河谷", m: 1500 }, { label: "空中草原", m: 2200 }],
   transport: {
     roads: "景区内自驾路线（空中草原-游牧人家、盘龙谷道）",
     distance: "0-1小时（仅景区内挪车）",
@@ -342,6 +366,8 @@ const DAYS = [
   title: "那拉提 ⇄ 唐布拉核心区（经S316+G218，不经独库公路）",
   summary: "零风险日：山谷公路直达唐布拉，无需任何独库预约",
   mapPoints: ["Nalati Grassland, Xinjiang, China", "Tangbula Grassland, Nilka County, Xinjiang, China"],
+  terrain: "唐布拉草原地处喀什河谷，是天山支脉间由113条沟谷组成的山地草原带，被称为\"百里画廊\"，河谷两岸雪岭云杉与草甸交错分布。",
+  elevProfile: [{ label: "那拉提", m: 1500 }, { label: "唐布拉", m: 1500 }],
   transport: {
     roads: "S316省道 + G218国道（已用高德地图验证，全程不经乔尔玛/独库公路）",
     distance: "约110 km（单程），往返约220-230 km",
@@ -365,6 +391,8 @@ const DAYS = [
   title: "那拉提 → 独库公路北段 → 奎屯/独山子 ⚠ 史诗级长途日",
   summary: "全程最震撼的一天：翻越哈希勒根达坂，一日看四季",
   mapPoints: ["Nalati Grassland, Xinjiang, China", "Dushanzi, Karamay, Xinjiang, China"],
+  terrain: "翻越天山主脊的哈希勒根达坂（海拔约3400米，是奎屯河与喀什河的分水岭），从伊犁河谷一路北上跨越整条天山山脉，最终下降至准噶尔盆地南缘的独山子——独山子大峡谷是奎屯河亿万年冲刷切割天山山前地层形成的峡谷地貌。",
+  elevProfile: [{ label: "那拉提", m: 1500 }, { label: "哈希勒根达坂", m: 3400 }, { label: "独山子", m: 400 }],
   transport: {
     roads: "G217独库公路北段",
     distance: "约260 km",
@@ -394,6 +422,8 @@ const DAYS = [
   title: "奎屯 → 天山天池 → 乌鲁木齐机场",
   summary: "最后一站，环湖轻健行后回城备战返程",
   mapPoints: ["Dushanzi, Karamay, Xinjiang, China", "Tianshan Tianchi, Fukang, Xinjiang, China", "Urumqi Diwopu International Airport"],
+  terrain: "从准噶尔盆地南缘东行至博格达峰北麓，天山天池是第四纪冰川刨蚀+冰碛物堰塞形成的高山湖泊，堤坝主体由冰川堆积物构成，湖面倒映着博格达峰（5445米）的雪峰。",
+  elevProfile: [{ label: "独山子", m: 400 }, { label: "天池", m: 1910 }, { label: "乌鲁木齐", m: 800 }],
   transport: {
     roads: "连霍高速（G30）",
     distance: "奎屯-天池约280-320km；天池-机场约85-110km",
@@ -425,6 +455,8 @@ const DAYS = [
   title: "乌鲁木齐 → 香港",
   summary: "无游玩安排，从容返程",
   mapPoints: ["Urumqi Diwopu International Airport", "Hong Kong International Airport"],
+  terrain: "从天山北麓的准噶尔盆地南缘飞返珠江口海滨，全程无陆地移动，地形变化已随前一日的天池/独山子之行完成。",
+  elevProfile: [{ label: "乌鲁木齐", m: 800 }, { label: "香港", m: 10 }],
   transport: {
     roads: "—", distance: "—",
     duration: "南航CZ603，10:20乌鲁木齐起飞，15:40抵香港（飞行约5小时20分，经济舱，中型机321，该航班历史准点率93.33%）",
