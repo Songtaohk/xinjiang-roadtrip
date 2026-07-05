@@ -287,6 +287,16 @@ footer.site-footer {
   font-size: 12px;
   padding: 20px;
 }
+.map-live-note {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--teal);
+  background: #EAF2E9;
+  border-radius: 6px;
+  padding: 6px 10px;
+  margin-top: 6px;
+  min-height: 14px;
+}
 .terrain-box {
   background: #F1F6F3;
   border-left: 3px solid var(--teal-light);
@@ -325,6 +335,7 @@ footer.site-footer {
     
   <div id="amap-day-15" class="map-frame-wrap"></div>
   <div id="amap-status-15" class="map-fallback-link"></div>
+  <div id="amap-day-15-live" class="map-live-note"></div>
   <div class="map-note">地图由高德地图 JS API 驱动，路线为高德实时驾车路线规划结果（仅供参考，实际路况请以导航为准）。</div>
   
   
@@ -347,7 +358,7 @@ footer.site-footer {
     <h3><span class="icon">🚗</span>交通</h3>
     <table class="info-table"><tr><td class="label">路线</td><td>—</td></tr><tr><td class="label">里程</td><td>—</td></tr><tr><td class="label">车程</td><td>南航CZ603，10:20乌鲁木齐起飞，15:40抵香港（飞行约5小时20分，经济舱，中型机321，该航班历史准点率93.33%）</td></tr><tr><td class="label">海拔变化</td><td>—</td></tr><tr><td class="label">历史天气参考</td><td>—</td></tr><tr><td class="label">是否需预约</td><td>机票已确认（南航CZ603）</td></tr></table>
     
-    <div class="warn-box"><strong>驾车注意事项：</strong>建议早上7:30左右从容前往机场还车、办理托运登机手续，无游览安排</div>
+    <div class="warn-box"><strong>驾车注意事项：</strong>建议早上7:30左右从容前往机场，办理托运登机手续，无游览安排（昨日已还车，今日在市区酒店直接打车/网约车前往机场）</div>
   </div>
 
   <div class="section-card">
@@ -446,6 +457,13 @@ window._AMapSecurityConfig = { securityJsCode: "f5122d0c0aae74cc4c4e8f4ce0a196cc
       driving.search(start, end, { waypoints: mid }, function(status, result){
         if (status !== "complete") {
           document.getElementById("amap-status-15").innerHTML = "驾车路线规划失败，请在高德地图App中手动搜索：" + routePoints.map(function(p){ return p.keyword; }).join(" → ");
+        } else if (result && result.routes && result.routes[0]) {
+          var km = (result.routes[0].distance / 1000).toFixed(0);
+          var totalMin = Math.round(result.routes[0].time / 60);
+          var hrs = Math.floor(totalMin / 60), remMin = totalMin % 60;
+          var timeStr = hrs > 0 ? (hrs + "小时" + (remMin > 0 ? remMin + "分钟" : "")) : (totalMin + "分钟");
+          var liveEl = document.getElementById("amap-day-15-live");
+          if (liveEl) liveEl.innerHTML = "📍 高德实时路线：约 " + km + " km，纯驾车预计 " + timeStr + "（不含休息/堵车，当前浏览时刻的实时路况计算，仅供参考，与下方\u201c交通\u201d表格中的研究估算值可能不同）";
         }
         map.setFitView();
         addHotelMarkers();

@@ -13,89 +13,89 @@ const AMAP_SECURITY = "f5122d0c0aae74cc4c4e8f4ce0a196cc";
 // 阿勒泰地区 (Altay), 伊犁哈萨克自治州 (Ili), 博尔塔拉蒙古自治州 (Bortala), 克拉玛依市, 乌鲁木齐市, 伊宁市, 阜康市, 奎屯市.
 const WAYPOINTS_CN = {
   0: [{ keyword: "乌鲁木齐地窝堡国际机场", city: "乌鲁木齐市" }],
-  1: [{ keyword: "乌鲁木齐市", city: "乌鲁木齐市" }],
-  2: [
+  1: [
     { keyword: "乌鲁木齐市", city: "乌鲁木齐市" },
     { keyword: "阿勒泰市", city: "阿勒泰地区" },
     { keyword: "布尔津县", city: "阿勒泰地区" },
   ],
-  3: [
+  2: [
     { keyword: "布尔津县", city: "阿勒泰地区" },
     { keyword: "喀纳斯景区贾登峪游客中心", city: "阿勒泰地区" },
   ],
-  4: [
+  3: [
     { keyword: "贾登峪游客中心", city: "阿勒泰地区" },
     { keyword: "喀纳斯湖", city: "阿勒泰地区" },
   ],
-  5: [
+  4: [
     { keyword: "贾登峪游客中心", city: "阿勒泰地区" },
     { keyword: "白哈巴", city: "阿勒泰地区" },
   ],
-  6: [
+  5: [
     { keyword: "贾登峪游客中心", city: "阿勒泰地区" },
     { keyword: "禾木村", city: "阿勒泰地区" },
   ],
-  7: [
+  6: [
     { keyword: "禾木村", city: "阿勒泰地区" },
     { keyword: "贾登峪游客中心", city: "阿勒泰地区" },
     { keyword: "布尔津县", city: "阿勒泰地区" },
   ],
-  8: [
+  7: [
     { keyword: "布尔津县", city: "阿勒泰地区" },
     { keyword: "世界魔鬼城", city: "克拉玛依市" },
   ],
-  9: [
+  8: [
     { keyword: "世界魔鬼城", city: "克拉玛依市" },
     { keyword: "赛里木湖", city: "博尔塔拉蒙古自治州" },
   ],
-  10: [
+  9: [
     { keyword: "赛里木湖", city: "博尔塔拉蒙古自治州" },
     { keyword: "伊宁市六星街", city: "伊宁市" },
     { keyword: "库尔德宁", city: "伊犁哈萨克自治州" },
     { keyword: "那拉提镇", city: "伊犁哈萨克自治州" },
   ],
-  11: [{ keyword: "那拉提草原景区", city: "伊犁哈萨克自治州" }],
-  12: [
+  10: [{ keyword: "那拉提草原景区", city: "伊犁哈萨克自治州" }],
+  11: [
     { keyword: "那拉提镇", city: "伊犁哈萨克自治州" },
     { keyword: "唐布拉草原", city: "伊犁哈萨克自治州" },
   ],
-  13: [
+  12: [
     { keyword: "那拉提镇", city: "伊犁哈萨克自治州" },
     { keyword: "独山子区", city: "克拉玛依市" },
   ],
-  14: [
+  13: [
     { keyword: "独山子区", city: "克拉玛依市" },
     { keyword: "天山天池", city: "阜康市" },
     { keyword: "乌鲁木齐地窝堡国际机场", city: "乌鲁木齐市" },
   ],
+  14: [{ keyword: "乌鲁木齐市", city: "乌鲁木齐市" }],
   15: [{ keyword: "乌鲁木齐地窝堡国际机场", city: "乌鲁木齐市" }],
 };
 
 // City bias for geocoding each day's hotel names (POI-name lookup).
 const HOTEL_CITY_BIAS = {
   0: "乌鲁木齐市",
-  1: "乌鲁木齐市",
+  1: "阿勒泰地区",
   2: "阿勒泰地区",
   3: "阿勒泰地区",
   4: "阿勒泰地区",
   5: "阿勒泰地区",
   6: "阿勒泰地区",
-  7: "阿勒泰地区",
-  8: "克拉玛依市",
-  9: "博尔塔拉蒙古自治州",
+  7: "克拉玛依市",
+  8: "博尔塔拉蒙古自治州",
+  9: "伊犁哈萨克自治州",
   10: "伊犁哈萨克自治州",
   11: "伊犁哈萨克自治州",
-  12: "伊犁哈萨克自治州",
-  13: "奎屯市",
+  12: "奎屯市",
+  13: "乌鲁木齐市",
   14: "乌鲁木齐市",
   15: null,
 };
 
-// Rental car pickup (Day 2, 8/17) / return (Day 14, 8/29) label prefixes for map markers,
+// Rental car pickup (Day 1, 8/16) / return (Day 13, 8/28) label prefixes for map markers,
 // geocoded directly by each rental company's real name+address (see data.js rentalOptions).
 const RENTAL_LABEL_PREFIX = {
-  2: "🚗 取车：",
-  14: "🚗 还车：",
+  1: "🚗 取车：",
+  13: "🚗 还车：",
 };
 
 function hotelListForDay(d) {
@@ -395,6 +395,16 @@ footer.site-footer {
   font-size: 12px;
   padding: 20px;
 }
+.map-live-note {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--teal);
+  background: #EAF2E9;
+  border-radius: 6px;
+  padding: 6px 10px;
+  margin-top: 6px;
+  min-height: 14px;
+}
 .terrain-box {
   background: #F1F6F3;
   border-left: 3px solid var(--teal-light);
@@ -577,6 +587,13 @@ ${JS_HELPERS}
       driving.search(start, end, { waypoints: mid }, function(status, result){
         if (status !== "complete") {
           document.getElementById("${statusId}").innerHTML = "驾车路线规划失败，请在高德地图App中手动搜索：" + routePoints.map(function(p){ return p.keyword; }).join(" → ");
+        } else if (result && result.routes && result.routes[0]) {
+          var km = (result.routes[0].distance / 1000).toFixed(0);
+          var totalMin = Math.round(result.routes[0].time / 60);
+          var hrs = Math.floor(totalMin / 60), remMin = totalMin % 60;
+          var timeStr = hrs > 0 ? (hrs + "小时" + (remMin > 0 ? remMin + "分钟" : "")) : (totalMin + "分钟");
+          var liveEl = document.getElementById("${mapId}-live");
+          if (liveEl) liveEl.innerHTML = "📍 高德实时路线：约 " + km + " km，纯驾车预计 " + timeStr + "（不含休息/堵车，当前浏览时刻的实时路况计算，仅供参考，与下方\\u201c交通\\u201d表格中的研究估算值可能不同）";
         }
         map.setFitView();
         addHotelMarkers();
@@ -603,6 +620,7 @@ function renderDayPage(d, idx) {
   const mapSection = points.length > 0 ? `
   <div id="amap-day-${d.num}" class="map-frame-wrap"></div>
   <div id="amap-status-${d.num}" class="map-fallback-link"></div>
+  <div id="amap-day-${d.num}-live" class="map-live-note"></div>
   <div class="map-note">地图由高德地图 JS API 驱动，路线为高德实时驾车路线规划结果（仅供参考，实际路况请以导航为准）。</div>
   ${legendParts.length > 0 ? `<div class="map-legend">${legendParts.join(" · ")}</div>` : ""}
   ` : `<p class="empty-note">当天无自驾/位置移动。</p>`;

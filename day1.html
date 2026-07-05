@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>D1 乌鲁木齐深度游 - 北疆16日自驾行程</title>
+<title>D1 乌鲁木齐 → 布尔津（经S21沙漠公路+阿勒泰市，取车日） - 北疆16日自驾行程</title>
 <style>
 :root {
   --teal: #1F4E5F;
@@ -287,6 +287,16 @@ footer.site-footer {
   font-size: 12px;
   padding: 20px;
 }
+.map-live-note {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--teal);
+  background: #EAF2E9;
+  border-radius: 6px;
+  padding: 6px 10px;
+  margin-top: 6px;
+  min-height: 14px;
+}
 .terrain-box {
   background: #F1F6F3;
   border-left: 3px solid var(--teal-light);
@@ -316,8 +326,8 @@ footer.site-footer {
 <main>
   <div class="day-title-block">
     <span class="day-num">Day 1 · 8月16日（周六）</span>
-    <h2>乌鲁木齐深度游</h2>
-    <div class="summary">睡眠充足后从容开启的第一个完整游览日，无需赶路</div>
+    <h2>乌鲁木齐 → 布尔津（经S21沙漠公路+阿勒泰市，取车日）</h2>
+    <div class="summary">早晨取车后走沙漠高速直插北疆，路过克拉美丽沙漠公园和阿勒泰市，比原西线更省心，傍晚抵布尔津看五彩滩日落</div>
   </div>
 
   <div class="section-card">
@@ -325,56 +335,90 @@ footer.site-footer {
     
   <div id="amap-day-1" class="map-frame-wrap"></div>
   <div id="amap-status-1" class="map-fallback-link"></div>
+  <div id="amap-day-1-live" class="map-live-note"></div>
   <div class="map-note">地图由高德地图 JS API 驱动，路线为高德实时驾车路线规划结果（仅供参考，实际路况请以导航为准）。</div>
-  
+  <div class="map-legend">蓝色路线＝高德实时驾车路线规划 · 🏨红色标记＝推荐酒店 · 🚗绿色标记＝租车门店</div>
   
     
-    <div class="terrain-box"><strong>🏔️ 地形地貌：</strong>乌鲁木齐城区坐落在天山北坡的山麓冲积扇地带，向北即是准噶尔盆地南缘的古尔班通古特沙漠，向南数十公里便可见天山雪线，是典型的"背山面漠"绿洲城市。</div>
+  <div class="elev-chart-wrap">
+    <svg viewBox="0 0 640 130" class="elev-chart" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <polygon points="8.0,100 8.0,26.0 632.0,100.0 632.0,100" fill="#2E6F86" fill-opacity="0.12"/>
+    <polyline points="8.0,26.0 632.0,100.0" fill="none" stroke="#2E6F86" stroke-width="2.5"/>
+    <circle cx="8.0" cy="26.0" r="4" fill="#2E6F86" stroke="white" stroke-width="1.5"/><circle cx="632.0" cy="100.0" r="4" fill="#2E6F86" stroke="white" stroke-width="1.5"/>
+    <text x="10.0" y="120.0" font-size="11" text-anchor="start" fill="#5b6b70">乌鲁木齐</text>
+      <text x="10.0" y="16.0" font-size="11" font-weight="600" text-anchor="start" fill="#1F4E5F">800m</text><text x="630.0" y="120.0" font-size="11" text-anchor="end" fill="#5b6b70">布尔津</text>
+      <text x="630.0" y="90.0" font-size="11" font-weight="600" text-anchor="end" fill="#1F4E5F">480m</text>
+  </svg>
+    <div class="elev-chart-note">海拔变化示意图：仅标注已知的起点/关键垭口或水域/终点海拔，用直线连接，并非连续实测曲线，具体请见下方"交通"表格的海拔变化说明。</div>
+  </div>
+    <div class="terrain-box"><strong>🏔️ 地形地貌：</strong>沿S21沙漠公路一路向北，穿越准噶尔盆地腹地的古尔班通古特沙漠（中国第二大沙漠，四周高山环抱、地形闭塞，以固定/半固定沙丘为主），过阿勒泰市后进入阿尔泰山南麓的额尔齐斯河谷平原，抵达布尔津。</div>
   </div>
 
   <div class="section-card">
     <h3><span class="icon">🚗</span>交通</h3>
-    <table class="info-table"><tr><td class="label">路线</td><td>市内道路</td></tr><tr><td class="label">里程</td><td>市区内代步，无长途驾车</td></tr><tr><td class="label">车程</td><td>全天游览，无需赶路</td></tr><tr><td class="label">海拔变化</td><td>乌鲁木齐市区，海拔约800m，无爬升</td></tr><tr><td class="label">历史天气参考</td><td>8月乌鲁木齐日间气温约25-30℃，夜间约15-18℃，晴朗干燥为主</td></tr><tr><td class="label">是否需预约</td><td>博物馆建议提前官网/公众号预约参观名额</td></tr></table>
+    <table class="info-table"><tr><td class="label">路线</td><td>S21阿勒泰-乌鲁木齐沙漠高速公路（经克拉美丽沙漠公园）+ 阿勒泰市→布尔津段G217国道</td></tr><tr><td class="label">里程</td><td>约560-610 km（乌鲁木齐-阿勒泰市方向经S21约450-500km + 阿勒泰市-布尔津约108km，S21与市区衔接段的确切公里数暂未逐段核实，建议出发前用高德核实实时路线）</td></tr><tr><td class="label">车程</td><td>约7-8小时（含休息），比原西线（经克拉玛依方向630-750km/8-9小时）更短更好开，S21全程高速、设计时速120km/h</td></tr><tr><td class="label">海拔变化</td><td>乌鲁木齐 ~800m → 布尔津 ~480m（总体下降，平缓为主）</td></tr><tr><td class="label">历史天气参考</td><td>沿途多为戈壁/沙漠，8月日间炎热干燥，可达30℃+；布尔津傍晚转凉，约20℃左右</td></tr><tr><td class="label">是否需预约</td><td>上午先到机场租车门店取车，凭预订单+驾驶员本人证件+港澳驾照及内地翻译认证件；五彩滩门票建议网上提前购买</td></tr></table>
     
-    <div class="warn-box"><strong>驾车注意事项：</strong>尚未取车，当天以打车/步行游览市区为主；因前一晚已抵达并入住，不存在红眼航班疲劳问题，游览节奏可从容安排</div>
+    <div class="warn-box"><strong>驾车注意事项：</strong>⚠这仍是全程较长的一天，但比原西线路线更短更省心，建议7:30-8:00出发，每2小时左右下服务区休息10-15分钟；阿勒泰市这段只是路过，不安排过夜/深度游览（将军山、阿勒泰博物馆等如需专门游览，建议另外增加1晚）；傍晚抵布尔津安顿后直接前往五彩滩看日落，建议18:30前入园</div>
   </div>
 
   <div class="section-card">
     <h3><span class="icon">📍</span>活动安排</h3>
     
       <div class="activity-item">
-        <div class="name">新疆维吾尔自治区博物馆</div>
-        <div class="meta">游览时间：约2小时</div>
-        <div class="intro">馆藏"楼兰美女"干尸最负盛名，出土于若羌铁板河墓地，距今约3800年，是新疆年代最早、保存最完整的干尸，另有大量西域民族文物与丝路文书。</div>
-        <div class="note">楼兰美女干尸展厅是核心看点，建议提前官网/公众号预约参观名额</div>
-        <div class="depth-box">
-          <div class="depth-row"><span class="depth-tag shallow">浅度</span>只看二楼古代干尸陈列厅（"楼兰美女"等），30-40分钟</div>
-          <div class="depth-row"><span class="depth-tag deep">深度</span>加逛丝绸之路展厅、新疆历史文物展厅，租讲解器或请讲解员，2小时以上</div>
-        </div>
+        <div class="name">克拉美丽沙漠公园（可选途经）</div>
+        <div class="meta">游览时间：约20-30分钟</div>
+        <div class="intro">S21沙漠公路穿越古尔班通古特沙漠途中的雅丹地貌观景点，与"克拉玛依"市名相近但地理位置和管理范围完全不同，是沙漠公路本身的观景亮点。</div>
+        <div class="note">S21沙漠公路沿线的服务区型景点，不是克拉玛依市区，视精力和时间决定是否下车拍照，不建议久留以免影响后续车程</div>
+        
       </div>
       <div class="activity-item">
-        <div class="name">乌鲁木齐大巴扎</div>
-        <div class="meta">游览时间：约1.5-2小时</div>
-        <div class="intro">国际大巴扎是中亚风格建筑群，集市贸易、烤肉干果、歌舞表演于一体，是乌鲁木齐最具民族风情的地标夜市。</div>
-        <div class="note">民族风情建筑群+烤肉+干果市集，傍晚人气最旺，注意随身财物</div>
+        <div class="name">五彩滩</div>
+        <div class="meta">游览时间：约1-1.5小时</div>
+        <div class="intro">额尔齐斯河北岸典型雅丹地貌，红黄相间的丘陵在夕阳下色彩斑斓，与河对岸的绿洲、白桦林形成鲜明对比，是布尔津最经典的日落打卡地。</div>
+        <div class="note">布尔津西北约24公里，雅丹地貌，傍晚日落光影最佳，建议18:30前入园，门票约45-50元/人</div>
         <div class="depth-box">
-          <div class="depth-row"><span class="depth-tag shallow">浅度</span>逛主楼+小吃街，吃烤包子/烤肉串，40分钟-1小时</div>
-          <div class="depth-row"><span class="depth-tag deep">深度</span>登观光塔俯瞰全景，逛地毯/手工艺品市集，赶上民族歌舞表演，1.5-2小时</div>
+          <div class="depth-row"><span class="depth-tag shallow">浅度</span>木栈道走一段拍照，20-30分钟</div>
+          <div class="depth-row"><span class="depth-tag deep">深度</span>走到远处观景台，完整等待日落光线变化，1-1.5小时</div>
         </div>
       </div>
   </div>
 
   <div class="section-card">
     <h3><span class="icon">🍽️</span>饮食 / 住宿</h3>
-    <div style="margin-bottom:10px;"><strong style="font-size:13.5px;color:var(--muted);">推荐饮食</strong><ul class="food-list"><li>大巴扎烤羊肉串、烤包子</li><li>新疆大盘鸡（市区老字号）</li></ul></div>
+    <div style="margin-bottom:10px;"><strong style="font-size:13.5px;color:var(--muted);">推荐饮食</strong><ul class="food-list"><li>沿途服务区简餐（午餐）</li><li>布尔津河鲜（额尔齐斯河鱼类，抵达后晚餐）</li></ul></div>
     <div><strong style="font-size:13.5px;color:var(--muted);">当晚住宿（3-4星，推荐1-3选）</strong>
       <div class="hotel-item">
-        <div class="name">（同Day0，连住第2晚）</div>
-        <div class="meta">乌鲁木齐市区 · —</div>
-        <div class="note">大件行李无需搬动</div>
+        <div class="name">布尔津神湖大酒店</div>
+        <div class="meta">布尔津县城核心区域 · 建议携程查实时价</div>
+        <div class="note">携程489条点评（473条推荐），"停车方便、早餐很棒、性价比高、环境优雅"</div>
+      </div>
+      <div class="hotel-item">
+        <div class="name">布尔津格林城大酒店</div>
+        <div class="meta">布尔津县城 · 建议携程查实时价</div>
+        <div class="note">点评"环境很好、干净整洁，房间空间大，干湿分离卫生间"</div>
+      </div>
+      <div class="hotel-item">
+        <div class="name">布尔津疆峪酒店</div>
+        <div class="meta">布尔津县城，靠近景区入口 · 建议携程查实时价（后面D6返程会再次经过布尔津，可选择同一家或换一家）</div>
+        <div class="note">园林式酒店，点评"环境非常好，房间宽敞明亮，设施配套齐全"</div>
       </div></div>
   </div>
   
+  <div class="section-card">
+    <h3><span class="icon">🚙</span>自驾租车</h3>
+    
+      <div class="hotel-item">
+        <div class="name">神州租车(地窝堡国际机场店)</div>
+        <div class="meta">乌鲁木齐市新市区迎宾路1341号乌鲁木齐国际机场天缘酒店B座1层后侧（新疆机场集团公司对面）</div>
+        <div class="note">📞 官方客服 400-616-6666（门店号码来自第三方地图POI，建议以官网/App下单前的门店确认电话为准） ｜ 全国连锁，门店在机场外围酒店区；建议提前预约当天上午取车时段，取车后即长途出发，务必仔细检查备胎、工具箱、保险单据是否齐全</div>
+      </div>
+      <div class="hotel-item">
+        <div class="name">一嗨租车(地窝堡机场店)</div>
+        <div class="meta">乌鲁木齐市新市区迎宾路1341号机场宾馆1层1021室</div>
+        <div class="note">📞 官方客服 400-888-6608（港澳台/海外专线 +86-511-81886608） ｜ 全国连锁，提供港澳台专线，对香港客户咨询更方便</div>
+      </div>
+    <div class="map-note">门店地址/电话来自第三方地图POI与官网核对，建议出发前致电门店二次确认车型库存与取还车时间。</div>
+  </div>
 
   <div class="prevnext">
     <a href="day0.html" class="">← 上一天：D0</a>
@@ -390,9 +434,9 @@ window._AMapSecurityConfig = { securityJsCode: "f5122d0c0aae74cc4c4e8f4ce0a196cc
 <script>
 (function(){
   var map = new AMap.Map("amap-day-1", { zoom: 6, resizeEnable: true });
-  var routePoints = [{"keyword":"乌鲁木齐市","city":"乌鲁木齐市"}];
-  var hotels = [];
-  var rentals = [];
+  var routePoints = [{"keyword":"乌鲁木齐市","city":"乌鲁木齐市"},{"keyword":"阿勒泰市","city":"阿勒泰地区"},{"keyword":"布尔津县","city":"阿勒泰地区"}];
+  var hotels = [{"name":"布尔津神湖大酒店","city":"阿勒泰地区"},{"name":"布尔津格林城大酒店","city":"阿勒泰地区"},{"name":"布尔津疆峪酒店","city":"阿勒泰地区"}];
+  var rentals = [{"name":"神州租车(地窝堡国际机场店)","city":"乌鲁木齐市","label":"🚗 取车：神州租车(地窝堡国际机场店)"},{"name":"一嗨租车(地窝堡机场店)","city":"乌鲁木齐市","label":"🚗 取车：一嗨租车(地窝堡机场店)"}];
 
   function geocode(address, city) {
     return new Promise(function(resolve){
@@ -460,6 +504,13 @@ window._AMapSecurityConfig = { securityJsCode: "f5122d0c0aae74cc4c4e8f4ce0a196cc
       driving.search(start, end, { waypoints: mid }, function(status, result){
         if (status !== "complete") {
           document.getElementById("amap-status-1").innerHTML = "驾车路线规划失败，请在高德地图App中手动搜索：" + routePoints.map(function(p){ return p.keyword; }).join(" → ");
+        } else if (result && result.routes && result.routes[0]) {
+          var km = (result.routes[0].distance / 1000).toFixed(0);
+          var totalMin = Math.round(result.routes[0].time / 60);
+          var hrs = Math.floor(totalMin / 60), remMin = totalMin % 60;
+          var timeStr = hrs > 0 ? (hrs + "小时" + (remMin > 0 ? remMin + "分钟" : "")) : (totalMin + "分钟");
+          var liveEl = document.getElementById("amap-day-1-live");
+          if (liveEl) liveEl.innerHTML = "📍 高德实时路线：约 " + km + " km，纯驾车预计 " + timeStr + "（不含休息/堵车，当前浏览时刻的实时路况计算，仅供参考，与下方\u201c交通\u201d表格中的研究估算值可能不同）";
         }
         map.setFitView();
         addHotelMarkers();

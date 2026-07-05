@@ -287,6 +287,16 @@ footer.site-footer {
   font-size: 12px;
   padding: 20px;
 }
+.map-live-note {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--teal);
+  background: #EAF2E9;
+  border-radius: 6px;
+  padding: 6px 10px;
+  margin-top: 6px;
+  min-height: 14px;
+}
 .terrain-box {
   background: #F1F6F3;
   border-left: 3px solid var(--teal-light);
@@ -325,6 +335,7 @@ footer.site-footer {
     
   <div id="amap-day-0" class="map-frame-wrap"></div>
   <div id="amap-status-0" class="map-fallback-link"></div>
+  <div id="amap-day-0-live" class="map-live-note"></div>
   <div class="map-note">地图由高德地图 JS API 驱动，路线为高德实时驾车路线规划结果（仅供参考，实际路况请以导航为准）。</div>
   <div class="map-legend">🏨红色标记＝推荐酒店</div>
   
@@ -345,7 +356,7 @@ footer.site-footer {
 
   <div class="section-card">
     <h3><span class="icon">🚗</span>交通</h3>
-    <table class="info-table"><tr><td class="label">路线</td><td>机场高速（乘出租车/网约车前往酒店，暂不涉及自驾）</td></tr><tr><td class="label">里程</td><td>约25 km（机场→市区）</td></tr><tr><td class="label">车程</td><td>飞行约5小时35分（南航CZ604，16:55香港起飞，22:30抵乌鲁木齐，均为当地时间，两地同为北京时间无时差）；落地后打车约30分钟到酒店</td></tr><tr><td class="label">海拔变化</td><td>香港 ~10m → 乌鲁木齐 ~800m（爬升约790m，飞行途中完成，无自驾爬升）</td></tr><tr><td class="label">历史天气参考</td><td>8月乌鲁木齐夜间气温约15-18℃，落地已入夜，注意添衣</td></tr><tr><td class="label">是否需预约</td><td>机票已确认（南航CZ604，经济舱，中型机737）；租车推迟到D2（8/17）取车，可省下D0、D1两天用不上车的租金</td></tr></table>
+    <table class="info-table"><tr><td class="label">路线</td><td>机场高速（乘出租车/网约车前往酒店，暂不涉及自驾）</td></tr><tr><td class="label">里程</td><td>约25 km（机场→市区）</td></tr><tr><td class="label">车程</td><td>飞行约5小时35分（南航CZ604，16:55香港起飞，22:30抵乌鲁木齐，均为当地时间，两地同为北京时间无时差）；落地后打车约30分钟到酒店</td></tr><tr><td class="label">海拔变化</td><td>香港 ~10m → 乌鲁木齐 ~800m（爬升约790m，飞行途中完成，无自驾爬升）</td></tr><tr><td class="label">历史天气参考</td><td>8月乌鲁木齐夜间气温约15-18℃，落地已入夜，注意添衣</td></tr><tr><td class="label">是否需预约</td><td>机票已确认（南航CZ604，经济舱，中型机737）；租车推迟到D1（8/16）取车，可省下D0当天用不上车的租金</td></tr></table>
     
     <div class="warn-box"><strong>驾车注意事项：</strong>非红眼航班，抵达时精神状态较好；当晚不取车，直接打车/酒店接驳去市区酒店休息，避免深夜疲劳驾驶风险</div>
   </div>
@@ -461,6 +472,13 @@ window._AMapSecurityConfig = { securityJsCode: "f5122d0c0aae74cc4c4e8f4ce0a196cc
       driving.search(start, end, { waypoints: mid }, function(status, result){
         if (status !== "complete") {
           document.getElementById("amap-status-0").innerHTML = "驾车路线规划失败，请在高德地图App中手动搜索：" + routePoints.map(function(p){ return p.keyword; }).join(" → ");
+        } else if (result && result.routes && result.routes[0]) {
+          var km = (result.routes[0].distance / 1000).toFixed(0);
+          var totalMin = Math.round(result.routes[0].time / 60);
+          var hrs = Math.floor(totalMin / 60), remMin = totalMin % 60;
+          var timeStr = hrs > 0 ? (hrs + "小时" + (remMin > 0 ? remMin + "分钟" : "")) : (totalMin + "分钟");
+          var liveEl = document.getElementById("amap-day-0-live");
+          if (liveEl) liveEl.innerHTML = "📍 高德实时路线：约 " + km + " km，纯驾车预计 " + timeStr + "（不含休息/堵车，当前浏览时刻的实时路况计算，仅供参考，与下方\u201c交通\u201d表格中的研究估算值可能不同）";
         }
         map.setFitView();
         addHotelMarkers();
