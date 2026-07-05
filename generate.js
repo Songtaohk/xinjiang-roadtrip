@@ -12,7 +12,8 @@ const AMAP_SECURITY = "f5122d0c0aae74cc4c4e8f4ce0a196cc";
 // city values use prefecture-level (地级) administrative names for reliable AMap geocoding bias:
 // 阿勒泰地区 (Altay), 伊犁哈萨克自治州 (Ili), 博尔塔拉蒙古自治州 (Bortala), 克拉玛依市, 乌鲁木齐市, 伊宁市, 阜康市, 奎屯市.
 const WAYPOINTS_CN = {
-  1: [{ keyword: "乌鲁木齐地窝堡国际机场", city: "乌鲁木齐市" }],
+  0: [{ keyword: "乌鲁木齐地窝堡国际机场", city: "乌鲁木齐市" }],
+  1: [{ keyword: "乌鲁木齐市", city: "乌鲁木齐市" }],
   2: [
     { keyword: "乌鲁木齐市", city: "乌鲁木齐市" },
     { keyword: "克拉玛依市", city: "克拉玛依市" },
@@ -68,6 +69,7 @@ const WAYPOINTS_CN = {
 
 // City bias for geocoding each day's hotel names (POI-name lookup).
 const HOTEL_CITY_BIAS = {
+  0: "乌鲁木齐市",
   1: "乌鲁木齐市",
   2: "克拉玛依市",
   3: "阿勒泰地区",
@@ -85,10 +87,10 @@ const HOTEL_CITY_BIAS = {
   15: null,
 };
 
-// Rental car pickup (Day 1) / return (Day 14) label prefixes for map markers,
+// Rental car pickup (Day 2, 8/17) / return (Day 14, 8/29) label prefixes for map markers,
 // geocoded directly by each rental company's real name+address (see data.js rentalOptions).
 const RENTAL_LABEL_PREFIX = {
-  1: "🚗 取车：",
+  2: "🚗 取车：",
   14: "🚗 还车：",
 };
 
