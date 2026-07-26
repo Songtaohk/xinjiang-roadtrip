@@ -48,29 +48,29 @@ const WAYPOINTS_CN = {
   ],
   9: [
     { keyword: "赛里木湖", city: "博尔塔拉蒙古自治州" },
+    { keyword: "松树头", city: "博尔塔拉蒙古自治州" },
+  ],
+  10: [
+    { keyword: "赛里木湖", city: "博尔塔拉蒙古自治州" },
     { keyword: "伊宁市六星街", city: "伊宁市" },
     { keyword: "库尔德宁", city: "伊犁哈萨克自治州" },
     { keyword: "那拉提镇", city: "伊犁哈萨克自治州" },
   ],
-  10: [{ keyword: "那拉提草原景区", city: "伊犁哈萨克自治州" }],
-  "11a": [
-    { keyword: "那拉提镇", city: "伊犁哈萨克自治州" },
-    { keyword: "唐布拉草原", city: "伊犁哈萨克自治州" },
-  ],
-  "11b": [
-    { keyword: "那拉提镇", city: "伊犁哈萨克自治州" },
-    { keyword: "唐布拉草原", city: "伊犁哈萨克自治州" },
-  ],
+  11: [{ keyword: "那拉提草原景区", city: "伊犁哈萨克自治州" }],
   12: [
     { keyword: "那拉提镇", city: "伊犁哈萨克自治州" },
-    { keyword: "独山子区", city: "克拉玛依市" },
+    { keyword: "唐布拉草原", city: "伊犁哈萨克自治州" },
   ],
   13: [
+    { keyword: "唐布拉草原", city: "伊犁哈萨克自治州" },
+    { keyword: "乔尔玛", city: "伊犁哈萨克自治州" },
+    { keyword: "独山子区", city: "克拉玛依市" },
+  ],
+  14: [
     { keyword: "独山子区", city: "克拉玛依市" },
     { keyword: "天山天池", city: "阜康市" },
     { keyword: "乌鲁木齐地窝堡国际机场", city: "乌鲁木齐市" },
   ],
-  14: [{ keyword: "乌鲁木齐市", city: "乌鲁木齐市" }],
   15: [{ keyword: "乌鲁木齐地窝堡国际机场", city: "乌鲁木齐市" }],
 };
 
@@ -85,21 +85,20 @@ const HOTEL_CITY_BIAS = {
   6: "阿勒泰地区",
   7: "克拉玛依市",
   8: "博尔塔拉蒙古自治州",
-  9: "伊犁哈萨克自治州",
+  9: "博尔塔拉蒙古自治州",
   10: "伊犁哈萨克自治州",
-  "11a": "伊犁哈萨克自治州",
-  "11b": "伊犁哈萨克自治州",
-  12: "奎屯市",
-  13: "乌鲁木齐市",
+  11: "伊犁哈萨克自治州",
+  12: "伊犁哈萨克自治州",
+  13: "奎屯市",
   14: "乌鲁木齐市",
   15: null,
 };
 
-// Rental car pickup (Day 1, 8/16) / return (Day 13, 8/28) label prefixes for map markers,
+// Rental car pickup (Day 1, 8/16) / return (Day 14, 8/29) label prefixes for map markers,
 // geocoded directly by each rental company's real name+address (see data.js rentalOptions).
 const RENTAL_LABEL_PREFIX = {
   1: "🚗 取车：",
-  13: "🚗 还车：",
+  14: "🚗 还车：",
 };
 
 function hotelListForDay(d) {
