@@ -21,14 +21,15 @@ const WAYPOINTS_CN = {
   2: [
     { keyword: "布尔津县", city: "阿勒泰地区" },
     { keyword: "喀纳斯景区贾登峪游客中心", city: "阿勒泰地区" },
-  ],
-  3: [
-    { keyword: "贾登峪游客中心", city: "阿勒泰地区" },
     { keyword: "喀纳斯湖", city: "阿勒泰地区" },
   ],
-  4: [
-    { keyword: "贾登峪游客中心", city: "阿勒泰地区" },
+  3: [
+    { keyword: "喀纳斯湖", city: "阿勒泰地区" },
     { keyword: "白哈巴", city: "阿勒泰地区" },
+  ],
+  4: [
+    { keyword: "白哈巴", city: "阿勒泰地区" },
+    { keyword: "喀纳斯景区贾登峪游客中心", city: "阿勒泰地区" },
   ],
   5: [
     { keyword: "贾登峪游客中心", city: "阿勒泰地区" },
