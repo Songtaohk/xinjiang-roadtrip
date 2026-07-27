@@ -410,6 +410,9 @@ window._AMapSecurityConfig = { securityJsCode: "f5122d0c0aae74cc4c4e8f4ce0a196cc
   function rentalIcon(){
     return new AMap.Icon({ size: new AMap.Size(25,34), image: "https://webapi.amap.com/theme/v1.3/markers/n/mark_g.png", imageSize: new AMap.Size(25,34) });
   }
+  function gasIcon(){
+    return new AMap.Icon({ size: new AMap.Size(19,33), image: "https://webapi.amap.com/theme/v1.3/markers/n/mark_bs.png", imageSize: new AMap.Size(19,33) });
+  }
 
   function addHotelMarkers(){
     hotels.forEach(function(h){
@@ -424,6 +427,27 @@ window._AMapSecurityConfig = { securityJsCode: "f5122d0c0aae74cc4c4e8f4ce0a196cc
       geocode(r.name, r.city).then(function(loc){
         if (!loc) return;
         new AMap.Marker({ position: loc, map: map, icon: rentalIcon(), title: r.label, label: { content: r.label, direction: "bottom" } });
+      });
+    });
+  }
+  // Live-search real gas stations (⛽) near each route waypoint via AMap PlaceSearch,
+  // rather than hardcoding station names/locations (which would go stale and can't be verified per-day).
+  function addGasStationMarkers(anchorLocs){
+    if (!anchorLocs || anchorLocs.length === 0) return;
+    var seen = {};
+    var placeSearch = new AMap.PlaceSearch({ pageSize: 3, extensions: "base" });
+    anchorLocs.forEach(function(loc){
+      placeSearch.searchNearBy("加油站", loc, 15000, function(status, result){
+        if (status !== "complete" || !result || !result.poiList) return;
+        (result.poiList.pois || []).forEach(function(poi){
+          var key = poi.name + poi.location.toString();
+          if (seen[key]) return;
+          seen[key] = true;
+          new AMap.Marker({
+            position: poi.location, map: map, icon: gasIcon(), title: poi.name,
+            label: { content: "⛽ " + poi.name, direction: "right" }
+          });
+        });
       });
     });
   }
@@ -468,6 +492,7 @@ window._AMapSecurityConfig = { securityJsCode: "f5122d0c0aae74cc4c4e8f4ce0a196cc
         map.setFitView();
         addHotelMarkers();
         addRentalMarkers();
+        addGasStationMarkers(validIdx.map(function(i){ return locs[i]; }));
       });
     });
   }

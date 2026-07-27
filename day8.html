@@ -337,7 +337,7 @@ footer.site-footer {
   <div id="amap-status-8" class="map-fallback-link"></div>
   <div id="amap-day-8-live" class="map-live-note"></div>
   <div class="map-note">地图由高德地图 JS API 驱动，路线为高德实时驾车路线规划结果（仅供参考，实际路况请以导航为准）。</div>
-  <div class="map-legend">蓝色路线＝高德实时驾车路线规划 · 🏨红色标记＝推荐酒店</div>
+  <div class="map-legend">蓝色路线＝高德实时驾车路线规划 · 🏨红色标记＝推荐酒店 · ⛽标记＝高德实时搜索到的沿途加油站（自动检索，非人工核实，仅供参考，出发前请以导航实际结果为准）</div>
   
     
   <div class="elev-chart-wrap">
@@ -358,7 +358,7 @@ footer.site-footer {
     <h3><span class="icon">🚗</span>交通</h3>
     <table class="info-table"><tr><td class="label">路线</td><td>克拉玛依-独山子-精河方向高速</td></tr><tr><td class="label">里程</td><td>约410 km</td></tr><tr><td class="label">车程</td><td>约5-5.5小时（纯高速）</td></tr><tr><td class="label">海拔变化</td><td>乌尔禾 ~400m → 赛里木湖 ~2073m（爬升约1670m，全程渐进式）</td></tr><tr><td class="label">历史天气参考</td><td>赛里木湖8月日间约18-22℃，夜间可降至5-10℃，昼夜温差大，务必带厚外套</td></tr><tr><td class="label">是否需预约</td><td>自驾无需预约；露营/房车营位见住宿栏</td></tr></table>
     <div class="warn-box"><strong>预约提醒：</strong>⚠须提前通过"赛里木湖旅游"微信小程序预约营位（这次是2晚，务必确认两晚都预约成功），建议提前2-3周锁定</div>
-    <div class="warn-box"><strong>驾车注意事项：</strong>本次赛里木湖连住2晚（v18变更：从原来的1晚恢复为2晚，腾出的1天来自取消D14乌鲁木齐机动缓冲日），当天先环湖看日落，次日是全程唯一真正的0驾驶休整日</div>
+    <div class="warn-box"><strong>驾车注意事项：</strong>本次赛里木湖连住2晚（v18变更：从原来的1晚恢复为2晚，腾出的1天来自取消D14乌鲁木齐机动缓冲日），当天先环湖看日落，次日是全程唯一真正的0驾驶休整日；⏰建议时间预算（估算，仅供参考）：赛里木湖所属博尔塔拉州8月23日日落时间没有查到当天精确数据，用邻近伊犁州的外推趋势作参考约21:30左右；这是全程最长的纯驾驶日之一（410km），建议6:30起床、7:00出发（比此前版本的"9:30前"更早，留出充分的休息和抵达后的环湖时间），驾车5.5小时（中值）+服务区午餐1小时，预计13:30左右抵达赛里木湖，入住后环湖自驾1-1.5小时，17:00-21:00自由活动，21:30前后等日落，21:45左右结束</div>
   </div>
 
   <div class="section-card">
@@ -442,6 +442,9 @@ window._AMapSecurityConfig = { securityJsCode: "f5122d0c0aae74cc4c4e8f4ce0a196cc
   function rentalIcon(){
     return new AMap.Icon({ size: new AMap.Size(25,34), image: "https://webapi.amap.com/theme/v1.3/markers/n/mark_g.png", imageSize: new AMap.Size(25,34) });
   }
+  function gasIcon(){
+    return new AMap.Icon({ size: new AMap.Size(19,33), image: "https://webapi.amap.com/theme/v1.3/markers/n/mark_bs.png", imageSize: new AMap.Size(19,33) });
+  }
 
   function addHotelMarkers(){
     hotels.forEach(function(h){
@@ -456,6 +459,27 @@ window._AMapSecurityConfig = { securityJsCode: "f5122d0c0aae74cc4c4e8f4ce0a196cc
       geocode(r.name, r.city).then(function(loc){
         if (!loc) return;
         new AMap.Marker({ position: loc, map: map, icon: rentalIcon(), title: r.label, label: { content: r.label, direction: "bottom" } });
+      });
+    });
+  }
+  // Live-search real gas stations (⛽) near each route waypoint via AMap PlaceSearch,
+  // rather than hardcoding station names/locations (which would go stale and can't be verified per-day).
+  function addGasStationMarkers(anchorLocs){
+    if (!anchorLocs || anchorLocs.length === 0) return;
+    var seen = {};
+    var placeSearch = new AMap.PlaceSearch({ pageSize: 3, extensions: "base" });
+    anchorLocs.forEach(function(loc){
+      placeSearch.searchNearBy("加油站", loc, 15000, function(status, result){
+        if (status !== "complete" || !result || !result.poiList) return;
+        (result.poiList.pois || []).forEach(function(poi){
+          var key = poi.name + poi.location.toString();
+          if (seen[key]) return;
+          seen[key] = true;
+          new AMap.Marker({
+            position: poi.location, map: map, icon: gasIcon(), title: poi.name,
+            label: { content: "⛽ " + poi.name, direction: "right" }
+          });
+        });
       });
     });
   }
@@ -500,6 +524,7 @@ window._AMapSecurityConfig = { securityJsCode: "f5122d0c0aae74cc4c4e8f4ce0a196cc
         map.setFitView();
         addHotelMarkers();
         addRentalMarkers();
+        addGasStationMarkers(validIdx.map(function(i){ return locs[i]; }));
       });
     });
   }

@@ -337,7 +337,7 @@ footer.site-footer {
   <div id="amap-status-7" class="map-fallback-link"></div>
   <div id="amap-day-7-live" class="map-live-note"></div>
   <div class="map-note">地图由高德地图 JS API 驱动，路线为高德实时驾车路线规划结果（仅供参考，实际路况请以导航为准）。</div>
-  <div class="map-legend">蓝色路线＝高德实时驾车路线规划 · 🏨红色标记＝推荐酒店</div>
+  <div class="map-legend">蓝色路线＝高德实时驾车路线规划 · 🏨红色标记＝推荐酒店 · ⛽标记＝高德实时搜索到的沿途加油站（自动检索，非人工核实，仅供参考，出发前请以导航实际结果为准）</div>
   
     
   <div class="elev-chart-wrap">
@@ -358,7 +358,7 @@ footer.site-footer {
     <h3><span class="icon">🚗</span>交通</h3>
     <table class="info-table"><tr><td class="label">路线</td><td>G217国道</td></tr><tr><td class="label">里程</td><td>布尔津-乌尔禾约220km</td></tr><tr><td class="label">车程</td><td>约2.5-3小时，纯平路，比原"贾登峪→布尔津→乌尔禾"合计约350km/5-6小时的长途日轻松很多</td></tr><tr><td class="label">海拔变化</td><td>布尔津 ~480m → 乌尔禾 ~350-450m（缓降）</td></tr><tr><td class="label">历史天气参考</td><td>戈壁段8月日间炎热干燥，可达30-32℃+，傍晚风力较大</td></tr><tr><td class="label">是否需预约</td><td>自驾无需预约；魔鬼城门票建议网上提前购买</td></tr></table>
     
-    <div class="warn-box"><strong>驾车注意事项：</strong>⚠v20变更：五彩滩已在D6傍晚看过真正的日落效果，这天不再需要安排；轻松的半天路程，可以从容出发，中午前后抵达乌尔禾即可，把更多时间留给魔鬼城；🅿️沿途布尔津县幸福路加油站(0906-6327566，24小时)、黑流滩加油站(0906-6511235，09:00-23:00)、冲乎尔镇河西加油站(0906-6322253，09:00-23:00)均可加油，来自"原行网"官方公众号加油站点名单</div>
+    <div class="warn-box"><strong>驾车注意事项：</strong>⚠v20变更：五彩滩已在D6傍晚看过真正的日落效果，这天不再需要安排；轻松的半天路程，可以从容出发，中午前后抵达乌尔禾即可，把更多时间留给魔鬼城；🅿️沿途布尔津县幸福路加油站(0906-6327566，24小时)、黑流滩加油站(0906-6511235，09:00-23:00)、冲乎尔镇河西加油站(0906-6322253，09:00-23:00)均可加油，来自"原行网"官方公众号加油站点名单；⏰建议时间预算（估算，仅供参考）：8月22日克拉玛依/乌尔禾一带日落时间没有查到当天精确数据，用阿勒泰地区的外推趋势作参考约21:10左右（克拉玛依纬度略低，实际可能更晚几分钟，建议出发前用天气APP确认）；据此建议：9:00早餐后出发，2.5-3小时车程，12:00左右抵达乌尔禾，先入住/午餐休息，17:00-18:00再进魔鬼城（游览2-3小时，等到日落最佳光线21:00-21:15前后），21:30左右结束，晚餐可安排在游览前后</div>
   </div>
 
   <div class="section-card">
@@ -435,6 +435,9 @@ window._AMapSecurityConfig = { securityJsCode: "f5122d0c0aae74cc4c4e8f4ce0a196cc
   function rentalIcon(){
     return new AMap.Icon({ size: new AMap.Size(25,34), image: "https://webapi.amap.com/theme/v1.3/markers/n/mark_g.png", imageSize: new AMap.Size(25,34) });
   }
+  function gasIcon(){
+    return new AMap.Icon({ size: new AMap.Size(19,33), image: "https://webapi.amap.com/theme/v1.3/markers/n/mark_bs.png", imageSize: new AMap.Size(19,33) });
+  }
 
   function addHotelMarkers(){
     hotels.forEach(function(h){
@@ -449,6 +452,27 @@ window._AMapSecurityConfig = { securityJsCode: "f5122d0c0aae74cc4c4e8f4ce0a196cc
       geocode(r.name, r.city).then(function(loc){
         if (!loc) return;
         new AMap.Marker({ position: loc, map: map, icon: rentalIcon(), title: r.label, label: { content: r.label, direction: "bottom" } });
+      });
+    });
+  }
+  // Live-search real gas stations (⛽) near each route waypoint via AMap PlaceSearch,
+  // rather than hardcoding station names/locations (which would go stale and can't be verified per-day).
+  function addGasStationMarkers(anchorLocs){
+    if (!anchorLocs || anchorLocs.length === 0) return;
+    var seen = {};
+    var placeSearch = new AMap.PlaceSearch({ pageSize: 3, extensions: "base" });
+    anchorLocs.forEach(function(loc){
+      placeSearch.searchNearBy("加油站", loc, 15000, function(status, result){
+        if (status !== "complete" || !result || !result.poiList) return;
+        (result.poiList.pois || []).forEach(function(poi){
+          var key = poi.name + poi.location.toString();
+          if (seen[key]) return;
+          seen[key] = true;
+          new AMap.Marker({
+            position: poi.location, map: map, icon: gasIcon(), title: poi.name,
+            label: { content: "⛽ " + poi.name, direction: "right" }
+          });
+        });
       });
     });
   }
@@ -493,6 +517,7 @@ window._AMapSecurityConfig = { securityJsCode: "f5122d0c0aae74cc4c4e8f4ce0a196cc
         map.setFitView();
         addHotelMarkers();
         addRentalMarkers();
+        addGasStationMarkers(validIdx.map(function(i){ return locs[i]; }));
       });
     });
   }

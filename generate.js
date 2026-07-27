@@ -66,7 +66,6 @@ const WAYPOINTS_CN = {
   ],
   14: [
     { keyword: "独山子区", city: "克拉玛依市" },
-    { keyword: "天山天池", city: "阜康市" },
     { keyword: "乌鲁木齐地窝堡国际机场", city: "乌鲁木齐市" },
   ],
   15: [{ keyword: "乌鲁木齐地窝堡国际机场", city: "乌鲁木齐市" }],
@@ -521,6 +520,9 @@ const JS_HELPERS = `
   function rentalIcon(){
     return new AMap.Icon({ size: new AMap.Size(25,34), image: "https://webapi.amap.com/theme/v1.3/markers/n/mark_g.png", imageSize: new AMap.Size(25,34) });
   }
+  function gasIcon(){
+    return new AMap.Icon({ size: new AMap.Size(19,33), image: "https://webapi.amap.com/theme/v1.3/markers/n/mark_bs.png", imageSize: new AMap.Size(19,33) });
+  }
 `;
 
 // Builds the AMap init script for a single day's map div: real driving route
@@ -555,6 +557,27 @@ ${JS_HELPERS}
       geocode(r.name, r.city).then(function(loc){
         if (!loc) return;
         new AMap.Marker({ position: loc, map: map, icon: rentalIcon(), title: r.label, label: { content: r.label, direction: "bottom" } });
+      });
+    });
+  }
+  // Live-search real gas stations (⛽) near each route waypoint via AMap PlaceSearch,
+  // rather than hardcoding station names/locations (which would go stale and can't be verified per-day).
+  function addGasStationMarkers(anchorLocs){
+    if (!anchorLocs || anchorLocs.length === 0) return;
+    var seen = {};
+    var placeSearch = new AMap.PlaceSearch({ pageSize: 3, extensions: "base" });
+    anchorLocs.forEach(function(loc){
+      placeSearch.searchNearBy("加油站", loc, 15000, function(status, result){
+        if (status !== "complete" || !result || !result.poiList) return;
+        (result.poiList.pois || []).forEach(function(poi){
+          var key = poi.name + poi.location.toString();
+          if (seen[key]) return;
+          seen[key] = true;
+          new AMap.Marker({
+            position: poi.location, map: map, icon: gasIcon(), title: poi.name,
+            label: { content: "⛽ " + poi.name, direction: "right" }
+          });
+        });
       });
     });
   }
@@ -599,6 +622,7 @@ ${JS_HELPERS}
         map.setFitView();
         addHotelMarkers();
         addRentalMarkers();
+        addGasStationMarkers(validIdx.map(function(i){ return locs[i]; }));
       });
     });
   }
@@ -617,6 +641,7 @@ function renderDayPage(d, idx) {
   if (points.length > 1) legendParts.push("蓝色路线＝高德实时驾车路线规划");
   if (hotels.length > 0) legendParts.push("🏨红色标记＝推荐酒店");
   if (rentals.length > 0) legendParts.push("🚗绿色标记＝租车门店");
+  if (points.length > 1) legendParts.push("⛽标记＝高德实时搜索到的沿途加油站（自动检索，非人工核实，仅供参考，出发前请以导航实际结果为准）");
 
   const mapSection = points.length > 0 ? `
   <div id="amap-day-${d.num}" class="map-frame-wrap"></div>

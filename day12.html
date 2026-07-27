@@ -337,7 +337,7 @@ footer.site-footer {
   <div id="amap-status-12" class="map-fallback-link"></div>
   <div id="amap-day-12-live" class="map-live-note"></div>
   <div class="map-note">地图由高德地图 JS API 驱动，路线为高德实时驾车路线规划结果（仅供参考，实际路况请以导航为准）。</div>
-  <div class="map-legend">蓝色路线＝高德实时驾车路线规划 · 🏨红色标记＝推荐酒店</div>
+  <div class="map-legend">蓝色路线＝高德实时驾车路线规划 · 🏨红色标记＝推荐酒店 · ⛽标记＝高德实时搜索到的沿途加油站（自动检索，非人工核实，仅供参考，出发前请以导航实际结果为准）</div>
   
     
   <div class="elev-chart-wrap">
@@ -358,7 +358,7 @@ footer.site-footer {
     <h3><span class="icon">🚗</span>交通</h3>
     <table class="info-table"><tr><td class="label">路线</td><td>S316省道 + G218国道（那拉提→唐布拉方向，全程不经乔尔玛/独库公路管制区）</td></tr><tr><td class="label">里程</td><td>那拉提-唐布拉核心区约110km（单程）；孟克特古道入口的确切距离未查到独立数据，推测比唐布拉核心区略远，建议出发前用高德实测</td></tr><tr><td class="label">车程</td><td>约1.5-2小时+（单程，视具体目的地远近）</td></tr><tr><td class="label">海拔变化</td><td>那拉提 ~1500m → 唐布拉/孟克特一带约1200-1800m（起伏不大）</td></tr><tr><td class="label">历史天气参考</td><td>喀什河谷8月日间约22-26℃，河谷阴凉处更舒适；孟克特古道最佳季节6-9月，8月在窗口内</td></tr><tr><td class="label">是否需预约</td><td>无需任何独库公路预约（此段完全不进入G217管制区）；孟克特古道自驾门票200元/车，或选择景区区间车30元/人（限4人/车，多1人+50元）；⚠今晚务必确认明天"乔尔玛入口"独库公路北段通行凭证已预约成功（应已于D11晚上办理，提前7天含当天可约，仅限7座以下客车）</td></tr></table>
     
-    <div class="warn-box"><strong>驾车注意事项：</strong>⚠v18变更：这天不再回那拉提过夜，改为就近住唐布拉附近民宿，为明天直接从乔尔玛入口衔接独库公路省掉一趟来回130-220km的重复路线；黑蜂庄园/小华山（轻量版）与孟克特古道（深度版，完整线路3-5小时）时间有限建议二选一，沥青+砂石路面，雨天路滑建议四驱车</div>
+    <div class="warn-box"><strong>驾车注意事项：</strong>⚠v18变更：这天不再回那拉提过夜，改为就近住唐布拉附近民宿，为明天直接从乔尔玛入口衔接独库公路省掉一趟来回130-220km的重复路线；黑蜂庄园/小华山（轻量版）与孟克特古道（深度版，完整线路3-5小时）时间有限建议二选一，沥青+砂石路面，雨天路滑建议四驱车；⏰建议时间预算（估算，仅供参考）：7:30早餐，8:00出发，约2小时车程（中值），10:00抵达唐布拉/孟克特入口，游览3-5小时（孟克特深度版取中值4小时，10:00-14:00），午餐可安排在活动前后或自备干粮，14:00前往唐布拉附近民宿（短途，30分钟内），15:00左右入住休息，18:00-19:00晚餐；这天相对宽松，没有需要赶的日落或末班车</div>
   </div>
 
   <div class="section-card">
@@ -445,6 +445,9 @@ window._AMapSecurityConfig = { securityJsCode: "f5122d0c0aae74cc4c4e8f4ce0a196cc
   function rentalIcon(){
     return new AMap.Icon({ size: new AMap.Size(25,34), image: "https://webapi.amap.com/theme/v1.3/markers/n/mark_g.png", imageSize: new AMap.Size(25,34) });
   }
+  function gasIcon(){
+    return new AMap.Icon({ size: new AMap.Size(19,33), image: "https://webapi.amap.com/theme/v1.3/markers/n/mark_bs.png", imageSize: new AMap.Size(19,33) });
+  }
 
   function addHotelMarkers(){
     hotels.forEach(function(h){
@@ -459,6 +462,27 @@ window._AMapSecurityConfig = { securityJsCode: "f5122d0c0aae74cc4c4e8f4ce0a196cc
       geocode(r.name, r.city).then(function(loc){
         if (!loc) return;
         new AMap.Marker({ position: loc, map: map, icon: rentalIcon(), title: r.label, label: { content: r.label, direction: "bottom" } });
+      });
+    });
+  }
+  // Live-search real gas stations (⛽) near each route waypoint via AMap PlaceSearch,
+  // rather than hardcoding station names/locations (which would go stale and can't be verified per-day).
+  function addGasStationMarkers(anchorLocs){
+    if (!anchorLocs || anchorLocs.length === 0) return;
+    var seen = {};
+    var placeSearch = new AMap.PlaceSearch({ pageSize: 3, extensions: "base" });
+    anchorLocs.forEach(function(loc){
+      placeSearch.searchNearBy("加油站", loc, 15000, function(status, result){
+        if (status !== "complete" || !result || !result.poiList) return;
+        (result.poiList.pois || []).forEach(function(poi){
+          var key = poi.name + poi.location.toString();
+          if (seen[key]) return;
+          seen[key] = true;
+          new AMap.Marker({
+            position: poi.location, map: map, icon: gasIcon(), title: poi.name,
+            label: { content: "⛽ " + poi.name, direction: "right" }
+          });
+        });
       });
     });
   }
@@ -503,6 +527,7 @@ window._AMapSecurityConfig = { securityJsCode: "f5122d0c0aae74cc4c4e8f4ce0a196cc
         map.setFitView();
         addHotelMarkers();
         addRentalMarkers();
+        addGasStationMarkers(validIdx.map(function(i){ return locs[i]; }));
       });
     });
   }

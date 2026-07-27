@@ -358,7 +358,7 @@ footer.site-footer {
     <h3><span class="icon">🚗</span>交通</h3>
     <table class="info-table"><tr><td class="label">路线</td><td>景区内自驾路线（空中草原-游牧人家、盘龙谷道）</td></tr><tr><td class="label">里程</td><td>0-1小时（仅景区内挪车）</td></tr><tr><td class="label">车程</td><td>—</td></tr><tr><td class="label">海拔变化</td><td>空中草原核心区约1800-2200m</td></tr><tr><td class="label">历史天气参考</td><td>草原8月日间约22-26℃，夜间转凉约10-14℃</td></tr><tr><td class="label">是否需预约</td><td>⚠需通过"智游那拉提"小程序实名预约自驾，定制自驾游执行200元/人次（自驾票105元+门票95元，过闸机后48小时内有效），严禁搭载无票乘客；仅限7座以下车辆（含7座/SUV/商务车/轿车/一体式房车，拖挂型及超7米房车不可办理）；仅限空中草原-游牧人家/河谷草原全线/西盘龙谷道，其余路段单行道禁止驶入；驾驶规范：只能在划定的观景台/停车场停车，草原植被脆弱，路边碾压草场会面临高额罚款，全程禁止携带火种/烧烤/野炊等明火行为</td></tr></table>
     
-    <div class="warn-box"><strong>驾车注意事项：</strong>今晚务必在"游新疆一码游"小程序（或"新疆路网""平安天山"公众号）预约明天"乔尔玛入口"独库公路北段通行凭证（v18变更：不再是那拉提入口，因为明天走的是唐布拉→乔尔玛这条路线，见D12/D13）；2026年7月10日起独库公路北段已是强制分时预约，提前7天含当天可约，选定入口/时段后不可更改；⚠景区内没有加油站，务必在进景区前，于那拉提镇或新源县把油箱加满</div>
+    <div class="warn-box"><strong>驾车注意事项：</strong>今晚务必在"游新疆一码游"小程序（或"新疆路网""平安天山"公众号）预约明天"乔尔玛入口"独库公路北段通行凭证（v18变更：不再是那拉提入口，因为明天走的是唐布拉→乔尔玛这条路线，见D12/D13）；2026年7月10日起独库公路北段已是强制分时预约，提前7天含当天可约，选定入口/时段后不可更改；⚠景区内没有加油站，务必在进景区前，于那拉提镇或新源县把油箱加满；⏰建议时间预算（估算，仅供参考）：7:30早餐，8:00进景区，空中草原3.5小时（中值，8:00-11:30），11:30-12:30午餐，下午自由/雪莲谷可选（12:30-15:00），17:00-18:00盘龙谷道自驾（傍晚），18:30-19:30晚餐；伊犁州8月26日日落时间没有查到当天精确数据，用7月实测趋势外推约21:25左右，17:00-18:00去盘龙谷时段光线仍然充足，不存在赶日落的压力</div>
   </div>
 
   <div class="section-card">
@@ -442,6 +442,9 @@ window._AMapSecurityConfig = { securityJsCode: "f5122d0c0aae74cc4c4e8f4ce0a196cc
   function rentalIcon(){
     return new AMap.Icon({ size: new AMap.Size(25,34), image: "https://webapi.amap.com/theme/v1.3/markers/n/mark_g.png", imageSize: new AMap.Size(25,34) });
   }
+  function gasIcon(){
+    return new AMap.Icon({ size: new AMap.Size(19,33), image: "https://webapi.amap.com/theme/v1.3/markers/n/mark_bs.png", imageSize: new AMap.Size(19,33) });
+  }
 
   function addHotelMarkers(){
     hotels.forEach(function(h){
@@ -456,6 +459,27 @@ window._AMapSecurityConfig = { securityJsCode: "f5122d0c0aae74cc4c4e8f4ce0a196cc
       geocode(r.name, r.city).then(function(loc){
         if (!loc) return;
         new AMap.Marker({ position: loc, map: map, icon: rentalIcon(), title: r.label, label: { content: r.label, direction: "bottom" } });
+      });
+    });
+  }
+  // Live-search real gas stations (⛽) near each route waypoint via AMap PlaceSearch,
+  // rather than hardcoding station names/locations (which would go stale and can't be verified per-day).
+  function addGasStationMarkers(anchorLocs){
+    if (!anchorLocs || anchorLocs.length === 0) return;
+    var seen = {};
+    var placeSearch = new AMap.PlaceSearch({ pageSize: 3, extensions: "base" });
+    anchorLocs.forEach(function(loc){
+      placeSearch.searchNearBy("加油站", loc, 15000, function(status, result){
+        if (status !== "complete" || !result || !result.poiList) return;
+        (result.poiList.pois || []).forEach(function(poi){
+          var key = poi.name + poi.location.toString();
+          if (seen[key]) return;
+          seen[key] = true;
+          new AMap.Marker({
+            position: poi.location, map: map, icon: gasIcon(), title: poi.name,
+            label: { content: "⛽ " + poi.name, direction: "right" }
+          });
+        });
       });
     });
   }
@@ -500,6 +524,7 @@ window._AMapSecurityConfig = { securityJsCode: "f5122d0c0aae74cc4c4e8f4ce0a196cc
         map.setFitView();
         addHotelMarkers();
         addRentalMarkers();
+        addGasStationMarkers(validIdx.map(function(i){ return locs[i]; }));
       });
     });
   }

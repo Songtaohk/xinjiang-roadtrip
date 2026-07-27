@@ -337,7 +337,7 @@ footer.site-footer {
   <div id="amap-status-9" class="map-fallback-link"></div>
   <div id="amap-day-9-live" class="map-live-note"></div>
   <div class="map-note">地图由高德地图 JS API 驱动，路线为高德实时驾车路线规划结果（仅供参考，实际路况请以导航为准）。</div>
-  <div class="map-legend">蓝色路线＝高德实时驾车路线规划</div>
+  <div class="map-legend">蓝色路线＝高德实时驾车路线规划 · ⛽标记＝高德实时搜索到的沿途加油站（自动检索，非人工核实，仅供参考，出发前请以导航实际结果为准）</div>
   
     
     <div class="terrain-box"><strong>🏔️ 地形地貌：</strong>赛里木湖是天山山系间的构造断陷湖，湖面海拔2073米；松树头是湖东岸的一处山地观景点，松林覆盖，登高可俯瞰全湖及远处的果子沟大桥。</div>
@@ -347,7 +347,7 @@ footer.site-footer {
     <h3><span class="icon">🚗</span>交通</h3>
     <table class="info-table"><tr><td class="label">路线</td><td>景区内短途挪车/步行（松树头观景台）</td></tr><tr><td class="label">里程</td><td>赛里木湖东门-松树头约27km</td></tr><tr><td class="label">车程</td><td>0驾驶休整日，仅景区内短途挪车，无长途驾驶</td></tr><tr><td class="label">海拔变化</td><td>松树头徒步登高，具体海拔高度/爬升数据未查到确切数字</td></tr><tr><td class="label">历史天气参考</td><td>赛里木湖8月日间约18-22℃，夜间可降至5-10℃，昼夜温差大，务必带厚外套</td></tr><tr><td class="label">是否需预约</td><td>无需额外预约（住宿已在D8预约好）；⚠可以自驾进入景区，按车内人数购票，旺季"门票+自驾"合计145元/人次，景区内道路全程限速50km/h</td></tr></table>
     
-    <div class="warn-box"><strong>驾车注意事项：</strong>这是v18新恢复的休整日（原方案曾有过0驾驶休整日，v6版本为腾出白哈巴新增行程而取消，这次通过取消D14乌鲁木齐缓冲日换回来）；松树头具体徒步时长未查到确切数据，建议现场根据体力和天气弹性安排，木栈道沿途有多个休息平台，夏季是最佳季节；赛里木湖景区官方推介的十二景包括净海多彩、天湖古口、三台古驿、天湖宝顶、松头雾瀑（即松树头）、金花紫卉、科山观松、西海涌珠、天鹅乐水、乌孙古冢、将台怀古、草原诗林，可作为环湖自驾时的取景参考</div>
+    <div class="warn-box"><strong>驾车注意事项：</strong>这是v18新恢复的休整日（原方案曾有过0驾驶休整日，v6版本为腾出白哈巴新增行程而取消，这次通过取消D14乌鲁木齐缓冲日换回来）；松树头具体徒步时长未查到确切数据，建议现场根据体力和天气弹性安排，木栈道沿途有多个休息平台，夏季是最佳季节；赛里木湖景区官方推介的十二景包括净海多彩、天湖古口、三台古驿、天湖宝顶、松头雾瀑（即松树头）、金花紫卉、科山观松、西海涌珠、天鹅乐水、乌孙古冢、将台怀古、草原诗林，可作为环湖自驾时的取景参考；⏰这天是全程唯一的0驾驶休整日，没有需要精算的出发/结束时间，建议避开正午高温和紫外线最强时段（11:00-15:00）去松树头徒步，其余时间完全自由安排</div>
   </div>
 
   <div class="section-card">
@@ -435,6 +435,9 @@ window._AMapSecurityConfig = { securityJsCode: "f5122d0c0aae74cc4c4e8f4ce0a196cc
   function rentalIcon(){
     return new AMap.Icon({ size: new AMap.Size(25,34), image: "https://webapi.amap.com/theme/v1.3/markers/n/mark_g.png", imageSize: new AMap.Size(25,34) });
   }
+  function gasIcon(){
+    return new AMap.Icon({ size: new AMap.Size(19,33), image: "https://webapi.amap.com/theme/v1.3/markers/n/mark_bs.png", imageSize: new AMap.Size(19,33) });
+  }
 
   function addHotelMarkers(){
     hotels.forEach(function(h){
@@ -449,6 +452,27 @@ window._AMapSecurityConfig = { securityJsCode: "f5122d0c0aae74cc4c4e8f4ce0a196cc
       geocode(r.name, r.city).then(function(loc){
         if (!loc) return;
         new AMap.Marker({ position: loc, map: map, icon: rentalIcon(), title: r.label, label: { content: r.label, direction: "bottom" } });
+      });
+    });
+  }
+  // Live-search real gas stations (⛽) near each route waypoint via AMap PlaceSearch,
+  // rather than hardcoding station names/locations (which would go stale and can't be verified per-day).
+  function addGasStationMarkers(anchorLocs){
+    if (!anchorLocs || anchorLocs.length === 0) return;
+    var seen = {};
+    var placeSearch = new AMap.PlaceSearch({ pageSize: 3, extensions: "base" });
+    anchorLocs.forEach(function(loc){
+      placeSearch.searchNearBy("加油站", loc, 15000, function(status, result){
+        if (status !== "complete" || !result || !result.poiList) return;
+        (result.poiList.pois || []).forEach(function(poi){
+          var key = poi.name + poi.location.toString();
+          if (seen[key]) return;
+          seen[key] = true;
+          new AMap.Marker({
+            position: poi.location, map: map, icon: gasIcon(), title: poi.name,
+            label: { content: "⛽ " + poi.name, direction: "right" }
+          });
+        });
       });
     });
   }
@@ -493,6 +517,7 @@ window._AMapSecurityConfig = { securityJsCode: "f5122d0c0aae74cc4c4e8f4ce0a196cc
         map.setFitView();
         addHotelMarkers();
         addRentalMarkers();
+        addGasStationMarkers(validIdx.map(function(i){ return locs[i]; }));
       });
     });
   }

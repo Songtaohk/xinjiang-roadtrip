@@ -337,7 +337,7 @@ footer.site-footer {
   <div id="amap-status-10" class="map-fallback-link"></div>
   <div id="amap-day-10-live" class="map-live-note"></div>
   <div class="map-note">地图由高德地图 JS API 驱动，路线为高德实时驾车路线规划结果（仅供参考，实际路况请以导航为准）。</div>
-  <div class="map-legend">蓝色路线＝高德实时驾车路线规划 · 🏨红色标记＝推荐酒店</div>
+  <div class="map-legend">蓝色路线＝高德实时驾车路线规划 · 🏨红色标记＝推荐酒店 · ⛽标记＝高德实时搜索到的沿途加油站（自动检索，非人工核实，仅供参考，出发前请以导航实际结果为准）</div>
   
     
   <div class="elev-chart-wrap">
@@ -360,7 +360,7 @@ footer.site-footer {
     <h3><span class="icon">🚗</span>交通</h3>
     <table class="info-table"><tr><td class="label">路线</td><td>果子沟大桥高速（赛里木湖-伊宁）+ 伊宁-巩留-库尔德宁-那拉提山谷公路（经库尔德宁，不再走伊宁直达那拉提的更短路线）</td></tr><tr><td class="label">里程</td><td>赛里木湖-伊宁约140km；伊宁-那拉提（经库尔德宁）约250-280km（不同路书数据有出入，比直达路线约110km明显更长，建议出发前用高德核实实时路况）</td></tr><tr><td class="label">车程</td><td>合计约7-8小时（含库尔德宁沿途停留），是全程内容最满的一天之一</td></tr><tr><td class="label">海拔变化</td><td>赛里木湖 ~2073m → 伊宁 ~660m → 库尔德宁谷底 ~1500m → 那拉提 ~1000-2000m（起伏较大）</td></tr><tr><td class="label">历史天气参考</td><td>伊宁河谷8月日间约28-32℃，库尔德宁山谷树荫下凉爽，那拉提相对凉爽约20-25℃</td></tr><tr><td class="label">是否需预约</td><td>自驾，无需预约</td></tr></table>
     
-    <div class="warn-box"><strong>驾车注意事项：</strong>⚠今天内容较满（长途+六星街+库尔德宁），因为昨天已经休整过一天，今天不用赶日出，正常时间退房出发即可；果子沟大桥路段风景极佳但弯道多，注意观景与驾驶分开；库尔德宁段以沿途观景为主，不安排长时间徒步，若想深度体验建议单独增加1天</div>
+    <div class="warn-box"><strong>驾车注意事项：</strong>⚠今天内容较满（长途+六星街+库尔德宁），因为昨天已经休整过一天，今天不用赶日出，正常时间退房出发即可；果子沟大桥路段风景极佳但弯道多，注意观景与驾驶分开；库尔德宁段以沿途观景为主，不安排长时间徒步，若想深度体验建议单独增加1天；⏰建议时间预算（估算，仅供参考）：7:00早餐，7:30出发，驾车7小时（中值，含库尔德宁沿途观景停留）+六星街1小时+库尔德宁1.25小时（中值）+午餐1小时，合计约10.25小时，预计17:45左右抵达那拉提，18:30-19:30晚餐；这是全程内容最满的一天之一，务必按建议时间出发，避免入住太晚</div>
   </div>
 
   <div class="section-card">
@@ -454,6 +454,9 @@ window._AMapSecurityConfig = { securityJsCode: "f5122d0c0aae74cc4c4e8f4ce0a196cc
   function rentalIcon(){
     return new AMap.Icon({ size: new AMap.Size(25,34), image: "https://webapi.amap.com/theme/v1.3/markers/n/mark_g.png", imageSize: new AMap.Size(25,34) });
   }
+  function gasIcon(){
+    return new AMap.Icon({ size: new AMap.Size(19,33), image: "https://webapi.amap.com/theme/v1.3/markers/n/mark_bs.png", imageSize: new AMap.Size(19,33) });
+  }
 
   function addHotelMarkers(){
     hotels.forEach(function(h){
@@ -468,6 +471,27 @@ window._AMapSecurityConfig = { securityJsCode: "f5122d0c0aae74cc4c4e8f4ce0a196cc
       geocode(r.name, r.city).then(function(loc){
         if (!loc) return;
         new AMap.Marker({ position: loc, map: map, icon: rentalIcon(), title: r.label, label: { content: r.label, direction: "bottom" } });
+      });
+    });
+  }
+  // Live-search real gas stations (⛽) near each route waypoint via AMap PlaceSearch,
+  // rather than hardcoding station names/locations (which would go stale and can't be verified per-day).
+  function addGasStationMarkers(anchorLocs){
+    if (!anchorLocs || anchorLocs.length === 0) return;
+    var seen = {};
+    var placeSearch = new AMap.PlaceSearch({ pageSize: 3, extensions: "base" });
+    anchorLocs.forEach(function(loc){
+      placeSearch.searchNearBy("加油站", loc, 15000, function(status, result){
+        if (status !== "complete" || !result || !result.poiList) return;
+        (result.poiList.pois || []).forEach(function(poi){
+          var key = poi.name + poi.location.toString();
+          if (seen[key]) return;
+          seen[key] = true;
+          new AMap.Marker({
+            position: poi.location, map: map, icon: gasIcon(), title: poi.name,
+            label: { content: "⛽ " + poi.name, direction: "right" }
+          });
+        });
       });
     });
   }
@@ -512,6 +536,7 @@ window._AMapSecurityConfig = { securityJsCode: "f5122d0c0aae74cc4c4e8f4ce0a196cc
         map.setFitView();
         addHotelMarkers();
         addRentalMarkers();
+        addGasStationMarkers(validIdx.map(function(i){ return locs[i]; }));
       });
     });
   }
