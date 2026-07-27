@@ -61,6 +61,12 @@ nav.day-nav a.active {
   color: var(--teal);
   font-weight: 600;
 }
+nav.day-nav .nav-sep {
+  color: rgba(255,255,255,0.7);
+  font-size: 12px;
+  margin-left: 4px;
+  white-space: nowrap;
+}
 main {
   max-width: 920px;
   margin: 0 auto;
@@ -322,8 +328,9 @@ footer.site-footer {
   <h1>北疆16日自驾行程</h1>
   <p>香港 ⇄ 乌鲁木齐 · 8月15日–8月30日 · 全自驾</p>
 </header>
-<nav class="day-nav"><a href="index.html" class="">总览</a><a href="day0.html" class="">D0</a><a href="day1.html" class="">D1</a><a href="day2.html" class="">D2</a><a href="day3.html" class="">D3</a><a href="day4.html" class="active">D4</a><a href="day5.html" class="">D5</a><a href="day6.html" class="">D6</a><a href="day7.html" class="">D7</a><a href="day8.html" class="">D8</a><a href="day9.html" class="">D9</a><a href="day10.html" class="">D10</a><a href="day11.html" class="">D11</a><a href="day12.html" class="">D12</a><a href="day13.html" class="">D13</a><a href="day14.html" class="">D14</a><a href="day15.html" class="">D15</a></nav>
+<nav class="day-nav"><a href="index.html" class="">总览</a><a href="day0.html" class="">D0</a><a href="day1.html" class="">D1</a><a href="day2.html" class="">D2</a><a href="day3.html" class="">D3</a><a href="day4.html" class="active">D4</a><a href="day5.html" class="">D5</a><a href="day6.html" class="">D6</a><a href="day7.html" class="">D7</a><a href="day8.html" class="">D8</a><a href="day9.html" class="">D9</a><a href="day10.html" class="">D10</a><a href="day11.html" class="">D11</a><a href="day12.html" class="">D12</a><a href="day13.html" class="">D13</a><a href="day14.html" class="">D14</a><a href="day15.html" class="">D15</a><span class="nav-sep">备选：</span><a href="day13a.html" class="">D13a</a><a href="day14a.html" class="">D14a</a></nav>
 <main>
+  
   <div class="day-title-block">
     <span class="day-num">Day 4 · 8月19日（周三）</span>
     <h2>贾登峪（自驾） → 喀纳斯换乘入住 → 当日往返白哈巴（3-4小时）</h2>
@@ -336,7 +343,7 @@ footer.site-footer {
   <div id="amap-day-4" class="map-frame-wrap"></div>
   <div id="amap-status-4" class="map-fallback-link"></div>
   <div id="amap-day-4-live" class="map-live-note"></div>
-  <div class="map-note">地图由高德地图 JS API 驱动，路线为高德实时驾车路线规划结果（仅供参考，实际路况请以导航为准）。</div>
+  <div class="map-note">地图由高德地图 JS API 驱动，路线为高德"速度最快"算法实时规划结果，仅供参考；对于限速较低的山区风景公路（如独库公路）或刚通车、地图数据库可能尚未收录的新路（如阿禾公路），算法有可能判定绕行其它道路"更快"而没有真正画出本文描述的那条路，与下方"交通"表格里的文字描述（里程/车程/路名）如有出入，请以文字描述和出发前的导航实测结果为准。</div>
   <div class="map-legend">蓝色路线＝高德实时驾车路线规划 · 🏨红色标记＝推荐酒店 · ⛽标记＝高德实时搜索到的沿途加油站（自动检索，非人工核实，仅供参考，出发前请以导航实际结果为准）</div>
   
     
@@ -357,7 +364,7 @@ footer.site-footer {
 
   <div class="section-card">
     <h3><span class="icon">🚗</span>交通</h3>
-    <table class="info-table"><tr><td class="label">路线</td><td>贾登峪-喀纳斯换乘中心区间车 + 喀纳斯换乘中心-白哈巴区间车（私家车夏季禁入湖区核心及边境管理区，全程换乘）</td></tr><tr><td class="label">里程</td><td>贾登峪-喀纳斯换乘中心约50km（区间车）；喀纳斯换乘中心-白哈巴约行车1小时（单程）</td></tr><tr><td class="label">车程</td><td>上午换乘进喀纳斯办理入住（含排队约1-1.5小时）；建议中午前后再换乘去白哈巴（往返车程约2小时+当地游览3-4小时），当天两段换乘加起来时间不短，属于紧凑的一天</td></tr><tr><td class="label">海拔变化</td><td>贾登峪 ~1350m → 喀纳斯湖 ~1374m → 白哈巴村（海拔区间约1600-2000m）</td></tr><tr><td class="label">历史天气参考</td><td>贾登峪、喀纳斯湖区海拔更高，夜间体感更凉，8月夜间约10-14℃；白哈巴边境山谷地带日间约20-24℃，昼夜温差大</td></tr><tr><td class="label">是否需预约</td><td>✅喀纳斯/白哈巴景区游览本身"无需预约"，可通过喀纳斯景区公众号/原行网小程序/OTA平台线上购票，也可现场购票；⚠只需买一次门票，但要选"二进票"（有效期3天，可进出景区2次，区间车往返2次含在内）而不是"一进票"（有效期只有2天）——本次D4入园到D6中午退房共跨3个自然日，超过一进票的2天有效期，必须选二进票才能覆盖，而不是因为需要用到"进出2次"这个额度（D4进、D6出，实际只算1次完整进出）；白哈巴走的是单独购买的区间车票，不占用二进票的进出次数配额；喀纳斯换乘中心-白哈巴区间车票约¥45/人（往返）需另购，运行时间约9:00-18:00（以景区当日公告为准），可选12:00或14:00左右的班次前往，务必留足返程时间赶上末班车；⚠白哈巴属边境管理区，需提前通过"移民局12367"小程序/App线上办理电子边境管理区通行证，或到哈巴河边防大队/喀纳斯边防派出所现场办理——因为v20改成D4当天就要去白哈巴，建议不要等到D4当天才办，最晚在D2或D3就提前1-2天申请好，避免临时办证耽误当天行程</td></tr></table>
+    <table class="info-table"><tr><td class="label">路线</td><td>贾登峪-喀纳斯换乘中心区间车 + 喀纳斯换乘中心-白哈巴区间车（私家车夏季禁入湖区核心及边境管理区，全程换乘）</td></tr><tr><td class="label">里程</td><td>贾登峪-喀纳斯换乘中心约50km（区间车）；喀纳斯换乘中心-白哈巴约行车1小时（单程）</td></tr><tr><td class="label">车程</td><td>上午换乘进喀纳斯办理入住（含排队约1-1.5小时）；建议中午前后再换乘去白哈巴（往返车程约2小时+当地游览3-4小时），当天两段换乘加起来时间不短，属于紧凑的一天</td></tr><tr><td class="label">海拔变化</td><td>贾登峪 ~1350m → 喀纳斯湖 ~1374m → 白哈巴村（海拔区间约1600-2000m）</td></tr><tr><td class="label">历史天气参考</td><td>贾登峪、喀纳斯湖区海拔更高，夜间体感更凉，8月夜间约10-14℃；白哈巴边境山谷地带日间约20-24℃，昼夜温差大</td></tr><tr><td class="label">加油站</td><td>车已停在贾登峪不动（今明两晚都在喀纳斯，D6才取车），当天全程换乘不涉及自驾加油；贾登峪喀纳斯加油站(0906-6327566，09:00-23:00)供D6取车后使用</td></tr><tr><td class="label">是否需预约</td><td>✅喀纳斯/白哈巴景区游览本身"无需预约"，可通过喀纳斯景区公众号/原行网小程序/OTA平台线上购票，也可现场购票；⚠只需买一次门票，但要选"二进票"（有效期3天，可进出景区2次，区间车往返2次含在内）而不是"一进票"（有效期只有2天）——本次D4入园到D6中午退房共跨3个自然日，超过一进票的2天有效期，必须选二进票才能覆盖，而不是因为需要用到"进出2次"这个额度（D4进、D6出，实际只算1次完整进出）；白哈巴走的是单独购买的区间车票，不占用二进票的进出次数配额；喀纳斯换乘中心-白哈巴区间车票约¥45/人（往返）需另购，运行时间约9:00-18:00（以景区当日公告为准），可选12:00或14:00左右的班次前往，务必留足返程时间赶上末班车；⚠白哈巴属边境管理区，需提前通过"移民局12367"小程序/App线上办理电子边境管理区通行证，或到哈巴河边防大队/喀纳斯边防派出所现场办理——因为v20改成D4当天就要去白哈巴，建议不要等到D4当天才办，最晚在D2或D3就提前1-2天申请好，避免临时办证耽误当天行程</td></tr></table>
     
     <div class="warn-box"><strong>驾车注意事项：</strong>⚠v20变更说明：白哈巴从原方案的"过夜一晚看晨雾"改为"当天往返游览3-4小时"，不再安排白哈巴住宿；由于白天光线下的村落体验和清晨晨雾是完全不同的两种感受，这次改动等于放弃了白哈巴晨雾这个项目，如果对晨雾特别执着，需要知道这是本次调整的一个取舍；建议一早办好喀纳斯入住、行李放下后就尽早出发去白哈巴，把最耗时间的换乘环节尽早解决，避免下午人多排队影响返程；🅿️贾登峪加油站(贾登峪喀纳斯加油站 0906-6327566，09:00-23:00)可在此加满油，贾登峪游客服务中心/贾登峪立体停车库设有充电桩，均来自"原行网"官方公众号提供的加油/充电站点名单；⚠贾登峪停车信息：这一带有多个免费停车场（太阳城堡、演艺中心150车位、风情园100车位、大森林、餐饮广场100车位，以及各酒店自带约550车位），30分钟内临时停车普遍不收费，超时收费标准不完全统一，建议入住时直接向酒店确认能否连续停车、是否收费；⚠关于"贾登峪还车、几天后再取车"：没有查到神州租车/一嗨租车在贾登峪、布尔津、喀纳斯当地设有实体门店的证据（两家在新疆的官方门店地址目前只查到乌鲁木齐机场店），这个方案大概率不可行，"车留在贾登峪停车"本身是这条线路的常见做法；⏰建议时间预算（估算，仅供参考）：7:00早餐，7:30退房+换乘，8:00出发，1小时车程+排队，9:00-9:30抵达喀纳斯换乘中心办理入住（含办入住约30-45分钟），10:00左右换乘去白哈巴（车程约1小时），11:00抵达白哈巴，游览含午餐约4.5小时（11:00-15:30），15:30换乘返回（车程约1小时），16:30抵达喀纳斯，晚餐18:00-19:00；这个时间线在9:00-18:00的换乘运行时段内，且15:30返程比18:00末班车留了充足余量</div>
   </div>
@@ -475,12 +482,15 @@ window._AMapSecurityConfig = { securityJsCode: "f5122d0c0aae74cc4c4e8f4ce0a196cc
   function addGasStationMarkers(anchorLocs){
     if (!anchorLocs || anchorLocs.length === 0) return;
     var seen = {};
-    var placeSearch = new AMap.PlaceSearch({ pageSize: 3, extensions: "base" });
+    // A fresh AMap.PlaceSearch instance per call, since reusing one instance for
+    // concurrent searchNearBy calls can cause callbacks to clobber each other.
     anchorLocs.forEach(function(loc){
-      placeSearch.searchNearBy("加油站", loc, 15000, function(status, result){
-        if (status !== "complete" || !result || !result.poiList) return;
-        (result.poiList.pois || []).forEach(function(poi){
-          var key = poi.name + poi.location.toString();
+      var placeSearch = new AMap.PlaceSearch({ pageSize: 5, extensions: "base", citylimit: false });
+      placeSearch.searchNearBy("加油站", loc, 20000, function(status, result){
+        if (status !== "complete" || !result || !result.poiList || !result.poiList.pois) return;
+        result.poiList.pois.forEach(function(poi){
+          if (!poi.location) return;
+          var key = poi.name + "_" + poi.location.toString();
           if (seen[key]) return;
           seen[key] = true;
           new AMap.Marker({

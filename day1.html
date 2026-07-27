@@ -61,6 +61,12 @@ nav.day-nav a.active {
   color: var(--teal);
   font-weight: 600;
 }
+nav.day-nav .nav-sep {
+  color: rgba(255,255,255,0.7);
+  font-size: 12px;
+  margin-left: 4px;
+  white-space: nowrap;
+}
 main {
   max-width: 920px;
   margin: 0 auto;
@@ -322,8 +328,9 @@ footer.site-footer {
   <h1>北疆16日自驾行程</h1>
   <p>香港 ⇄ 乌鲁木齐 · 8月15日–8月30日 · 全自驾</p>
 </header>
-<nav class="day-nav"><a href="index.html" class="">总览</a><a href="day0.html" class="">D0</a><a href="day1.html" class="active">D1</a><a href="day2.html" class="">D2</a><a href="day3.html" class="">D3</a><a href="day4.html" class="">D4</a><a href="day5.html" class="">D5</a><a href="day6.html" class="">D6</a><a href="day7.html" class="">D7</a><a href="day8.html" class="">D8</a><a href="day9.html" class="">D9</a><a href="day10.html" class="">D10</a><a href="day11.html" class="">D11</a><a href="day12.html" class="">D12</a><a href="day13.html" class="">D13</a><a href="day14.html" class="">D14</a><a href="day15.html" class="">D15</a></nav>
+<nav class="day-nav"><a href="index.html" class="">总览</a><a href="day0.html" class="">D0</a><a href="day1.html" class="active">D1</a><a href="day2.html" class="">D2</a><a href="day3.html" class="">D3</a><a href="day4.html" class="">D4</a><a href="day5.html" class="">D5</a><a href="day6.html" class="">D6</a><a href="day7.html" class="">D7</a><a href="day8.html" class="">D8</a><a href="day9.html" class="">D9</a><a href="day10.html" class="">D10</a><a href="day11.html" class="">D11</a><a href="day12.html" class="">D12</a><a href="day13.html" class="">D13</a><a href="day14.html" class="">D14</a><a href="day15.html" class="">D15</a><span class="nav-sep">备选：</span><a href="day13a.html" class="">D13a</a><a href="day14a.html" class="">D14a</a></nav>
 <main>
+  
   <div class="day-title-block">
     <span class="day-num">Day 1 · 8月16日（周日）</span>
     <h2>乌鲁木齐 → 阿勒泰市（经S21沙漠公路，取车日）</h2>
@@ -336,7 +343,7 @@ footer.site-footer {
   <div id="amap-day-1" class="map-frame-wrap"></div>
   <div id="amap-status-1" class="map-fallback-link"></div>
   <div id="amap-day-1-live" class="map-live-note"></div>
-  <div class="map-note">地图由高德地图 JS API 驱动，路线为高德实时驾车路线规划结果（仅供参考，实际路况请以导航为准）。</div>
+  <div class="map-note">地图由高德地图 JS API 驱动，路线为高德"速度最快"算法实时规划结果，仅供参考；对于限速较低的山区风景公路（如独库公路）或刚通车、地图数据库可能尚未收录的新路（如阿禾公路），算法有可能判定绕行其它道路"更快"而没有真正画出本文描述的那条路，与下方"交通"表格里的文字描述（里程/车程/路名）如有出入，请以文字描述和出发前的导航实测结果为准。</div>
   <div class="map-legend">蓝色路线＝高德实时驾车路线规划 · 🏨红色标记＝推荐酒店 · 🚗绿色标记＝租车门店 · ⛽标记＝高德实时搜索到的沿途加油站（自动检索，非人工核实，仅供参考，出发前请以导航实际结果为准）</div>
   
     
@@ -356,7 +363,7 @@ footer.site-footer {
 
   <div class="section-card">
     <h3><span class="icon">🚗</span>交通</h3>
-    <table class="info-table"><tr><td class="label">路线</td><td>S21阿勒泰-乌鲁木齐沙漠高速公路（经克拉美丽沙漠公园）</td></tr><tr><td class="label">里程</td><td>约450-500km（S21与市区衔接段的确切公里数暂未逐段核实，建议出发前用高德核实实时路线）</td></tr><tr><td class="label">车程</td><td>约6-7小时（含休息），比原方案（还要继续开到布尔津，560-610km/7-8小时）更短更省心，S21全程高速、设计时速120km/h</td></tr><tr><td class="label">海拔变化</td><td>乌鲁木齐 ~800m → 阿勒泰市 ~750-800m（总体下降，平缓为主）</td></tr><tr><td class="label">历史天气参考</td><td>沿途多为戈壁/沙漠，8月日间炎热干燥，可达30℃+；阿勒泰市傍晚转凉，约20℃左右</td></tr><tr><td class="label">是否需预约</td><td>上午先到机场租车门店取车，凭预订单+驾驶员本人证件+港澳驾照及内地翻译认证件</td></tr></table>
+    <table class="info-table"><tr><td class="label">路线</td><td>S21阿勒泰-乌鲁木齐沙漠高速公路（经克拉美丽沙漠公园）</td></tr><tr><td class="label">里程</td><td>约450-500km（S21与市区衔接段的确切公里数暂未逐段核实，建议出发前用高德核实实时路线）</td></tr><tr><td class="label">车程</td><td>约6-7小时（含休息），比原方案（还要继续开到布尔津，560-610km/7-8小时）更短更省心，S21全程高速、设计时速120km/h</td></tr><tr><td class="label">海拔变化</td><td>乌鲁木齐 ~800m → 阿勒泰市 ~750-800m（总体下降，平缓为主）</td></tr><tr><td class="label">历史天气参考</td><td>沿途多为戈壁/沙漠，8月日间炎热干燥，可达30℃+；阿勒泰市傍晚转凉，约20℃左右</td></tr><tr><td class="label">加油站</td><td>S21沿途设有五家渠服务区、103团服务区、克拉美丽服务区等3-4个服务区，均可加油且提供餐饮/卫生间；具体只查到大致名称和顺序，未逐一核实精确里程标，建议出发前用导航按"加油站"搜索确认最近一个</td></tr><tr><td class="label">是否需预约</td><td>上午先到机场租车门店取车，凭预订单+驾驶员本人证件+港澳驾照及内地翻译认证件</td></tr></table>
     
     <div class="warn-box"><strong>驾车注意事项：</strong>⚠这仍是全程较长的一天，但比原方案更短更省心，建议7:30-8:00出发，每2小时左右下服务区休息10-15分钟；行程重排后五彩滩不再是D1固定行程，改列为D7的备选项（视时间灵活安排，见D7说明）；⏰建议时间预算（估算，仅供参考）：6:30起床早餐，7:00前往机场租车门店取车（约30-45分钟手续），7:30-7:45出发，驾车6.5小时（中值）+服务区午餐1小时+克拉美丽沙漠公园25分钟（可选），预计15:00-16:00抵达阿勒泰市区，安顿后18:00-19:00晚餐，全天结束；阿勒泰8月中旬日落约21:15左右，这天不涉及赶日落的景点，时间比较宽松</div>
   </div>
@@ -378,19 +385,9 @@ footer.site-footer {
     <div style="margin-bottom:10px;"><strong style="font-size:13.5px;color:var(--muted);">推荐饮食</strong><ul class="food-list"><li>沿途服务区简餐（午餐）</li><li>阿勒泰市区新疆家常菜/烤肉（晚餐，市中心解放路/文化路一带餐饮选择丰富）</li></ul></div>
     <div><strong style="font-size:13.5px;color:var(--muted);">当晚住宿（3-4星，推荐1-3选）</strong>
       <div class="hotel-item">
-        <div class="name">阿勒泰吉域合酒店</div>
-        <div class="meta">阿勒泰市区，游牧文化主题酒店，交通方便，周边即有餐饮 · 建议携程查实时价</div>
-        <div class="note">①市区豪华酒店榜No.1，交通方便、旁边就有餐饮，符合"离市中心/餐饮近"的优先原则；②携程评分4.8（1726条点评），民族特色鲜明，含560㎡多功能厅</div>
-      </div>
-      <div class="hotel-item">
-        <div class="name">阿勒泰云雪国际度假酒店</div>
-        <div class="meta">阿勒泰市区，靠近街心公园和百货大楼（解放路店） · 建议携程查实时价</div>
-        <div class="note">①靠近解放路商圈（市中心最繁华区域，步行可达超市/百货/多种餐饮），符合就近餐饮的原则；②携程评分4.7（372条点评）</div>
-      </div>
-      <div class="hotel-item">
-        <div class="name">阿勒泰芳华漫记酒店</div>
-        <div class="meta">阿勒泰市区，靠近阿勒泰博物馆和天鹅湖公园 · 建议携程查实时价</div>
-        <div class="note">①周边景点密度高，市区位置，距餐饮区距离未逐一测算但同属市区核心地带；②携程评分4.7（1369条点评）</div>
+        <div class="name">宜森假日酒店(阿勒泰金山广场店)</div>
+        <div class="meta">阿勒泰市区，金山广场一带，具体到市中心/餐饮区的精确距离未逐一核实 · 已在携程预订，具体价格以订单为准</div>
+        <div class="note">①用户已确认预订：携程平台下单，当天可取消；②具体位置、点评评分等信息本次未独立核实，建议以携程订单页面的地图定位和实时评价为准</div>
       </div></div>
   </div>
   
@@ -425,7 +422,7 @@ window._AMapSecurityConfig = { securityJsCode: "f5122d0c0aae74cc4c4e8f4ce0a196cc
 (function(){
   var map = new AMap.Map("amap-day-1", { zoom: 6, resizeEnable: true });
   var routePoints = [{"keyword":"乌鲁木齐市","city":"乌鲁木齐市"},{"keyword":"阿勒泰市","city":"阿勒泰地区"}];
-  var hotels = [{"name":"阿勒泰吉域合酒店","city":"阿勒泰地区"},{"name":"阿勒泰云雪国际度假酒店","city":"阿勒泰地区"},{"name":"阿勒泰芳华漫记酒店","city":"阿勒泰地区"}];
+  var hotels = [{"name":"宜森假日酒店(阿勒泰金山广场店)","city":"阿勒泰地区"}];
   var rentals = [{"name":"神州租车(地窝堡国际机场店)","city":"乌鲁木齐市","label":"🚗 取车：神州租车(地窝堡国际机场店)"},{"name":"一嗨租车(地窝堡机场店)","city":"乌鲁木齐市","label":"🚗 取车：一嗨租车(地窝堡机场店)"}];
 
   function geocode(address, city) {
@@ -472,12 +469,15 @@ window._AMapSecurityConfig = { securityJsCode: "f5122d0c0aae74cc4c4e8f4ce0a196cc
   function addGasStationMarkers(anchorLocs){
     if (!anchorLocs || anchorLocs.length === 0) return;
     var seen = {};
-    var placeSearch = new AMap.PlaceSearch({ pageSize: 3, extensions: "base" });
+    // A fresh AMap.PlaceSearch instance per call, since reusing one instance for
+    // concurrent searchNearBy calls can cause callbacks to clobber each other.
     anchorLocs.forEach(function(loc){
-      placeSearch.searchNearBy("加油站", loc, 15000, function(status, result){
-        if (status !== "complete" || !result || !result.poiList) return;
-        (result.poiList.pois || []).forEach(function(poi){
-          var key = poi.name + poi.location.toString();
+      var placeSearch = new AMap.PlaceSearch({ pageSize: 5, extensions: "base", citylimit: false });
+      placeSearch.searchNearBy("加油站", loc, 20000, function(status, result){
+        if (status !== "complete" || !result || !result.poiList || !result.poiList.pois) return;
+        result.poiList.pois.forEach(function(poi){
+          if (!poi.location) return;
+          var key = poi.name + "_" + poi.location.toString();
           if (seen[key]) return;
           seen[key] = true;
           new AMap.Marker({

@@ -61,6 +61,12 @@ nav.day-nav a.active {
   color: var(--teal);
   font-weight: 600;
 }
+nav.day-nav .nav-sep {
+  color: rgba(255,255,255,0.7);
+  font-size: 12px;
+  margin-left: 4px;
+  white-space: nowrap;
+}
 main {
   max-width: 920px;
   margin: 0 auto;
@@ -322,8 +328,9 @@ footer.site-footer {
   <h1>北疆16日自驾行程</h1>
   <p>香港 ⇄ 乌鲁木齐 · 8月15日–8月30日 · 全自驾</p>
 </header>
-<nav class="day-nav"><a href="index.html" class="">总览</a><a href="day0.html" class="">D0</a><a href="day1.html" class="">D1</a><a href="day2.html" class="">D2</a><a href="day3.html" class="">D3</a><a href="day4.html" class="">D4</a><a href="day5.html" class="">D5</a><a href="day6.html" class="">D6</a><a href="day7.html" class="active">D7</a><a href="day8.html" class="">D8</a><a href="day9.html" class="">D9</a><a href="day10.html" class="">D10</a><a href="day11.html" class="">D11</a><a href="day12.html" class="">D12</a><a href="day13.html" class="">D13</a><a href="day14.html" class="">D14</a><a href="day15.html" class="">D15</a></nav>
+<nav class="day-nav"><a href="index.html" class="">总览</a><a href="day0.html" class="">D0</a><a href="day1.html" class="">D1</a><a href="day2.html" class="">D2</a><a href="day3.html" class="">D3</a><a href="day4.html" class="">D4</a><a href="day5.html" class="">D5</a><a href="day6.html" class="">D6</a><a href="day7.html" class="active">D7</a><a href="day8.html" class="">D8</a><a href="day9.html" class="">D9</a><a href="day10.html" class="">D10</a><a href="day11.html" class="">D11</a><a href="day12.html" class="">D12</a><a href="day13.html" class="">D13</a><a href="day14.html" class="">D14</a><a href="day15.html" class="">D15</a><span class="nav-sep">备选：</span><a href="day13a.html" class="">D13a</a><a href="day14a.html" class="">D14a</a></nav>
 <main>
+  
   <div class="day-title-block">
     <span class="day-num">Day 7 · 8月22日（周六）</span>
     <h2>布尔津 → 世界魔鬼城 → 乌尔禾/克拉玛依外围</h2>
@@ -336,7 +343,7 @@ footer.site-footer {
   <div id="amap-day-7" class="map-frame-wrap"></div>
   <div id="amap-status-7" class="map-fallback-link"></div>
   <div id="amap-day-7-live" class="map-live-note"></div>
-  <div class="map-note">地图由高德地图 JS API 驱动，路线为高德实时驾车路线规划结果（仅供参考，实际路况请以导航为准）。</div>
+  <div class="map-note">地图由高德地图 JS API 驱动，路线为高德"速度最快"算法实时规划结果，仅供参考；对于限速较低的山区风景公路（如独库公路）或刚通车、地图数据库可能尚未收录的新路（如阿禾公路），算法有可能判定绕行其它道路"更快"而没有真正画出本文描述的那条路，与下方"交通"表格里的文字描述（里程/车程/路名）如有出入，请以文字描述和出发前的导航实测结果为准。</div>
   <div class="map-legend">蓝色路线＝高德实时驾车路线规划 · 🏨红色标记＝推荐酒店 · ⛽标记＝高德实时搜索到的沿途加油站（自动检索，非人工核实，仅供参考，出发前请以导航实际结果为准）</div>
   
     
@@ -356,7 +363,7 @@ footer.site-footer {
 
   <div class="section-card">
     <h3><span class="icon">🚗</span>交通</h3>
-    <table class="info-table"><tr><td class="label">路线</td><td>G217国道</td></tr><tr><td class="label">里程</td><td>布尔津-乌尔禾约220km</td></tr><tr><td class="label">车程</td><td>约2.5-3小时，纯平路，比原"贾登峪→布尔津→乌尔禾"合计约350km/5-6小时的长途日轻松很多</td></tr><tr><td class="label">海拔变化</td><td>布尔津 ~480m → 乌尔禾 ~350-450m（缓降）</td></tr><tr><td class="label">历史天气参考</td><td>戈壁段8月日间炎热干燥，可达30-32℃+，傍晚风力较大</td></tr><tr><td class="label">是否需预约</td><td>自驾无需预约；魔鬼城门票建议网上提前购买</td></tr></table>
+    <table class="info-table"><tr><td class="label">路线</td><td>G217国道</td></tr><tr><td class="label">里程</td><td>布尔津-乌尔禾约220km</td></tr><tr><td class="label">车程</td><td>约2.5-3小时，纯平路，比原"贾登峪→布尔津→乌尔禾"合计约350km/5-6小时的长途日轻松很多</td></tr><tr><td class="label">海拔变化</td><td>布尔津 ~480m → 乌尔禾 ~350-450m（缓降）</td></tr><tr><td class="label">历史天气参考</td><td>戈壁段8月日间炎热干燥，可达30-32℃+，傍晚风力较大</td></tr><tr><td class="label">加油站</td><td>布尔津县幸福路加油站(0906-6327566，24小时)、黑流滩加油站(0906-6511235，09:00-23:00)、冲乎尔镇河西加油站(0906-6322253，09:00-23:00)均在沿途，出发前建议在布尔津县城加满</td></tr><tr><td class="label">是否需预约</td><td>自驾无需预约；魔鬼城门票建议网上提前购买</td></tr></table>
     
     <div class="warn-box"><strong>驾车注意事项：</strong>⚠v20变更：五彩滩已在D6傍晚看过真正的日落效果，这天不再需要安排；轻松的半天路程，可以从容出发，中午前后抵达乌尔禾即可，把更多时间留给魔鬼城；🅿️沿途布尔津县幸福路加油站(0906-6327566，24小时)、黑流滩加油站(0906-6511235，09:00-23:00)、冲乎尔镇河西加油站(0906-6322253，09:00-23:00)均可加油，来自"原行网"官方公众号加油站点名单；⏰建议时间预算（估算，仅供参考）：8月22日克拉玛依/乌尔禾一带日落时间没有查到当天精确数据，用阿勒泰地区的外推趋势作参考约21:10左右（克拉玛依纬度略低，实际可能更晚几分钟，建议出发前用天气APP确认）；据此建议：9:00早餐后出发，2.5-3小时车程，12:00左右抵达乌尔禾，先入住/午餐休息，17:00-18:00再进魔鬼城（游览2-3小时，等到日落最佳光线21:00-21:15前后），21:30左右结束，晚餐可安排在游览前后</div>
   </div>
@@ -460,12 +467,15 @@ window._AMapSecurityConfig = { securityJsCode: "f5122d0c0aae74cc4c4e8f4ce0a196cc
   function addGasStationMarkers(anchorLocs){
     if (!anchorLocs || anchorLocs.length === 0) return;
     var seen = {};
-    var placeSearch = new AMap.PlaceSearch({ pageSize: 3, extensions: "base" });
+    // A fresh AMap.PlaceSearch instance per call, since reusing one instance for
+    // concurrent searchNearBy calls can cause callbacks to clobber each other.
     anchorLocs.forEach(function(loc){
-      placeSearch.searchNearBy("加油站", loc, 15000, function(status, result){
-        if (status !== "complete" || !result || !result.poiList) return;
-        (result.poiList.pois || []).forEach(function(poi){
-          var key = poi.name + poi.location.toString();
+      var placeSearch = new AMap.PlaceSearch({ pageSize: 5, extensions: "base", citylimit: false });
+      placeSearch.searchNearBy("加油站", loc, 20000, function(status, result){
+        if (status !== "complete" || !result || !result.poiList || !result.poiList.pois) return;
+        result.poiList.pois.forEach(function(poi){
+          if (!poi.location) return;
+          var key = poi.name + "_" + poi.location.toString();
           if (seen[key]) return;
           seen[key] = true;
           new AMap.Marker({

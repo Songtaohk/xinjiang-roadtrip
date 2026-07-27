@@ -61,6 +61,12 @@ nav.day-nav a.active {
   color: var(--teal);
   font-weight: 600;
 }
+nav.day-nav .nav-sep {
+  color: rgba(255,255,255,0.7);
+  font-size: 12px;
+  margin-left: 4px;
+  white-space: nowrap;
+}
 main {
   max-width: 920px;
   margin: 0 auto;
@@ -322,7 +328,7 @@ footer.site-footer {
   <h1>北疆16日自驾行程</h1>
   <p>香港 ⇄ 乌鲁木齐 · 8月15日–8月30日 · 全自驾</p>
 </header>
-<nav class="day-nav"><a href="index.html" class="active">总览</a><a href="day0.html" class="active">D0</a><a href="day1.html" class="">D1</a><a href="day2.html" class="">D2</a><a href="day3.html" class="">D3</a><a href="day4.html" class="">D4</a><a href="day5.html" class="">D5</a><a href="day6.html" class="">D6</a><a href="day7.html" class="">D7</a><a href="day8.html" class="">D8</a><a href="day9.html" class="">D9</a><a href="day10.html" class="">D10</a><a href="day11.html" class="">D11</a><a href="day12.html" class="">D12</a><a href="day13.html" class="">D13</a><a href="day14.html" class="">D14</a><a href="day15.html" class="">D15</a></nav>
+<nav class="day-nav"><a href="index.html" class="active">总览</a><a href="day0.html" class="active">D0</a><a href="day1.html" class="">D1</a><a href="day2.html" class="">D2</a><a href="day3.html" class="">D3</a><a href="day4.html" class="">D4</a><a href="day5.html" class="">D5</a><a href="day6.html" class="">D6</a><a href="day7.html" class="">D7</a><a href="day8.html" class="">D8</a><a href="day9.html" class="">D9</a><a href="day10.html" class="">D10</a><a href="day11.html" class="">D11</a><a href="day12.html" class="">D12</a><a href="day13.html" class="">D13</a><a href="day14.html" class="">D14</a><a href="day15.html" class="">D15</a><span class="nav-sep">备选：</span><a href="day13a.html" class="">D13a</a><a href="day14a.html" class="">D14a</a></nav>
 <main>
   <div class="section-card">
     <h3><span class="icon">🗺️</span>全程路线总览</h3>
@@ -401,7 +407,7 @@ footer.site-footer {
     <li><a href="day13.html">
       <span class="idx-day">Day 13 · 8月28日（周五）</span>
       <div class="idx-title">唐布拉 → 乔尔玛（入口） → 独库公路北段 → 奎屯/独山子 ⚠ 史诗级长途日</div>
-      <div class="idx-summary">从乔尔玛入口衔接独库公路北段，翻越哈希勒根达坂，一日看四季</div>
+      <div class="idx-summary">从乔尔玛入口衔接独库公路北段，翻越哈希勒根达坂，一日看四季（默认方案：当晚住奎屯/独山子，次日D14再返乌鲁木齐）</div>
     </a></li>
     <li><a href="day14.html">
       <span class="idx-day">Day 14 · 8月29日（周六）</span>
@@ -412,6 +418,22 @@ footer.site-footer {
       <span class="idx-day">Day 15 · 8月30日（周日）</span>
       <div class="idx-title">乌鲁木齐 → 香港</div>
       <div class="idx-summary">无游玩安排，从容返程</div>
+    </a></li></ul>
+  </div>
+  
+  <div class="section-card">
+    <h3><span class="icon">🔀</span>备选方案（可选，不计入正式16天）</h3>
+    <p class="empty-note">D13a+D14a 是"独库公路当天直达乌鲁木齐"的合并方案，与默认的D13+D14二选一使用，详见各自页面内的说明。</p>
+    <ul class="index-list">
+    <li><a href="day13a.html">
+      <span class="idx-day">D13a · 8月28日（周五，合并方案）</span>
+      <div class="idx-title">【备选】唐布拉 → 乔尔玛 → 独库公路北段 → 独山子 → 乌鲁木齐（当日还车，不去天山天池）</div>
+      <div class="idx-summary">⚠合并方案：把默认D13+D14合并为一天，翻越独库公路后不在奎屯/独山子过夜，直接继续开到乌鲁木齐当晚还车；代价是全天驾车时间明显更长、更累，换来的是D14a变成真正空闲的一天</div>
+    </a></li>
+    <li><a href="day14a.html">
+      <span class="idx-day">D14a · 8月29日（周六，合并方案）</span>
+      <div class="idx-title">【备选】乌鲁木齐自由日（已还车，D13a合并方案专属）</div>
+      <div class="idx-summary">⚠仅适用于选择了D13a合并方案的情况：当晚已在乌鲁木齐、车已还，这是真正意义上的空闲一天，可在"天山天池一日游"和"市区深度游（博物馆+大巴扎+更多市区景点）"之间选择，甚至两者兼顾（如体力和时间允许）</div>
     </a></li></ul>
   </div>
   <div class="disclaimer">本网站所有里程、车程、预约规则、价格均为出行前整理的参考信息，存在多来源冲突或未查实的字段已逐一标注。请出发前用高德/百度地图核实实时路况，并通过官方渠道确认最新预约与门票政策。</div>
@@ -426,7 +448,7 @@ window._AMapSecurityConfig = { securityJsCode: "f5122d0c0aae74cc4c4e8f4ce0a196cc
   // own default (roughly Beijing) until setFitView() runs, which briefly (or, if something
   // downstream hangs, permanently) shows the wrong part of the country.
   var map = new AMap.Map("amap-index", { zoom: 6, center: [87.62, 43.82], resizeEnable: true });
-  var days = [{"num":0,"points":[{"keyword":"乌鲁木齐地窝堡国际机场","city":"乌鲁木齐市"}]},{"num":1,"points":[{"keyword":"乌鲁木齐市","city":"乌鲁木齐市"},{"keyword":"阿勒泰市","city":"阿勒泰地区"}]},{"num":2,"points":[{"keyword":"阿勒泰市","city":"阿勒泰地区"},{"keyword":"禾木村","city":"阿勒泰地区"}]},{"num":3,"points":[{"keyword":"禾木村","city":"阿勒泰地区"},{"keyword":"喀纳斯景区贾登峪游客中心","city":"阿勒泰地区"}]},{"num":4,"points":[{"keyword":"喀纳斯景区贾登峪游客中心","city":"阿勒泰地区"},{"keyword":"喀纳斯湖","city":"阿勒泰地区"},{"keyword":"白哈巴","city":"阿勒泰地区"}]},{"num":5,"points":[{"keyword":"喀纳斯湖","city":"阿勒泰地区"}]},{"num":6,"points":[{"keyword":"喀纳斯湖","city":"阿勒泰地区"},{"keyword":"喀纳斯景区贾登峪游客中心","city":"阿勒泰地区"},{"keyword":"布尔津县","city":"阿勒泰地区"}]},{"num":7,"points":[{"keyword":"布尔津县","city":"阿勒泰地区"},{"keyword":"世界魔鬼城","city":"克拉玛依市"}]},{"num":8,"points":[{"keyword":"世界魔鬼城","city":"克拉玛依市"},{"keyword":"赛里木湖","city":"博尔塔拉蒙古自治州"}]},{"num":9,"points":[{"keyword":"赛里木湖","city":"博尔塔拉蒙古自治州"},{"keyword":"松树头","city":"博尔塔拉蒙古自治州"}]},{"num":10,"points":[{"keyword":"赛里木湖","city":"博尔塔拉蒙古自治州"},{"keyword":"伊宁市六星街","city":"伊宁市"},{"keyword":"库尔德宁","city":"伊犁哈萨克自治州"},{"keyword":"那拉提镇","city":"伊犁哈萨克自治州"}]},{"num":11,"points":[{"keyword":"那拉提草原景区","city":"伊犁哈萨克自治州"}]},{"num":12,"points":[{"keyword":"那拉提镇","city":"伊犁哈萨克自治州"},{"keyword":"唐布拉草原","city":"伊犁哈萨克自治州"}]},{"num":13,"points":[{"keyword":"唐布拉草原","city":"伊犁哈萨克自治州"},{"keyword":"乔尔玛","city":"伊犁哈萨克自治州"},{"keyword":"独山子区","city":"克拉玛依市"}]},{"num":14,"points":[{"keyword":"独山子区","city":"克拉玛依市"},{"keyword":"乌鲁木齐地窝堡国际机场","city":"乌鲁木齐市"}]},{"num":15,"points":[{"keyword":"乌鲁木齐地窝堡国际机场","city":"乌鲁木齐市"}]}];
+  var days = [{"num":0,"points":[{"keyword":"乌鲁木齐地窝堡国际机场","city":"乌鲁木齐市"}]},{"num":1,"points":[{"keyword":"乌鲁木齐市","city":"乌鲁木齐市"},{"keyword":"阿勒泰市","city":"阿勒泰地区"}]},{"num":2,"points":[{"keyword":"阿勒泰市","city":"阿勒泰地区"},{"keyword":"小东沟森林公园","city":"阿勒泰地区"},{"keyword":"禾木村","city":"阿勒泰地区"}]},{"num":3,"points":[{"keyword":"禾木村","city":"阿勒泰地区"},{"keyword":"喀纳斯景区贾登峪游客中心","city":"阿勒泰地区"}]},{"num":4,"points":[{"keyword":"喀纳斯景区贾登峪游客中心","city":"阿勒泰地区"},{"keyword":"喀纳斯湖","city":"阿勒泰地区"},{"keyword":"白哈巴","city":"阿勒泰地区"}]},{"num":5,"points":[{"keyword":"喀纳斯湖","city":"阿勒泰地区"}]},{"num":6,"points":[{"keyword":"喀纳斯湖","city":"阿勒泰地区"},{"keyword":"喀纳斯景区贾登峪游客中心","city":"阿勒泰地区"},{"keyword":"布尔津五彩滩风景区","city":"阿勒泰地区"}]},{"num":7,"points":[{"keyword":"布尔津县","city":"阿勒泰地区"},{"keyword":"世界魔鬼城","city":"克拉玛依市"}]},{"num":8,"points":[{"keyword":"世界魔鬼城","city":"克拉玛依市"},{"keyword":"赛里木湖","city":"博尔塔拉蒙古自治州"}]},{"num":9,"points":[{"keyword":"赛里木湖","city":"博尔塔拉蒙古自治州"},{"keyword":"松树头","city":"博尔塔拉蒙古自治州"}]},{"num":10,"points":[{"keyword":"赛里木湖","city":"博尔塔拉蒙古自治州"},{"keyword":"伊宁市六星街","city":"伊宁市"},{"keyword":"库尔德宁","city":"伊犁哈萨克自治州"},{"keyword":"那拉提镇","city":"伊犁哈萨克自治州"}]},{"num":11,"points":[{"keyword":"那拉提草原景区","city":"伊犁哈萨克自治州"}]},{"num":12,"points":[{"keyword":"那拉提镇","city":"伊犁哈萨克自治州"},{"keyword":"唐布拉草原","city":"伊犁哈萨克自治州"}]},{"num":13,"points":[{"keyword":"唐布拉草原","city":"伊犁哈萨克自治州"},{"keyword":"乔尔玛烈士陵园","city":"伊犁哈萨克自治州"},{"keyword":"哈希勒根达坂","city":"伊犁哈萨克自治州"},{"keyword":"独山子大峡谷","city":"克拉玛依市"},{"keyword":"独山子区","city":"克拉玛依市"}]},{"num":14,"points":[{"keyword":"独山子区","city":"克拉玛依市"},{"keyword":"乌鲁木齐地窝堡国际机场","city":"乌鲁木齐市"}]},{"num":15,"points":[{"keyword":"乌鲁木齐地窝堡国际机场","city":"乌鲁木齐市"}]}];
   var pending = days.length;
   var doneCalled = {};
 

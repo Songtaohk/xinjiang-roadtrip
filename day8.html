@@ -61,6 +61,12 @@ nav.day-nav a.active {
   color: var(--teal);
   font-weight: 600;
 }
+nav.day-nav .nav-sep {
+  color: rgba(255,255,255,0.7);
+  font-size: 12px;
+  margin-left: 4px;
+  white-space: nowrap;
+}
 main {
   max-width: 920px;
   margin: 0 auto;
@@ -322,8 +328,9 @@ footer.site-footer {
   <h1>北疆16日自驾行程</h1>
   <p>香港 ⇄ 乌鲁木齐 · 8月15日–8月30日 · 全自驾</p>
 </header>
-<nav class="day-nav"><a href="index.html" class="">总览</a><a href="day0.html" class="">D0</a><a href="day1.html" class="">D1</a><a href="day2.html" class="">D2</a><a href="day3.html" class="">D3</a><a href="day4.html" class="">D4</a><a href="day5.html" class="">D5</a><a href="day6.html" class="">D6</a><a href="day7.html" class="">D7</a><a href="day8.html" class="active">D8</a><a href="day9.html" class="">D9</a><a href="day10.html" class="">D10</a><a href="day11.html" class="">D11</a><a href="day12.html" class="">D12</a><a href="day13.html" class="">D13</a><a href="day14.html" class="">D14</a><a href="day15.html" class="">D15</a></nav>
+<nav class="day-nav"><a href="index.html" class="">总览</a><a href="day0.html" class="">D0</a><a href="day1.html" class="">D1</a><a href="day2.html" class="">D2</a><a href="day3.html" class="">D3</a><a href="day4.html" class="">D4</a><a href="day5.html" class="">D5</a><a href="day6.html" class="">D6</a><a href="day7.html" class="">D7</a><a href="day8.html" class="active">D8</a><a href="day9.html" class="">D9</a><a href="day10.html" class="">D10</a><a href="day11.html" class="">D11</a><a href="day12.html" class="">D12</a><a href="day13.html" class="">D13</a><a href="day14.html" class="">D14</a><a href="day15.html" class="">D15</a><span class="nav-sep">备选：</span><a href="day13a.html" class="">D13a</a><a href="day14a.html" class="">D14a</a></nav>
 <main>
+  
   <div class="day-title-block">
     <span class="day-num">Day 8 · 8月23日（周日）</span>
     <h2>乌尔禾 → 赛里木湖 ⚠ 刚性长途日</h2>
@@ -336,7 +343,7 @@ footer.site-footer {
   <div id="amap-day-8" class="map-frame-wrap"></div>
   <div id="amap-status-8" class="map-fallback-link"></div>
   <div id="amap-day-8-live" class="map-live-note"></div>
-  <div class="map-note">地图由高德地图 JS API 驱动，路线为高德实时驾车路线规划结果（仅供参考，实际路况请以导航为准）。</div>
+  <div class="map-note">地图由高德地图 JS API 驱动，路线为高德"速度最快"算法实时规划结果，仅供参考；对于限速较低的山区风景公路（如独库公路）或刚通车、地图数据库可能尚未收录的新路（如阿禾公路），算法有可能判定绕行其它道路"更快"而没有真正画出本文描述的那条路，与下方"交通"表格里的文字描述（里程/车程/路名）如有出入，请以文字描述和出发前的导航实测结果为准。</div>
   <div class="map-legend">蓝色路线＝高德实时驾车路线规划 · 🏨红色标记＝推荐酒店 · ⛽标记＝高德实时搜索到的沿途加油站（自动检索，非人工核实，仅供参考，出发前请以导航实际结果为准）</div>
   
     
@@ -356,7 +363,7 @@ footer.site-footer {
 
   <div class="section-card">
     <h3><span class="icon">🚗</span>交通</h3>
-    <table class="info-table"><tr><td class="label">路线</td><td>克拉玛依-独山子-精河方向高速</td></tr><tr><td class="label">里程</td><td>约410 km</td></tr><tr><td class="label">车程</td><td>约5-5.5小时（纯高速）</td></tr><tr><td class="label">海拔变化</td><td>乌尔禾 ~400m → 赛里木湖 ~2073m（爬升约1670m，全程渐进式）</td></tr><tr><td class="label">历史天气参考</td><td>赛里木湖8月日间约18-22℃，夜间可降至5-10℃，昼夜温差大，务必带厚外套</td></tr><tr><td class="label">是否需预约</td><td>自驾无需预约；露营/房车营位见住宿栏</td></tr></table>
+    <table class="info-table"><tr><td class="label">路线</td><td>克拉玛依-独山子-精河方向高速</td></tr><tr><td class="label">里程</td><td>约410 km</td></tr><tr><td class="label">车程</td><td>约5-5.5小时（纯高速）</td></tr><tr><td class="label">海拔变化</td><td>乌尔禾 ~400m → 赛里木湖 ~2073m（爬升约1670m，全程渐进式）</td></tr><tr><td class="label">历史天气参考</td><td>赛里木湖8月日间约18-22℃，夜间可降至5-10℃，昼夜温差大，务必带厚外套</td></tr><tr><td class="label">加油站</td><td>全天410km高速长途，出发前务必在乌尔禾/克拉玛依市区加满油；沿途独山子、精河服务区一带也有加油站可补充，具体名称未逐一核实，建议按导航"加油站"搜索确认</td></tr><tr><td class="label">是否需预约</td><td>自驾无需预约；露营/房车营位见住宿栏</td></tr></table>
     <div class="warn-box"><strong>预约提醒：</strong>⚠须提前通过"赛里木湖旅游"微信小程序预约营位（这次是2晚，务必确认两晚都预约成功），建议提前2-3周锁定</div>
     <div class="warn-box"><strong>驾车注意事项：</strong>本次赛里木湖连住2晚（v18变更：从原来的1晚恢复为2晚，腾出的1天来自取消D14乌鲁木齐机动缓冲日），当天先环湖看日落，次日是全程唯一真正的0驾驶休整日；⏰建议时间预算（估算，仅供参考）：赛里木湖所属博尔塔拉州8月23日日落时间没有查到当天精确数据，用邻近伊犁州的外推趋势作参考约21:30左右；这是全程最长的纯驾驶日之一（410km），建议6:30起床、7:00出发（比此前版本的"9:30前"更早，留出充分的休息和抵达后的环湖时间），驾车5.5小时（中值）+服务区午餐1小时，预计13:30左右抵达赛里木湖，入住后环湖自驾1-1.5小时，17:00-21:00自由活动，21:30前后等日落，21:45左右结束</div>
   </div>
@@ -467,12 +474,15 @@ window._AMapSecurityConfig = { securityJsCode: "f5122d0c0aae74cc4c4e8f4ce0a196cc
   function addGasStationMarkers(anchorLocs){
     if (!anchorLocs || anchorLocs.length === 0) return;
     var seen = {};
-    var placeSearch = new AMap.PlaceSearch({ pageSize: 3, extensions: "base" });
+    // A fresh AMap.PlaceSearch instance per call, since reusing one instance for
+    // concurrent searchNearBy calls can cause callbacks to clobber each other.
     anchorLocs.forEach(function(loc){
-      placeSearch.searchNearBy("加油站", loc, 15000, function(status, result){
-        if (status !== "complete" || !result || !result.poiList) return;
-        (result.poiList.pois || []).forEach(function(poi){
-          var key = poi.name + poi.location.toString();
+      var placeSearch = new AMap.PlaceSearch({ pageSize: 5, extensions: "base", citylimit: false });
+      placeSearch.searchNearBy("加油站", loc, 20000, function(status, result){
+        if (status !== "complete" || !result || !result.poiList || !result.poiList.pois) return;
+        result.poiList.pois.forEach(function(poi){
+          if (!poi.location) return;
+          var key = poi.name + "_" + poi.location.toString();
           if (seen[key]) return;
           seen[key] = true;
           new AMap.Marker({

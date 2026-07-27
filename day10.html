@@ -61,6 +61,12 @@ nav.day-nav a.active {
   color: var(--teal);
   font-weight: 600;
 }
+nav.day-nav .nav-sep {
+  color: rgba(255,255,255,0.7);
+  font-size: 12px;
+  margin-left: 4px;
+  white-space: nowrap;
+}
 main {
   max-width: 920px;
   margin: 0 auto;
@@ -322,8 +328,9 @@ footer.site-footer {
   <h1>北疆16日自驾行程</h1>
   <p>香港 ⇄ 乌鲁木齐 · 8月15日–8月30日 · 全自驾</p>
 </header>
-<nav class="day-nav"><a href="index.html" class="">总览</a><a href="day0.html" class="">D0</a><a href="day1.html" class="">D1</a><a href="day2.html" class="">D2</a><a href="day3.html" class="">D3</a><a href="day4.html" class="">D4</a><a href="day5.html" class="">D5</a><a href="day6.html" class="">D6</a><a href="day7.html" class="">D7</a><a href="day8.html" class="">D8</a><a href="day9.html" class="">D9</a><a href="day10.html" class="active">D10</a><a href="day11.html" class="">D11</a><a href="day12.html" class="">D12</a><a href="day13.html" class="">D13</a><a href="day14.html" class="">D14</a><a href="day15.html" class="">D15</a></nav>
+<nav class="day-nav"><a href="index.html" class="">总览</a><a href="day0.html" class="">D0</a><a href="day1.html" class="">D1</a><a href="day2.html" class="">D2</a><a href="day3.html" class="">D3</a><a href="day4.html" class="">D4</a><a href="day5.html" class="">D5</a><a href="day6.html" class="">D6</a><a href="day7.html" class="">D7</a><a href="day8.html" class="">D8</a><a href="day9.html" class="">D9</a><a href="day10.html" class="active">D10</a><a href="day11.html" class="">D11</a><a href="day12.html" class="">D12</a><a href="day13.html" class="">D13</a><a href="day14.html" class="">D14</a><a href="day15.html" class="">D15</a><span class="nav-sep">备选：</span><a href="day13a.html" class="">D13a</a><a href="day14a.html" class="">D14a</a></nav>
 <main>
+  
   <div class="day-title-block">
     <span class="day-num">Day 10 · 8月25日（周二）</span>
     <h2>赛里木湖 → 伊宁（六星街） → 库尔德宁 → 那拉提 ⚠ 内容较满</h2>
@@ -336,7 +343,7 @@ footer.site-footer {
   <div id="amap-day-10" class="map-frame-wrap"></div>
   <div id="amap-status-10" class="map-fallback-link"></div>
   <div id="amap-day-10-live" class="map-live-note"></div>
-  <div class="map-note">地图由高德地图 JS API 驱动，路线为高德实时驾车路线规划结果（仅供参考，实际路况请以导航为准）。</div>
+  <div class="map-note">地图由高德地图 JS API 驱动，路线为高德"速度最快"算法实时规划结果，仅供参考；对于限速较低的山区风景公路（如独库公路）或刚通车、地图数据库可能尚未收录的新路（如阿禾公路），算法有可能判定绕行其它道路"更快"而没有真正画出本文描述的那条路，与下方"交通"表格里的文字描述（里程/车程/路名）如有出入，请以文字描述和出发前的导航实测结果为准。</div>
   <div class="map-legend">蓝色路线＝高德实时驾车路线规划 · 🏨红色标记＝推荐酒店 · ⛽标记＝高德实时搜索到的沿途加油站（自动检索，非人工核实，仅供参考，出发前请以导航实际结果为准）</div>
   
     
@@ -358,7 +365,7 @@ footer.site-footer {
 
   <div class="section-card">
     <h3><span class="icon">🚗</span>交通</h3>
-    <table class="info-table"><tr><td class="label">路线</td><td>果子沟大桥高速（赛里木湖-伊宁）+ 伊宁-巩留-库尔德宁-那拉提山谷公路（经库尔德宁，不再走伊宁直达那拉提的更短路线）</td></tr><tr><td class="label">里程</td><td>赛里木湖-伊宁约140km；伊宁-那拉提（经库尔德宁）约250-280km（不同路书数据有出入，比直达路线约110km明显更长，建议出发前用高德核实实时路况）</td></tr><tr><td class="label">车程</td><td>合计约7-8小时（含库尔德宁沿途停留），是全程内容最满的一天之一</td></tr><tr><td class="label">海拔变化</td><td>赛里木湖 ~2073m → 伊宁 ~660m → 库尔德宁谷底 ~1500m → 那拉提 ~1000-2000m（起伏较大）</td></tr><tr><td class="label">历史天气参考</td><td>伊宁河谷8月日间约28-32℃，库尔德宁山谷树荫下凉爽，那拉提相对凉爽约20-25℃</td></tr><tr><td class="label">是否需预约</td><td>自驾，无需预约</td></tr></table>
+    <table class="info-table"><tr><td class="label">路线</td><td>果子沟大桥高速（赛里木湖-伊宁）+ 伊宁-巩留-库尔德宁-那拉提山谷公路（经库尔德宁，不再走伊宁直达那拉提的更短路线）</td></tr><tr><td class="label">里程</td><td>赛里木湖-伊宁约140km；伊宁-那拉提（经库尔德宁）约250-280km（不同路书数据有出入，比直达路线约110km明显更长，建议出发前用高德核实实时路况）</td></tr><tr><td class="label">车程</td><td>合计约7-8小时（含库尔德宁沿途停留），是全程内容最满的一天之一</td></tr><tr><td class="label">海拔变化</td><td>赛里木湖 ~2073m → 伊宁 ~660m → 库尔德宁谷底 ~1500m → 那拉提 ~1000-2000m（起伏较大）</td></tr><tr><td class="label">历史天气参考</td><td>伊宁河谷8月日间约28-32℃，库尔德宁山谷树荫下凉爽，那拉提相对凉爽约20-25℃</td></tr><tr><td class="label">加油站</td><td>伊宁市区加油站较多，途经六星街时建议顺路加满；库尔德宁-那拉提段山路加油站较少，具体名称未逐一核实，出发前建议在伊宁加满以策安全</td></tr><tr><td class="label">是否需预约</td><td>自驾，无需预约</td></tr></table>
     
     <div class="warn-box"><strong>驾车注意事项：</strong>⚠今天内容较满（长途+六星街+库尔德宁），因为昨天已经休整过一天，今天不用赶日出，正常时间退房出发即可；果子沟大桥路段风景极佳但弯道多，注意观景与驾驶分开；库尔德宁段以沿途观景为主，不安排长时间徒步，若想深度体验建议单独增加1天；⏰建议时间预算（估算，仅供参考）：7:00早餐，7:30出发，驾车7小时（中值，含库尔德宁沿途观景停留）+六星街1小时+库尔德宁1.25小时（中值）+午餐1小时，合计约10.25小时，预计17:45左右抵达那拉提，18:30-19:30晚餐；这是全程内容最满的一天之一，务必按建议时间出发，避免入住太晚</div>
   </div>
@@ -479,12 +486,15 @@ window._AMapSecurityConfig = { securityJsCode: "f5122d0c0aae74cc4c4e8f4ce0a196cc
   function addGasStationMarkers(anchorLocs){
     if (!anchorLocs || anchorLocs.length === 0) return;
     var seen = {};
-    var placeSearch = new AMap.PlaceSearch({ pageSize: 3, extensions: "base" });
+    // A fresh AMap.PlaceSearch instance per call, since reusing one instance for
+    // concurrent searchNearBy calls can cause callbacks to clobber each other.
     anchorLocs.forEach(function(loc){
-      placeSearch.searchNearBy("加油站", loc, 15000, function(status, result){
-        if (status !== "complete" || !result || !result.poiList) return;
-        (result.poiList.pois || []).forEach(function(poi){
-          var key = poi.name + poi.location.toString();
+      var placeSearch = new AMap.PlaceSearch({ pageSize: 5, extensions: "base", citylimit: false });
+      placeSearch.searchNearBy("加油站", loc, 20000, function(status, result){
+        if (status !== "complete" || !result || !result.poiList || !result.poiList.pois) return;
+        result.poiList.pois.forEach(function(poi){
+          if (!poi.location) return;
+          var key = poi.name + "_" + poi.location.toString();
           if (seen[key]) return;
           seen[key] = true;
           new AMap.Marker({

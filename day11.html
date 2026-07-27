@@ -61,6 +61,12 @@ nav.day-nav a.active {
   color: var(--teal);
   font-weight: 600;
 }
+nav.day-nav .nav-sep {
+  color: rgba(255,255,255,0.7);
+  font-size: 12px;
+  margin-left: 4px;
+  white-space: nowrap;
+}
 main {
   max-width: 920px;
   margin: 0 auto;
@@ -322,8 +328,9 @@ footer.site-footer {
   <h1>北疆16日自驾行程</h1>
   <p>香港 ⇄ 乌鲁木齐 · 8月15日–8月30日 · 全自驾</p>
 </header>
-<nav class="day-nav"><a href="index.html" class="">总览</a><a href="day0.html" class="">D0</a><a href="day1.html" class="">D1</a><a href="day2.html" class="">D2</a><a href="day3.html" class="">D3</a><a href="day4.html" class="">D4</a><a href="day5.html" class="">D5</a><a href="day6.html" class="">D6</a><a href="day7.html" class="">D7</a><a href="day8.html" class="">D8</a><a href="day9.html" class="">D9</a><a href="day10.html" class="">D10</a><a href="day11.html" class="active">D11</a><a href="day12.html" class="">D12</a><a href="day13.html" class="">D13</a><a href="day14.html" class="">D14</a><a href="day15.html" class="">D15</a></nav>
+<nav class="day-nav"><a href="index.html" class="">总览</a><a href="day0.html" class="">D0</a><a href="day1.html" class="">D1</a><a href="day2.html" class="">D2</a><a href="day3.html" class="">D3</a><a href="day4.html" class="">D4</a><a href="day5.html" class="">D5</a><a href="day6.html" class="">D6</a><a href="day7.html" class="">D7</a><a href="day8.html" class="">D8</a><a href="day9.html" class="">D9</a><a href="day10.html" class="">D10</a><a href="day11.html" class="active">D11</a><a href="day12.html" class="">D12</a><a href="day13.html" class="">D13</a><a href="day14.html" class="">D14</a><a href="day15.html" class="">D15</a><span class="nav-sep">备选：</span><a href="day13a.html" class="">D13a</a><a href="day14a.html" class="">D14a</a></nav>
 <main>
+  
   <div class="day-title-block">
     <span class="day-num">Day 11 · 8月26日（周三）</span>
     <h2>那拉提草原深度游 + 傍晚盘龙谷自驾</h2>
@@ -336,7 +343,7 @@ footer.site-footer {
   <div id="amap-day-11" class="map-frame-wrap"></div>
   <div id="amap-status-11" class="map-fallback-link"></div>
   <div id="amap-day-11-live" class="map-live-note"></div>
-  <div class="map-note">地图由高德地图 JS API 驱动，路线为高德实时驾车路线规划结果（仅供参考，实际路况请以导航为准）。</div>
+  <div class="map-note">地图由高德地图 JS API 驱动，路线为高德"速度最快"算法实时规划结果，仅供参考；对于限速较低的山区风景公路（如独库公路）或刚通车、地图数据库可能尚未收录的新路（如阿禾公路），算法有可能判定绕行其它道路"更快"而没有真正画出本文描述的那条路，与下方"交通"表格里的文字描述（里程/车程/路名）如有出入，请以文字描述和出发前的导航实测结果为准。</div>
   
   
     
@@ -356,7 +363,7 @@ footer.site-footer {
 
   <div class="section-card">
     <h3><span class="icon">🚗</span>交通</h3>
-    <table class="info-table"><tr><td class="label">路线</td><td>景区内自驾路线（空中草原-游牧人家、盘龙谷道）</td></tr><tr><td class="label">里程</td><td>0-1小时（仅景区内挪车）</td></tr><tr><td class="label">车程</td><td>—</td></tr><tr><td class="label">海拔变化</td><td>空中草原核心区约1800-2200m</td></tr><tr><td class="label">历史天气参考</td><td>草原8月日间约22-26℃，夜间转凉约10-14℃</td></tr><tr><td class="label">是否需预约</td><td>⚠需通过"智游那拉提"小程序实名预约自驾，定制自驾游执行200元/人次（自驾票105元+门票95元，过闸机后48小时内有效），严禁搭载无票乘客；仅限7座以下车辆（含7座/SUV/商务车/轿车/一体式房车，拖挂型及超7米房车不可办理）；仅限空中草原-游牧人家/河谷草原全线/西盘龙谷道，其余路段单行道禁止驶入；驾驶规范：只能在划定的观景台/停车场停车，草原植被脆弱，路边碾压草场会面临高额罚款，全程禁止携带火种/烧烤/野炊等明火行为</td></tr></table>
+    <table class="info-table"><tr><td class="label">路线</td><td>景区内自驾路线（空中草原-游牧人家、盘龙谷道）</td></tr><tr><td class="label">里程</td><td>0-1小时（仅景区内挪车）</td></tr><tr><td class="label">车程</td><td>—</td></tr><tr><td class="label">海拔变化</td><td>空中草原核心区约1800-2200m</td></tr><tr><td class="label">历史天气参考</td><td>草原8月日间约22-26℃，夜间转凉约10-14℃</td></tr><tr><td class="label">加油站</td><td>景区内没有加油站，务必在进景区前于那拉提镇或新源县把油箱加满</td></tr><tr><td class="label">是否需预约</td><td>⚠需通过"智游那拉提"小程序实名预约自驾，定制自驾游执行200元/人次（自驾票105元+门票95元，过闸机后48小时内有效），严禁搭载无票乘客；仅限7座以下车辆（含7座/SUV/商务车/轿车/一体式房车，拖挂型及超7米房车不可办理）；仅限空中草原-游牧人家/河谷草原全线/西盘龙谷道，其余路段单行道禁止驶入；驾驶规范：只能在划定的观景台/停车场停车，草原植被脆弱，路边碾压草场会面临高额罚款，全程禁止携带火种/烧烤/野炊等明火行为</td></tr></table>
     
     <div class="warn-box"><strong>驾车注意事项：</strong>今晚务必在"游新疆一码游"小程序（或"新疆路网""平安天山"公众号）预约明天"乔尔玛入口"独库公路北段通行凭证（v18变更：不再是那拉提入口，因为明天走的是唐布拉→乔尔玛这条路线，见D12/D13）；2026年7月10日起独库公路北段已是强制分时预约，提前7天含当天可约，选定入口/时段后不可更改；⚠景区内没有加油站，务必在进景区前，于那拉提镇或新源县把油箱加满；⏰建议时间预算（估算，仅供参考）：7:30早餐，8:00进景区，空中草原3.5小时（中值，8:00-11:30），11:30-12:30午餐，下午自由/雪莲谷可选（12:30-15:00），17:00-18:00盘龙谷道自驾（傍晚），18:30-19:30晚餐；伊犁州8月26日日落时间没有查到当天精确数据，用7月实测趋势外推约21:25左右，17:00-18:00去盘龙谷时段光线仍然充足，不存在赶日落的压力</div>
   </div>
@@ -467,12 +474,15 @@ window._AMapSecurityConfig = { securityJsCode: "f5122d0c0aae74cc4c4e8f4ce0a196cc
   function addGasStationMarkers(anchorLocs){
     if (!anchorLocs || anchorLocs.length === 0) return;
     var seen = {};
-    var placeSearch = new AMap.PlaceSearch({ pageSize: 3, extensions: "base" });
+    // A fresh AMap.PlaceSearch instance per call, since reusing one instance for
+    // concurrent searchNearBy calls can cause callbacks to clobber each other.
     anchorLocs.forEach(function(loc){
-      placeSearch.searchNearBy("加油站", loc, 15000, function(status, result){
-        if (status !== "complete" || !result || !result.poiList) return;
-        (result.poiList.pois || []).forEach(function(poi){
-          var key = poi.name + poi.location.toString();
+      var placeSearch = new AMap.PlaceSearch({ pageSize: 5, extensions: "base", citylimit: false });
+      placeSearch.searchNearBy("加油站", loc, 20000, function(status, result){
+        if (status !== "complete" || !result || !result.poiList || !result.poiList.pois) return;
+        result.poiList.pois.forEach(function(poi){
+          if (!poi.location) return;
+          var key = poi.name + "_" + poi.location.toString();
           if (seen[key]) return;
           seen[key] = true;
           new AMap.Marker({

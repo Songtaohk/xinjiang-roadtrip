@@ -61,6 +61,12 @@ nav.day-nav a.active {
   color: var(--teal);
   font-weight: 600;
 }
+nav.day-nav .nav-sep {
+  color: rgba(255,255,255,0.7);
+  font-size: 12px;
+  margin-left: 4px;
+  white-space: nowrap;
+}
 main {
   max-width: 920px;
   margin: 0 auto;
@@ -322,8 +328,9 @@ footer.site-footer {
   <h1>北疆16日自驾行程</h1>
   <p>香港 ⇄ 乌鲁木齐 · 8月15日–8月30日 · 全自驾</p>
 </header>
-<nav class="day-nav"><a href="index.html" class="">总览</a><a href="day0.html" class="">D0</a><a href="day1.html" class="">D1</a><a href="day2.html" class="">D2</a><a href="day3.html" class="">D3</a><a href="day4.html" class="">D4</a><a href="day5.html" class="">D5</a><a href="day6.html" class="active">D6</a><a href="day7.html" class="">D7</a><a href="day8.html" class="">D8</a><a href="day9.html" class="">D9</a><a href="day10.html" class="">D10</a><a href="day11.html" class="">D11</a><a href="day12.html" class="">D12</a><a href="day13.html" class="">D13</a><a href="day14.html" class="">D14</a><a href="day15.html" class="">D15</a></nav>
+<nav class="day-nav"><a href="index.html" class="">总览</a><a href="day0.html" class="">D0</a><a href="day1.html" class="">D1</a><a href="day2.html" class="">D2</a><a href="day3.html" class="">D3</a><a href="day4.html" class="">D4</a><a href="day5.html" class="">D5</a><a href="day6.html" class="active">D6</a><a href="day7.html" class="">D7</a><a href="day8.html" class="">D8</a><a href="day9.html" class="">D9</a><a href="day10.html" class="">D10</a><a href="day11.html" class="">D11</a><a href="day12.html" class="">D12</a><a href="day13.html" class="">D13</a><a href="day14.html" class="">D14</a><a href="day15.html" class="">D15</a><span class="nav-sep">备选：</span><a href="day13a.html" class="">D13a</a><a href="day14a.html" class="">D14a</a></nav>
 <main>
+  
   <div class="day-title-block">
     <span class="day-num">Day 6 · 8月21日（周五）</span>
     <h2>喀纳斯半日游 → 中午退房换乘回贾登峪（取车） → 直奔五彩滩（傍晚日落，住布尔津）</h2>
@@ -336,7 +343,7 @@ footer.site-footer {
   <div id="amap-day-6" class="map-frame-wrap"></div>
   <div id="amap-status-6" class="map-fallback-link"></div>
   <div id="amap-day-6-live" class="map-live-note"></div>
-  <div class="map-note">地图由高德地图 JS API 驱动，路线为高德实时驾车路线规划结果（仅供参考，实际路况请以导航为准）。</div>
+  <div class="map-note">地图由高德地图 JS API 驱动，路线为高德"速度最快"算法实时规划结果，仅供参考；对于限速较低的山区风景公路（如独库公路）或刚通车、地图数据库可能尚未收录的新路（如阿禾公路），算法有可能判定绕行其它道路"更快"而没有真正画出本文描述的那条路，与下方"交通"表格里的文字描述（里程/车程/路名）如有出入，请以文字描述和出发前的导航实测结果为准。</div>
   <div class="map-legend">蓝色路线＝高德实时驾车路线规划 · 🏨红色标记＝推荐酒店 · ⛽标记＝高德实时搜索到的沿途加油站（自动检索，非人工核实，仅供参考，出发前请以导航实际结果为准）</div>
   
     
@@ -357,7 +364,7 @@ footer.site-footer {
 
   <div class="section-card">
     <h3><span class="icon">🚗</span>交通</h3>
-    <table class="info-table"><tr><td class="label">路线</td><td>喀纳斯换乘中心↔贾登峪区间车换乘（私家车不可驶入） + 贾登峪-布尔津-五彩滩自驾</td></tr><tr><td class="label">里程</td><td>喀纳斯换乘中心-贾登峪约50km（区间车）；贾登峪-五彩滩实测约147km（自驾）</td></tr><tr><td class="label">车程</td><td>上午半日游览约2-3小时；中午退房后换乘约1小时车程回贾登峪；取车后贾登峪-五彩滩自驾约3小时12分钟</td></tr><tr><td class="label">海拔变化</td><td>喀纳斯湖 ~1374m → 贾登峪 ~1350m → 五彩滩/布尔津 ~480m（下降）</td></tr><tr><td class="label">历史天气参考</td><td>贾登峪、喀纳斯湖区8月日间约20-24℃；布尔津/五彩滩河谷平原地带8月日间较热，傍晚风力较大</td></tr><tr><td class="label">是否需预约</td><td>无需额外办理，D4已购的二进票/住宿已覆盖这两晚；五彩滩门票约45-50元/人，建议网上提前购买</td></tr></table>
+    <table class="info-table"><tr><td class="label">路线</td><td>喀纳斯换乘中心↔贾登峪区间车换乘（私家车不可驶入） + 贾登峪-布尔津-五彩滩自驾</td></tr><tr><td class="label">里程</td><td>喀纳斯换乘中心-贾登峪约50km（区间车）；贾登峪-五彩滩实测约147km（自驾）</td></tr><tr><td class="label">车程</td><td>上午半日游览约2-3小时；中午退房后换乘约1小时车程回贾登峪；取车后贾登峪-五彩滩自驾约3小时12分钟</td></tr><tr><td class="label">海拔变化</td><td>喀纳斯湖 ~1374m → 贾登峪 ~1350m → 五彩滩/布尔津 ~480m（下降）</td></tr><tr><td class="label">历史天气参考</td><td>贾登峪、喀纳斯湖区8月日间约20-24℃；布尔津/五彩滩河谷平原地带8月日间较热，傍晚风力较大</td></tr><tr><td class="label">加油站</td><td>取车后建议先在贾登峪喀纳斯加油站(0906-6327566，09:00-23:00)加满油，再出发去五彩滩/布尔津；布尔津县城内加油站较多，当晚也可在县城补充</td></tr><tr><td class="label">是否需预约</td><td>无需额外办理，D4已购的二进票/住宿已覆盖这两晚；五彩滩门票约45-50元/人，建议网上提前购买</td></tr></table>
     
     <div class="warn-box"><strong>驾车注意事项：</strong>⚠v20新方案：贾登峪-五彩滩实测距离约147km、车程约3小时12分钟（另有资料给出130-180km的不同数字，147km这个来自专门查询"贾登峪到五彩滩"路书的数据，相对更可信，建议出发前仍用高德核实实时路况）；中午12点左右取车，若13点前能出发，傍晚16-17点左右可抵达五彩滩，正好赶上真正的日落效果（比原方案"白天路过"版本好得多）；当晚住布尔津，D7不需要再从贾登峪出发，直接从布尔津继续去魔鬼城即可，反而比原方案更省一段路（原"贾登峪→布尔津→乌尔禾"合计约350km的长途日，现在拆成了D6"贾登峪→五彩滩/布尔津"和D7"布尔津→乌尔禾"两个更轻松的半天）；⚠这个方案的前提是喀纳斯连住2晚（D4/D5），D6中午就能拿到车；如果喀纳斯只住1晚，D5晚上得赶最后一班区间车才能到贾登峪，当天已经来不及再开3小时去五彩滩看日落了，只能省下1天但错过五彩滩日落，两者是互斥的取舍，具体见D5的备注；建议当晚在🅿️贾登峪加油站(贾登峪喀纳斯加油站 0906-6327566，09:00-23:00)把油加满；⚠沿途景观：喀纳斯-贾登峪区间车途中会时而穿越幽深峡谷、时而路过茂密森林、时而横跨喀纳斯河，网友建议坐左侧（司机方向）座位视野更好；⏰建议时间预算（结合日落时间精算，仅供参考）：阿勒泰/布尔津地区8月21日日落时间没有查到当天的精确官方数据，是根据7月同地区的实测日落时间表按每日约变化1.5分钟的趋势外推得到的估算值，约21:10-21:20，建议出发前用天气APP查当天精确值；据此推算：8:00早餐，8:30-11:00上午半日游览（2.5小时），11:00退房+取行李，11:30换乘出发回贾登峪，12:30抵达取车，13:00出发（留出中饭简餐时间），3小时12分钟车程，约16:12抵达五彩滩，先游览+简餐晚饭，19:00起在栈道等光线变化，21:15左右日落，21:30-22:00结束返回布尔津酒店；这天是全程结束最晚的一天之一，需要注意体力安排</div>
   </div>
@@ -417,7 +424,7 @@ window._AMapSecurityConfig = { securityJsCode: "f5122d0c0aae74cc4c4e8f4ce0a196cc
 <script>
 (function(){
   var map = new AMap.Map("amap-day-6", { zoom: 6, resizeEnable: true });
-  var routePoints = [{"keyword":"喀纳斯湖","city":"阿勒泰地区"},{"keyword":"喀纳斯景区贾登峪游客中心","city":"阿勒泰地区"},{"keyword":"布尔津县","city":"阿勒泰地区"}];
+  var routePoints = [{"keyword":"喀纳斯湖","city":"阿勒泰地区"},{"keyword":"喀纳斯景区贾登峪游客中心","city":"阿勒泰地区"},{"keyword":"布尔津五彩滩风景区","city":"阿勒泰地区"}];
   var hotels = [{"name":"布尔津当地酒店（具体门店建议携程搜索确认）","city":"阿勒泰地区"}];
   var rentals = [];
 
@@ -465,12 +472,15 @@ window._AMapSecurityConfig = { securityJsCode: "f5122d0c0aae74cc4c4e8f4ce0a196cc
   function addGasStationMarkers(anchorLocs){
     if (!anchorLocs || anchorLocs.length === 0) return;
     var seen = {};
-    var placeSearch = new AMap.PlaceSearch({ pageSize: 3, extensions: "base" });
+    // A fresh AMap.PlaceSearch instance per call, since reusing one instance for
+    // concurrent searchNearBy calls can cause callbacks to clobber each other.
     anchorLocs.forEach(function(loc){
-      placeSearch.searchNearBy("加油站", loc, 15000, function(status, result){
-        if (status !== "complete" || !result || !result.poiList) return;
-        (result.poiList.pois || []).forEach(function(poi){
-          var key = poi.name + poi.location.toString();
+      var placeSearch = new AMap.PlaceSearch({ pageSize: 5, extensions: "base", citylimit: false });
+      placeSearch.searchNearBy("加油站", loc, 20000, function(status, result){
+        if (status !== "complete" || !result || !result.poiList || !result.poiList.pois) return;
+        result.poiList.pois.forEach(function(poi){
+          if (!poi.location) return;
+          var key = poi.name + "_" + poi.location.toString();
           if (seen[key]) return;
           seen[key] = true;
           new AMap.Marker({

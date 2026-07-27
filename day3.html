@@ -61,6 +61,12 @@ nav.day-nav a.active {
   color: var(--teal);
   font-weight: 600;
 }
+nav.day-nav .nav-sep {
+  color: rgba(255,255,255,0.7);
+  font-size: 12px;
+  margin-left: 4px;
+  white-space: nowrap;
+}
 main {
   max-width: 920px;
   margin: 0 auto;
@@ -322,8 +328,9 @@ footer.site-footer {
   <h1>北疆16日自驾行程</h1>
   <p>香港 ⇄ 乌鲁木齐 · 8月15日–8月30日 · 全自驾</p>
 </header>
-<nav class="day-nav"><a href="index.html" class="">总览</a><a href="day0.html" class="">D0</a><a href="day1.html" class="">D1</a><a href="day2.html" class="">D2</a><a href="day3.html" class="active">D3</a><a href="day4.html" class="">D4</a><a href="day5.html" class="">D5</a><a href="day6.html" class="">D6</a><a href="day7.html" class="">D7</a><a href="day8.html" class="">D8</a><a href="day9.html" class="">D9</a><a href="day10.html" class="">D10</a><a href="day11.html" class="">D11</a><a href="day12.html" class="">D12</a><a href="day13.html" class="">D13</a><a href="day14.html" class="">D14</a><a href="day15.html" class="">D15</a></nav>
+<nav class="day-nav"><a href="index.html" class="">总览</a><a href="day0.html" class="">D0</a><a href="day1.html" class="">D1</a><a href="day2.html" class="">D2</a><a href="day3.html" class="active">D3</a><a href="day4.html" class="">D4</a><a href="day5.html" class="">D5</a><a href="day6.html" class="">D6</a><a href="day7.html" class="">D7</a><a href="day8.html" class="">D8</a><a href="day9.html" class="">D9</a><a href="day10.html" class="">D10</a><a href="day11.html" class="">D11</a><a href="day12.html" class="">D12</a><a href="day13.html" class="">D13</a><a href="day14.html" class="">D14</a><a href="day15.html" class="">D15</a><span class="nav-sep">备选：</span><a href="day13a.html" class="">D13a</a><a href="day14a.html" class="">D14a</a></nav>
 <main>
+  
   <div class="day-title-block">
     <span class="day-num">Day 3 · 8月18日（周二）</span>
     <h2>禾木清晨看晨雾 → 自驾贾登峪</h2>
@@ -336,7 +343,7 @@ footer.site-footer {
   <div id="amap-day-3" class="map-frame-wrap"></div>
   <div id="amap-status-3" class="map-fallback-link"></div>
   <div id="amap-day-3-live" class="map-live-note"></div>
-  <div class="map-note">地图由高德地图 JS API 驱动，路线为高德实时驾车路线规划结果（仅供参考，实际路况请以导航为准）。</div>
+  <div class="map-note">地图由高德地图 JS API 驱动，路线为高德"速度最快"算法实时规划结果，仅供参考；对于限速较低的山区风景公路（如独库公路）或刚通车、地图数据库可能尚未收录的新路（如阿禾公路），算法有可能判定绕行其它道路"更快"而没有真正画出本文描述的那条路，与下方"交通"表格里的文字描述（里程/车程/路名）如有出入，请以文字描述和出发前的导航实测结果为准。</div>
   <div class="map-legend">蓝色路线＝高德实时驾车路线规划 · 🏨红色标记＝推荐酒店 · ⛽标记＝高德实时搜索到的沿途加油站（自动检索，非人工核实，仅供参考，出发前请以导航实际结果为准）</div>
   
     
@@ -356,7 +363,7 @@ footer.site-footer {
 
   <div class="section-card">
     <h3><span class="icon">🚗</span>交通</h3>
-    <table class="info-table"><tr><td class="label">路线</td><td>禾木-贾登峪山区公路（自驾）</td></tr><tr><td class="label">里程</td><td>约34-50km（不同信源数据有出入：一份资料给出34.3km，另一份泛称约50km，建议出发前用高德核实实时路线）</td></tr><tr><td class="label">车程</td><td>约1小时（山路，弯道较多）</td></tr><tr><td class="label">海拔变化</td><td>禾木 ~1200m → 贾登峪 ~1350m（小幅爬升）</td></tr><tr><td class="label">历史天气参考</td><td>早晚温差大，山路建议日间行驶</td></tr><tr><td class="label">是否需预约</td><td>无需额外办理边防证（白哈巴才需要，禾木-贾登峪段不涉及边境管理区）；⚠v20提醒：由于D4当天就要去白哈巴，边境管理区通行证（"移民局12367"小程序/App办理）最晚应该在今天（D3）或更早申请好，不要拖到D4当天才办</td></tr></table>
+    <table class="info-table"><tr><td class="label">路线</td><td>禾木-贾登峪山区公路（自驾）</td></tr><tr><td class="label">里程</td><td>约34-50km（不同信源数据有出入：一份资料给出34.3km，另一份泛称约50km，建议出发前用高德核实实时路线）</td></tr><tr><td class="label">车程</td><td>约1小时（山路，弯道较多）</td></tr><tr><td class="label">海拔变化</td><td>禾木 ~1200m → 贾登峪 ~1350m（小幅爬升）</td></tr><tr><td class="label">历史天气参考</td><td>早晚温差大，山路建议日间行驶</td></tr><tr><td class="label">加油站</td><td>贾登峪喀纳斯加油站(0906-6327566，09:00-23:00)，抵达贾登峪后即可加油，来自"原行网"官方公众号加油站点名单</td></tr><tr><td class="label">是否需预约</td><td>无需额外办理边防证（白哈巴才需要，禾木-贾登峪段不涉及边境管理区）；⚠v20提醒：由于D4当天就要去白哈巴，边境管理区通行证（"移民局12367"小程序/App办理）最晚应该在今天（D3）或更早申请好，不要拖到D4当天才办</td></tr></table>
     
     <div class="warn-box"><strong>驾车注意事项：</strong>⚠这段自驾许可是本次行程规划过程中，用户本人致电"原行网"官方热线（400 111 0906）确认可自驾通行，与网上多数游记攻略描述的"必须换乘"不一致（网传规则是旺季私家车禁止驶入、只能换乘的说法，另有一说是2026年9月15日起才试点开放200个自驾预约名额，本次8月出行理论上应在此试点之前）；这条自驾许可强烈建议出发前2-3天再次电话确认，因规则今年内已变动多次，以防口头确认与实际执行有出入；山路弯道多，注意驾驶安全；⚠关于最晚出发/离开时间：本次没有查到这段34-50km道路的官方"最晚通行时间"公告（阿禾公路的"7:30-10:30/15:00-18:30"时段限制只针对9米以上大型客车，不适用于本次的7座以下自驾车），但查到一条相关信息——附近路口的安保人员通常21:00后下班，间接说明天黑后这段山路的管理/救援响应会变弱；山路无照明、傍晚起野生动物（棕熊/野猪/狼）活动增多，建议无论如何都不要天黑后再上路，下午16:00-17:00前从禾木出发是比较稳妥的安排；⏰建议时间预算（估算，仅供参考）：6:00起看晨雾到8:30，早餐+悠闲上午（9:00-11:00），11:00退房出发，1小时车程，12:00抵达贾登峪办理入住，午餐12:30-13:30，下午自由休息，18:00-19:00晚餐，19:00后贾登峪傍晚活动看晚霞，全天宽松</div>
   </div>
@@ -474,12 +481,15 @@ window._AMapSecurityConfig = { securityJsCode: "f5122d0c0aae74cc4c4e8f4ce0a196cc
   function addGasStationMarkers(anchorLocs){
     if (!anchorLocs || anchorLocs.length === 0) return;
     var seen = {};
-    var placeSearch = new AMap.PlaceSearch({ pageSize: 3, extensions: "base" });
+    // A fresh AMap.PlaceSearch instance per call, since reusing one instance for
+    // concurrent searchNearBy calls can cause callbacks to clobber each other.
     anchorLocs.forEach(function(loc){
-      placeSearch.searchNearBy("加油站", loc, 15000, function(status, result){
-        if (status !== "complete" || !result || !result.poiList) return;
-        (result.poiList.pois || []).forEach(function(poi){
-          var key = poi.name + poi.location.toString();
+      var placeSearch = new AMap.PlaceSearch({ pageSize: 5, extensions: "base", citylimit: false });
+      placeSearch.searchNearBy("加油站", loc, 20000, function(status, result){
+        if (status !== "complete" || !result || !result.poiList || !result.poiList.pois) return;
+        result.poiList.pois.forEach(function(poi){
+          if (!poi.location) return;
+          var key = poi.name + "_" + poi.location.toString();
           if (seen[key]) return;
           seen[key] = true;
           new AMap.Marker({
