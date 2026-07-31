@@ -706,6 +706,22 @@ function renderDayPage(d, idx, navOverride) {
   const notesBox = t.notes ? `<div class="warn-box"><strong>驾车注意事项：</strong>${t.notes}</div>` : "";
   const resAlertBox = d.reservationAlert ? `<div class="warn-box"><strong>预约提醒：</strong>${d.reservationAlert}</div>` : "";
 
+  const sc = d.sunClothing;
+  const sunClothingRows = sc ? [
+    renderTransportRow("日出", sc.sunrise),
+    renderTransportRow("日落", sc.sunset),
+    renderTransportRow("白天气温参考", sc.tempHigh),
+    renderTransportRow("夜间气温参考", sc.tempLow),
+    renderTransportRow("紫外线", sc.uv),
+  ].join("") : "";
+  const sunClothingCard = sc ? `
+  <div class="section-card">
+    <h3><span class="icon">☀️</span>日出日落 &amp; 穿衣建议</h3>
+    <table class="info-table">${sunClothingRows}</table>
+    ${sc.clothing ? `<div class="warn-box"><strong>👕 穿衣建议：</strong>${sc.clothing}</div>` : ""}
+    ${sc.sourceNote ? `<div class="map-note">📌 数据来源与可信度：${sc.sourceNote}</div>` : ""}
+  </div>` : "";
+
   const activitiesHtml = (d.activities && d.activities.length > 0)
     ? d.activities.map(a => `
       <div class="activity-item">
@@ -780,6 +796,7 @@ ${navHtml(d.num)}
     ${resAlertBox}
     ${notesBox}
   </div>
+  ${sunClothingCard}
 
   <div class="section-card">
     <h3><span class="icon">📍</span>活动安排</h3>
