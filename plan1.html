@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>方案1 · 正向环线（阿勒泰 → 伊犁） - 北疆16日自驾行程</title>
+<style>
+:root {
+  --teal: #1F4E5F;
+  --teal-light: #2E6F86;
+  --sand: #F5EFE6;
+  --warn-bg: #FCEFC7;
+  --warn-border: #E0B94D;
+  --text: #2B2B2B;
+  --muted: #6B6B6B;
+  --card-bg: #FFFFFF;
+  --border: #E3DED3;
+  --radius: 10px;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: "PingFang SC", "Microsoft YaHei", "Helvetica Neue", Arial, sans-serif;
+  background: var(--sand);
+  color: var(--text);
+  line-height: 1.6;
+}
+header.site-header {
+  background: var(--teal);
+  color: white;
+  padding: 20px 24px;
+}
+header.site-header h1 {
+  margin: 0 0 4px 0;
+  font-size: 22px;
+}
+header.site-header p {
+  margin: 0;
+  opacity: 0.85;
+  font-size: 14px;
+}
+nav.day-nav {
+  background: var(--teal-light);
+  padding: 10px 16px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+}
+nav.day-nav a {
+  color: white;
+  text-decoration: none;
+  background: rgba(255,255,255,0.15);
+  padding: 5px 10px;
+  border-radius: 6px;
+  font-size: 13px;
+  white-space: nowrap;
+}
+nav.day-nav a.active {
+  background: white;
+  color: var(--teal);
+  font-weight: 600;
+}
+nav.day-nav .nav-sep {
+  color: rgba(255,255,255,0.7);
+  font-size: 12px;
+  margin-left: 4px;
+  white-space: nowrap;
+}
+/* v32新增：方案1/方案2 切换条与总览页的方案卡片 */
+nav.plan-switch {
+  display: flex; gap: 8px; flex-wrap: wrap;
+  background: #12333f; padding: 8px 12px;
+  border-bottom: 1px solid rgba(255,255,255,0.12);
+}
+nav.plan-switch a {
+  color: rgba(255,255,255,0.72); text-decoration: none;
+  font-size: 13px; font-weight: 600; padding: 5px 12px;
+  border-radius: 999px; border: 1px solid rgba(255,255,255,0.22);
+  white-space: nowrap;
+}
+nav.plan-switch a.active { background: var(--warn-border); color: #2B2B2B; border-color: var(--warn-border); }
+.plan-card {
+  border: 2px solid var(--teal-light); border-radius: var(--radius);
+  padding: 14px 16px; margin-bottom: 16px; background: #fff;
+}
+.plan-card h4 { margin: 0 0 6px; font-size: 16px; color: var(--teal); }
+.plan-card .plan-sub { font-size: 13px; color: var(--muted); margin-bottom: 8px; }
+.plan-card .plan-go {
+  display: inline-block; margin-top: 10px; padding: 7px 16px;
+  background: var(--teal); color: #fff; text-decoration: none;
+  border-radius: 999px; font-size: 13.5px; font-weight: 600;
+}
+.res-item { border-left: 3px solid var(--warn-border); padding: 8px 0 8px 12px; margin-bottom: 16px; }
+.res-item .res-name { font-weight: 700; font-size: 14.5px; color: var(--teal); }
+.res-item .res-when { font-size: 12.5px; color: var(--muted); margin: 2px 0 6px; }
+.res-item .res-body { font-size: 13.5px; }
+.res-item .res-body p { margin: 5px 0; }
+.defer-table { width: 100%; border-collapse: collapse; font-size: 13.5px; margin: 10px 0; }
+.defer-table th, .defer-table td { border: 1px solid var(--border); padding: 7px 9px; text-align: left; vertical-align: top; }
+.defer-table th { background: var(--sand); font-weight: 600; }
+main {
+  max-width: 920px;
+  margin: 0 auto;
+  padding: 20px 16px 60px;
+}
+.day-title-block {
+  margin-bottom: 20px;
+}
+.day-title-block .day-num {
+  display: inline-block;
+  background: var(--teal);
+  color: white;
+  padding: 3px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  margin-bottom: 8px;
+}
+.day-title-block h2 {
+  margin: 6px 0 4px;
+  font-size: 24px;
+  color: var(--teal);
+}
+.day-title-block .date-line {
+  color: var(--muted);
+  font-size: 14px;
+}
+.day-title-block .summary {
+  margin-top: 8px;
+  font-size: 15px;
+  color: var(--text);
+}
+.section-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 18px 20px;
+  margin-bottom: 18px;
+}
+.section-card h3 {
+  margin: 0 0 12px 0;
+  font-size: 16px;
+  color: var(--teal);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.section-card h3 .icon {
+  font-size: 18px;
+}
+.map-frame-wrap {
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  margin-bottom: 8px;
+  width: 100%;
+  height: 380px;
+  background: #eef1ec;
+}
+.map-fallback-link {
+  font-size: 13px;
+  color: var(--muted);
+  min-height: 16px;
+}
+.map-fallback-link a { color: var(--teal-light); }
+.map-note {
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 4px;
+}
+.map-legend {
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 4px;
+}
+table.info-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+table.info-table td {
+  padding: 7px 6px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+}
+table.info-table td.label {
+  width: 92px;
+  color: var(--muted);
+  white-space: nowrap;
+  font-weight: 600;
+}
+.warn-box {
+  background: var(--warn-bg);
+  border: 1px solid var(--warn-border);
+  border-radius: 8px;
+  padding: 10px 14px;
+  margin-top: 10px;
+  font-size: 13.5px;
+}
+.activity-item, .hotel-item {
+  padding: 10px 0;
+  border-bottom: 1px dashed var(--border);
+}
+.activity-item:last-child, .hotel-item:last-child { border-bottom: none; }
+.activity-item .name, .hotel-item .name {
+  font-weight: 600;
+  font-size: 14.5px;
+}
+.activity-item .meta, .hotel-item .meta {
+  color: var(--muted);
+  font-size: 12.5px;
+  margin: 2px 0 4px;
+}
+.activity-item .note, .hotel-item .note {
+  font-size: 13.5px;
+}
+.activity-item .intro {
+  font-size: 13.5px;
+  color: var(--text);
+  background: #F5F8F6;
+  border-left: 3px solid var(--teal-light);
+  padding: 6px 10px;
+  margin: 4px 0 6px;
+  border-radius: 4px;
+}
+.depth-box {
+  margin-top: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.depth-row {
+  font-size: 13px;
+  color: var(--text);
+}
+.depth-tag {
+  display: inline-block;
+  font-size: 11px;
+  padding: 1px 8px;
+  border-radius: 10px;
+  margin-right: 6px;
+  font-weight: 600;
+}
+.depth-tag.shallow {
+  background: #E3EDE8;
+  color: var(--teal-light);
+}
+.depth-tag.deep {
+  background: var(--teal);
+  color: white;
+}
+.food-list {
+  font-size: 14px;
+  padding-left: 18px;
+  margin: 0;
+}
+.food-list li { margin-bottom: 4px; }
+.empty-note {
+  color: var(--muted);
+  font-style: italic;
+  font-size: 14px;
+}
+.disclaimer {
+  font-size: 12.5px;
+  color: var(--muted);
+  background: #FBF8F2;
+  border: 1px dashed var(--border);
+  border-radius: 8px;
+  padding: 12px 14px;
+  margin-top: 24px;
+}
+.index-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.index-list li {
+  margin-bottom: 10px;
+}
+.index-list a {
+  display: block;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+  text-decoration: none;
+  color: var(--text);
+}
+.index-list a:hover { border-color: var(--teal-light); }
+.index-list .idx-day {
+  font-size: 12px;
+  color: white;
+  background: var(--teal);
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 12px;
+  margin-bottom: 4px;
+}
+.index-list .idx-title { font-weight: 600; font-size: 15px; color: var(--teal); }
+.index-list .idx-summary { font-size: 13px; color: var(--muted); margin-top: 2px; }
+.prevnext {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 24px;
+  gap: 10px;
+}
+.prevnext a {
+  flex: 1;
+  text-align: center;
+  padding: 12px;
+  background: var(--teal);
+  color: white;
+  text-decoration: none;
+  border-radius: 8px;
+  font-size: 14px;
+}
+.prevnext a.disabled {
+  background: var(--border);
+  color: var(--muted);
+  pointer-events: none;
+}
+footer.site-footer {
+  text-align: center;
+  color: var(--muted);
+  font-size: 12px;
+  padding: 20px;
+}
+.map-live-note {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--teal);
+  background: #EAF2E9;
+  border-radius: 6px;
+  padding: 6px 10px;
+  margin-top: 6px;
+  min-height: 14px;
+}
+.terrain-box {
+  background: #F1F6F3;
+  border-left: 3px solid var(--teal-light);
+  border-radius: 6px;
+  padding: 10px 14px;
+  font-size: 13.5px;
+  color: var(--text);
+  margin-top: 10px;
+  line-height: 1.6;
+}
+.terrain-box strong { color: var(--teal); }
+.elev-chart-wrap { margin-top: 10px; }
+.elev-chart { width: 100%; height: auto; display: block; }
+.elev-chart-note {
+  font-size: 11.5px;
+  color: var(--muted);
+  margin-top: 2px;
+}
+</style>
+</head>
+<body>
+<header class="site-header">
+  <h1>北疆16日自驾行程</h1>
+  <p>香港 ⇄ 乌鲁木齐 · 8月15日–8月30日 · 全自驾</p>
+</header>
+<nav class="plan-switch">
+  <a href="index.html" class="">🏠 首页</a>
+  <a href="plan1.html" class="active">方案1 · 正向（阿勒泰→伊犁）</a>
+  <a href="plan2.html" class="">方案2 · 反向（伊犁→阿勒泰）</a>
+</nav><nav class="day-nav"><a href="plan1.html" class="active">总览</a><a href="day0.html" class="">D0</a><a href="day1.html" class="">D1</a><a href="day2.html" class="">D2</a><a href="day3.html" class="">D3</a><a href="day4.html" class="">D4</a><a href="day5.html" class="">D5</a><a href="day6.html" class="">D6</a><a href="day7.html" class="">D7</a><a href="day8.html" class="">D8</a><a href="day9.html" class="">D9</a><a href="day10.html" class="">D10</a><a href="day11.html" class="">D11</a><a href="day12.html" class="">D12</a><a href="day13.html" class="">D13</a><a href="day14.html" class="">D14</a><a href="day15.html" class="">D15</a><span class="nav-sep">备选：</span><a href="day13a.html" class="">D13a</a><a href="day14a.html" class="">D14a</a></nav>
+<main>
+  <div class="day-title-block">
+    <span class="day-num">总览</span>
+    <h2>方案1 · 正向环线（阿勒泰 → 伊犁）</h2>
+  </div>
+  
+  <div class="section-card">
+    <h3><span class="icon">🗺️</span>全程路线总览</h3>
+    <div id="amap-index" class="map-frame-wrap"></div>
+    <div id="amap-index-status" class="map-fallback-link"></div>
+    <div class="map-note">每日路段均为高德实时驾车路线规划结果（真实道路轨迹），首次加载需依次请求16天路线，可能需要几秒钟。这张图画的是<strong>方案1（正向）</strong>的路线。</div>
+  </div>
+  <div class="section-card">
+    <h3><span class="icon">📅</span>逐日行程</h3>
+    <ul class="index-list">
+    <li><a href="day0.html">
+      <span class="idx-day">Day 0 · 8月15日（周六）</span>
+      <div class="idx-title">香港 → 乌鲁木齐（抵达日）</div>
+      <div class="idx-summary">傍晚航班抵达，直接入住酒店，不取车，无游览安排</div>
+    </a></li>
+    <li><a href="day1.html">
+      <span class="idx-day">Day 1 · 8月16日（周日）</span>
+      <div class="idx-title">乌鲁木齐 → 阿勒泰市（经S21沙漠公路，取车日）</div>
+      <div class="idx-summary">早晨取车后走沙漠高速直插北疆，路过克拉美丽沙漠公园，比原经布尔津方向更短，傍晚入住阿勒泰市</div>
+    </a></li>
+    <li><a href="day2.html">
+      <span class="idx-day">Day 2 · 8月17日（周一）</span>
+      <div class="idx-title">阿勒泰市 → 禾木游客服务中心（阿禾公路自驾） → 换乘大巴入村</div>
+      <div class="idx-summary">⚠v28更新：用户已实地确认，禾木村内不能驾车进入，车停在禾木游客服务中心，换乘景区大巴入村；沿新通车的阿禾公路自驾抵达服务中心，一路森林/湿地/草原风光</div>
+    </a></li>
+    <li><a href="day3.html">
+      <span class="idx-day">Day 3 · 8月18日（周二）</span>
+      <div class="idx-title">禾木清晨看晨雾 → 自驾贾登峪</div>
+      <div class="idx-summary">早起看晨雾，退房后自驾去贾登峪，入住贾登峪，为后三天喀纳斯/白哈巴做准备（v20变更：白哈巴改为D4当天往返，喀纳斯连住D4/D5两晚，D6中午回贾登峪取车）</div>
+    </a></li>
+    <li><a href="day4.html">
+      <span class="idx-day">Day 4 · 8月19日（周三）</span>
+      <div class="idx-title">贾登峪（自驾） → 喀纳斯换乘入住 → 当日往返白哈巴（3-4小时）</div>
+      <div class="idx-summary">⚠v20变更：白哈巴改为当天往返（不再过夜），车留贾登峪，换乘进喀纳斯办理入住，当天再坐区间车去白哈巴逛3-4小时，傍晚返回喀纳斯过夜</div>
+    </a></li>
+    <li><a href="day5.html">
+      <span class="idx-day">Day 5 · 8月20日（周四）</span>
+      <div class="idx-title">喀纳斯一日深度游（晨雾 + 三湾一湖 + 观鱼台）</div>
+      <div class="idx-summary">全天泡在喀纳斯核心区，清晨看晨雾，木栈道走三湾，登观鱼台俯瞰全湖，当晚继续住喀纳斯</div>
+    </a></li>
+    <li><a href="day6.html">
+      <span class="idx-day">Day 6 · 8月21日（周五）</span>
+      <div class="idx-title">喀纳斯半日游 → 中午退房换乘回贾登峪（取车） → 直奔五彩滩（傍晚日落，住布尔津）</div>
+      <div class="idx-summary">上午补一次喀纳斯没逛完的角落，中午退房换乘回贾登峪取车，取车后直接开往五彩滩看真正的日落，当晚住布尔津</div>
+    </a></li>
+    <li><a href="day7.html">
+      <span class="idx-day">Day 7 · 8月22日（周六）</span>
+      <div class="idx-title">布尔津 → 世界魔鬼城（白天游览） → 奎屯</div>
+      <div class="idx-summary">⚠v27变更：应驾友建议，D7不再在乌尔禾过夜，白天游览魔鬼城后继续开到奎屯，为D8缩短赛里木湖车程做准备；代价是放弃魔鬼城的傍晚日落光线，改为中午/午后场</div>
+    </a></li>
+    <li><a href="day8.html">
+      <span class="idx-day">Day 8 · 8月23日（周日）</span>
+      <div class="idx-title">奎屯 → 赛里木湖（下午入园，傍晚出园入住）</div>
+      <div class="idx-summary">⚠v27变更：D7已提前开到奎屯，这天车程缩短为奎屯-赛里木湖，中午前后即可抵达，下午入园环湖，傍晚出园入住，本次赛里木湖只住1晚（不再连住2晚）</div>
+    </a></li>
+    <li><a href="day9.html">
+      <span class="idx-day">Day 9 · 8月24日（周一）</span>
+      <div class="idx-title">赛里木湖（上午入园） → 果子沟 → 伊宁</div>
+      <div class="idx-summary">⚠v27变更：不再是0驾驶休整日，改为上午再入园玩半天（松树头等），中午退房，下午经果子沟大桥直奔伊宁，当晚住伊宁（为D10六星街+库尔德宁减负）</div>
+    </a></li>
+    <li><a href="day10.html">
+      <span class="idx-day">Day 10 · 8月25日（周二）</span>
+      <div class="idx-title">伊宁（六星街） → 库尔德宁 → 那拉提</div>
+      <div class="idx-summary">⚠v27变更：不再从赛里木湖出发（D9下午已到伊宁），当天只需完成"伊宁-库尔德宁-那拉提"这一段，比原方案明显更轻松</div>
+    </a></li>
+    <li><a href="day11.html">
+      <span class="idx-day">Day 11 · 8月26日（周三）</span>
+      <div class="idx-title">那拉提草原深度游 + 傍晚盘龙谷自驾</div>
+      <div class="idx-summary">空中草原轻徒步，傍晚幽静森林公路自驾</div>
+    </a></li>
+    <li><a href="day12.html">
+      <span class="idx-day">Day 12 · 8月27日（周四）</span>
+      <div class="idx-title">那拉提 → 唐布拉/孟克特古道（夜宿唐布拉，不返回那拉提）</div>
+      <div class="idx-summary">自驾进唐布拉方向，孟克特古道深度体验（或轻量版黑蜂庄园/小华山），当晚就近住唐布拉附近，为明天从乔尔玛入口直接衔接独库公路做准备</div>
+    </a></li>
+    <li><a href="day13.html">
+      <span class="idx-day">Day 13 · 8月28日（周五）</span>
+      <div class="idx-title">唐布拉 → 乔尔玛（入口） → 独库公路北段 → 奎屯/独山子 ⚠ 史诗级长途日</div>
+      <div class="idx-summary">从乔尔玛入口衔接独库公路北段，翻越哈希勒根达坂，一日看四季（默认方案：当晚住奎屯/独山子，次日D14再返乌鲁木齐）</div>
+    </a></li>
+    <li><a href="day14.html">
+      <span class="idx-day">Day 14 · 8月29日（周六）</span>
+      <div class="idx-title">奎屯 → 乌鲁木齐（还车） → 市区深度游（博物馆+大巴扎）</div>
+      <div class="idx-summary">⚠v22变更：取消天山天池，直接从奎屯返回乌鲁木齐，把省下来的时间留给市区（博物馆+大巴扎），理由见下方notes</div>
+    </a></li>
+    <li><a href="day15.html">
+      <span class="idx-day">Day 15 · 8月30日（周日）</span>
+      <div class="idx-title">乌鲁木齐 → 香港</div>
+      <div class="idx-summary">无游玩安排，从容返程</div>
+    </a></li></ul>
+  </div>
+  
+  <div class="section-card">
+    <h3><span class="icon">🔀</span>备选方案（可选，不计入正式16天）</h3>
+    <p class="empty-note">D13a+D14a 是"独库公路当天直达乌鲁木齐"的合并方案，与默认的D13+D14二选一使用，详见各自页面内的说明。</p>
+    <ul class="index-list">
+    <li><a href="day13a.html">
+      <span class="idx-day">D13a · 8月28日（周五，合并方案）</span>
+      <div class="idx-title">【备选】唐布拉 → 乔尔玛 → 独库公路北段 → 独山子 → 乌鲁木齐（当日还车，不去天山天池）</div>
+      <div class="idx-summary">⚠合并方案：把默认D13+D14合并为一天，翻越独库公路后不在奎屯/独山子过夜，直接继续开到乌鲁木齐当晚还车；代价是全天驾车时间明显更长、更累，换来的是D14a变成真正空闲的一天</div>
+    </a></li>
+    <li><a href="day14a.html">
+      <span class="idx-day">D14a · 8月29日（周六，合并方案）</span>
+      <div class="idx-title">【备选】乌鲁木齐自由日（已还车，D13a合并方案专属）</div>
+      <div class="idx-summary">⚠仅适用于选择了D13a合并方案的情况：当晚已在乌鲁木齐、车已还，这是真正意义上的空闲一天，可在"天山天池一日游"和"市区深度游（博物馆+大巴扎+更多市区景点）"之间选择，甚至两者兼顾（如体力和时间允许）</div>
+    </a></li></ul>
+  </div>
+  
+  <div class="disclaimer">本网站所有里程、车程、预约规则、价格均为出行前整理的参考信息，存在多来源冲突或未查实的字段已逐一标注。请出发前用高德/百度地图核实实时路况，并通过官方渠道确认最新预约与门票政策。</div>
+</main>
+<script>
+window._AMapSecurityConfig = { securityJsCode: "f5122d0c0aae74cc4c4e8f4ce0a196cc" };
+</script>
+<script src="https://webapi.amap.com/maps?v=2.0&key=1e292eeef1aae1b6eb63c7989ae14dbb&plugin=AMap.Driving,AMap.Geocoder,AMap.PlaceSearch"></script>
+<script>
+(function(){
+  // Explicit initial center on Urumqi/Xinjiang -- without this AMap.Map falls back to its
+  // own default (roughly Beijing) until setFitView() runs, which briefly (or, if something
+  // downstream hangs, permanently) shows the wrong part of the country.
+  var map = new AMap.Map("amap-index", { zoom: 6, center: [87.62, 43.82], resizeEnable: true });
+  var days = [{"num":0,"points":[{"keyword":"乌鲁木齐地窝堡国际机场","city":"乌鲁木齐市"}]},{"num":1,"points":[{"keyword":"乌鲁木齐市","city":"乌鲁木齐市"},{"keyword":"阿勒泰市","city":"阿勒泰地区"}]},{"num":2,"points":[{"keyword":"阿勒泰市","city":"阿勒泰地区"},{"keyword":"小东沟森林公园","city":"阿勒泰地区"},{"keyword":"禾木村","city":"阿勒泰地区"}]},{"num":3,"points":[{"keyword":"禾木村","city":"阿勒泰地区"},{"keyword":"喀纳斯景区贾登峪游客中心","city":"阿勒泰地区"}]},{"num":4,"points":[{"keyword":"喀纳斯景区贾登峪游客中心","city":"阿勒泰地区"},{"keyword":"喀纳斯湖","city":"阿勒泰地区"},{"keyword":"白哈巴","city":"阿勒泰地区"}]},{"num":5,"points":[{"keyword":"喀纳斯湖","city":"阿勒泰地区"}]},{"num":6,"points":[{"keyword":"喀纳斯湖","city":"阿勒泰地区"},{"keyword":"喀纳斯景区贾登峪游客中心","city":"阿勒泰地区"},{"keyword":"布尔津五彩滩风景区","city":"阿勒泰地区"}]},{"num":7,"points":[{"keyword":"布尔津县","city":"阿勒泰地区"},{"keyword":"世界魔鬼城","city":"克拉玛依市"},{"keyword":"奎屯市","city":"奎屯市"}]},{"num":8,"points":[{"keyword":"奎屯市","city":"奎屯市"},{"keyword":"赛里木湖","city":"博尔塔拉蒙古自治州"}]},{"num":9,"points":[{"keyword":"赛里木湖","city":"博尔塔拉蒙古自治州"},{"keyword":"松树头","city":"博尔塔拉蒙古自治州"},{"keyword":"伊宁市","city":"伊宁市"}]},{"num":10,"points":[{"keyword":"伊宁市六星街","city":"伊宁市"},{"keyword":"库尔德宁","city":"伊犁哈萨克自治州"},{"keyword":"那拉提镇","city":"伊犁哈萨克自治州"}]},{"num":11,"points":[{"keyword":"那拉提草原景区","city":"伊犁哈萨克自治州"}]},{"num":12,"points":[{"keyword":"那拉提镇","city":"伊犁哈萨克自治州"},{"keyword":"唐布拉草原","city":"伊犁哈萨克自治州"}]},{"num":13,"points":[{"keyword":"唐布拉草原","city":"伊犁哈萨克自治州"},{"keyword":"乔尔玛烈士陵园","city":"伊犁哈萨克自治州"},{"keyword":"哈希勒根达坂","city":"伊犁哈萨克自治州"},{"keyword":"独山子大峡谷","city":"克拉玛依市"},{"keyword":"独山子区","city":"克拉玛依市"}]},{"num":14,"points":[{"keyword":"独山子区","city":"克拉玛依市"},{"keyword":"乌鲁木齐地窝堡国际机场","city":"乌鲁木齐市"}]},{"num":15,"points":[{"keyword":"乌鲁木齐地窝堡国际机场","city":"乌鲁木齐市"}]}];
+  var pending = days.length;
+  var doneCalled = {};
+
+  function geocode(address, city) {
+    return new Promise(function(resolve){
+      var opts = city ? { city: city } : {};
+      var g = new AMap.Geocoder(opts);
+      g.getLocation(address, function(status, result){
+        if (status === "complete" && result.geocodes && result.geocodes.length) {
+          resolve(result.geocodes[0].location);
+        } else {
+          resolve(null);
+        }
+      });
+    });
+  }
+  function hotelIcon(){
+    return new AMap.Icon({ size: new AMap.Size(25,34), image: "https://webapi.amap.com/theme/v1.3/markers/n/mark_r.png", imageSize: new AMap.Size(25,34) });
+  }
+  function rentalIcon(){
+    return new AMap.Icon({ size: new AMap.Size(25,34), image: "https://webapi.amap.com/theme/v1.3/markers/n/mark_g.png", imageSize: new AMap.Size(25,34) });
+  }
+  function gasIcon(){
+    return new AMap.Icon({ size: new AMap.Size(19,33), image: "https://webapi.amap.com/theme/v1.3/markers/n/mark_bs.png", imageSize: new AMap.Size(19,33) });
+  }
+
+  function markDone(dayNum){
+    if (doneCalled[dayNum]) return; // guard against double-calling for the same day
+    doneCalled[dayNum] = true;
+    pending--;
+    var el = document.getElementById("amap-index-status");
+    if (el) el.innerHTML = "正在加载全程" + days.length + "天真实驾车路线，已完成 " + (days.length - pending) + "/" + days.length + "…";
+    if (pending <= 0) {
+      map.setFitView();
+      if (el) el.innerHTML = "";
+    }
+  }
+
+  document.getElementById("amap-index-status").innerHTML = "正在加载全程" + days.length + "天真实驾车路线，请稍候…";
+
+  // Processed ONE day at a time (not all fired in parallel) with a short gap between each --
+  // firing 13-16 concurrent AMap.Geocoder + AMap.Driving requests at once was overloading the
+  // API and causing some individual day segments to silently fail to draw. A per-day timeout
+  // also guarantees we move on (and eventually call setFitView) even if one request hangs.
+  function processDay(i){
+    if (i >= days.length) return;
+    var day = days[i];
+    var pts = day.points;
+    var settled = false;
+    var timeoutId = setTimeout(function(){
+      if (settled) return;
+      settled = true;
+      markDone(day.num);
+      setTimeout(function(){ processDay(i + 1); }, 150);
+    }, 8000);
+    function finish(){
+      if (settled) return;
+      settled = true;
+      clearTimeout(timeoutId);
+      markDone(day.num);
+      setTimeout(function(){ processDay(i + 1); }, 150);
+    }
+    try {
+      if (pts.length === 1) {
+        geocode(pts[0].keyword, pts[0].city).then(function(loc){
+          if (loc) {
+            new AMap.Marker({ position: loc, map: map, label: { content: "D" + day.num, direction: "top" }, title: pts[0].keyword });
+          }
+          finish();
+        }).catch(finish);
+      } else {
+        Promise.all(pts.map(function(p){ return geocode(p.keyword, p.city); })).then(function(locs){
+          var validIdx = [];
+          locs.forEach(function(l, idx){ if (l) validIdx.push(idx); });
+          if (validIdx.length < 2) { finish(); return; }
+          var start = locs[validIdx[0]];
+          var end = locs[validIdx[validIdx.length - 1]];
+          var mid = validIdx.slice(1, -1).map(function(idx){ return locs[idx]; });
+          // Note: no map option passed to the constructor here on purpose -- AMap.Driving
+          // auto-renders its own default start/end marker pair whenever a map is supplied, and
+          // with many day-routes chained onto one shared overview map that produced multiple
+          // stray marker labels. We draw the route manually as a plain polyline instead, so the
+          // only markers on this map are our intentional day-number labels.
+          var driving = new AMap.Driving({ policy: 0 });
+          try {
+            driving.search(start, end, { waypoints: mid }, function(status, result){
+              if (status === "complete" && result && result.routes && result.routes[0]) {
+                var path = [];
+                result.routes[0].steps.forEach(function(step){ path = path.concat(step.path); });
+                new AMap.Polyline({ map: map, path: path, strokeColor: "#2E6F86", strokeWeight: 4, strokeOpacity: 0.85 });
+              }
+              new AMap.Marker({ position: end, map: map, label: { content: "D" + day.num, direction: "top" }, title: pts[pts.length - 1].keyword });
+              finish();
+            });
+          } catch (e) { finish(); }
+        }).catch(finish);
+      }
+    } catch (e) { finish(); }
+  }
+  processDay(0);
+  // Absolute safety net: whatever else happens, don't leave the map stuck showing the
+  // default view forever if some request never resolves.
+  setTimeout(function(){
+    if (pending > 0) {
+      map.setFitView();
+      var el = document.getElementById("amap-index-status");
+      if (el) el.innerHTML = "部分路线加载超时，已显示已完成的部分，可刷新页面重试。";
+    }
+  }, 60000);
+})();
+</script>
+<footer class="site-footer">北疆16日自驾行程 · 生成于本次行程规划对话 · 出行前请务必核实实时信息</footer>
+</body></html>
