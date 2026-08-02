@@ -67,6 +67,38 @@ nav.day-nav .nav-sep {
   margin-left: 4px;
   white-space: nowrap;
 }
+/* v32新增：方案1/方案2 切换条与总览页的方案卡片 */
+nav.plan-switch {
+  display: flex; gap: 8px; flex-wrap: wrap;
+  background: #12333f; padding: 8px 12px;
+  border-bottom: 1px solid rgba(255,255,255,0.12);
+}
+nav.plan-switch a {
+  color: rgba(255,255,255,0.72); text-decoration: none;
+  font-size: 13px; font-weight: 600; padding: 5px 12px;
+  border-radius: 999px; border: 1px solid rgba(255,255,255,0.22);
+  white-space: nowrap;
+}
+nav.plan-switch a.active { background: var(--warn-border); color: #2B2B2B; border-color: var(--warn-border); }
+.plan-card {
+  border: 2px solid var(--teal-light); border-radius: var(--radius);
+  padding: 14px 16px; margin-bottom: 16px; background: #fff;
+}
+.plan-card h4 { margin: 0 0 6px; font-size: 16px; color: var(--teal); }
+.plan-card .plan-sub { font-size: 13px; color: var(--muted); margin-bottom: 8px; }
+.plan-card .plan-go {
+  display: inline-block; margin-top: 10px; padding: 7px 16px;
+  background: var(--teal); color: #fff; text-decoration: none;
+  border-radius: 999px; font-size: 13.5px; font-weight: 600;
+}
+.res-item { border-left: 3px solid var(--warn-border); padding: 8px 0 8px 12px; margin-bottom: 16px; }
+.res-item .res-name { font-weight: 700; font-size: 14.5px; color: var(--teal); }
+.res-item .res-when { font-size: 12.5px; color: var(--muted); margin: 2px 0 6px; }
+.res-item .res-body { font-size: 13.5px; }
+.res-item .res-body p { margin: 5px 0; }
+.defer-table { width: 100%; border-collapse: collapse; font-size: 13.5px; margin: 10px 0; }
+.defer-table th, .defer-table td { border: 1px solid var(--border); padding: 7px 9px; text-align: left; vertical-align: top; }
+.defer-table th { background: var(--sand); font-weight: 600; }
 main {
   max-width: 920px;
   margin: 0 auto;
@@ -328,7 +360,11 @@ footer.site-footer {
   <h1>北疆16日自驾行程</h1>
   <p>香港 ⇄ 乌鲁木齐 · 8月15日–8月30日 · 全自驾</p>
 </header>
-<nav class="day-nav"><a href="index.html" class="">总览</a><a href="day0.html" class="">D0</a><a href="day1.html" class="">D1</a><a href="day2.html" class="">D2</a><a href="day3.html" class="">D3</a><a href="day4.html" class="">D4</a><a href="day5.html" class="">D5</a><a href="day6.html" class="">D6</a><a href="day7.html" class="">D7</a><a href="day8.html" class="active">D8</a><a href="day9.html" class="">D9</a><a href="day10.html" class="">D10</a><a href="day11.html" class="">D11</a><a href="day12.html" class="">D12</a><a href="day13.html" class="">D13</a><a href="day14.html" class="">D14</a><a href="day15.html" class="">D15</a><span class="nav-sep">备选：</span><a href="day13a.html" class="">D13a</a><a href="day14a.html" class="">D14a</a></nav>
+<nav class="plan-switch">
+  <a href="index.html" class="">🏠 总览</a>
+  <a href="day0.html" class="active">方案1 · 正向（阿勒泰→伊犁）</a>
+  <a href="p2day0.html" class="">方案2 · 反向（伊犁→阿勒泰）</a>
+</nav><nav class="day-nav"><a href="index.html" class="">总览</a><a href="day0.html" class="">D0</a><a href="day1.html" class="">D1</a><a href="day2.html" class="">D2</a><a href="day3.html" class="">D3</a><a href="day4.html" class="">D4</a><a href="day5.html" class="">D5</a><a href="day6.html" class="">D6</a><a href="day7.html" class="">D7</a><a href="day8.html" class="active">D8</a><a href="day9.html" class="">D9</a><a href="day10.html" class="">D10</a><a href="day11.html" class="">D11</a><a href="day12.html" class="">D12</a><a href="day13.html" class="">D13</a><a href="day14.html" class="">D14</a><a href="day15.html" class="">D15</a><span class="nav-sep">备选：</span><a href="day13a.html" class="">D13a</a><a href="day14a.html" class="">D14a</a></nav>
 <main>
   
   <div class="day-title-block">
