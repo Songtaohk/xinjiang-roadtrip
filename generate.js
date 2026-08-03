@@ -4,6 +4,8 @@ const { TRIP, DAYS, ALT_DAYS } = require("./data.js");
 // v32新增：方案2（反向环线）。方案1（DAYS）保持完全不变，方案2的数据独立放在 plan2.js，
 // 页面输出为 p2day{n}.html，与方案1的 day{n}.html 完全隔离，互不覆盖。
 const { PLAN2_META, PLAN2_DAYS } = require("./plan2.js");
+// v34新增：两个方案通用的预约总表与车辆故障处理，渲染在首页
+const { ROAD_BOOKINGS, SITE_BOOKINGS, BREAKDOWN } = require("./common.js");
 
 const OUT = __dirname;
 
@@ -117,15 +119,16 @@ const WAYPOINTS_CN_P2 = {
     { keyword: "石河子市", city: "石河子市" },
     { keyword: "奎屯市", city: "奎屯市" },
   ],
+  // v34：全部改用行政地名优先（Geocoder 对行政区划最可靠），POI 名称只在没有替代时使用，
+  // 并已给 geocode() 加了 PlaceSearch 兜底，避免 POI 解析失败导致地图空白/路线画错。
   2: [
     { keyword: "独山子区", city: "克拉玛依市" },
-    { keyword: "哈希勒根达坂", city: "伊犁哈萨克自治州" },
-    { keyword: "乔尔玛烈士陵园", city: "伊犁哈萨克自治州" },
-    { keyword: "唐布拉草原", city: "伊犁哈萨克自治州" },
+    { keyword: "乔尔玛", city: "伊犁哈萨克自治州" },
+    { keyword: "孟克特旅游景区", city: "伊犁哈萨克自治州" },
   ],
   3: [
-    { keyword: "唐布拉草原", city: "伊犁哈萨克自治州" },
-    { keyword: "孟克特古道", city: "伊犁哈萨克自治州" },
+    { keyword: "孟克特旅游景区", city: "伊犁哈萨克自治州" },
+    { keyword: "尼勒克县种蜂场", city: "伊犁哈萨克自治州" },
     { keyword: "尼勒克县", city: "伊犁哈萨克自治州" },
   ],
   4: [
@@ -136,15 +139,20 @@ const WAYPOINTS_CN_P2 = {
   ],
   5: [
     { keyword: "昭苏县", city: "伊犁哈萨克自治州" },
-    { keyword: "夏塔景区", city: "伊犁哈萨克自治州" },
+    { keyword: "夏塔乡", city: "伊犁哈萨克自治州" },
+    { keyword: "夏塔古道", city: "伊犁哈萨克自治州" },
   ],
+  // v34修复：原来用"白石峰"（POI，解析失败）导致高德没有走 S237 伊昭公路，
+  // 改用伊昭公路沿线的行政地名强制上线：昭苏 → 加尕斯台镇(S237 K44，进山前最后一个建制镇)
+  // → 察布查尔县城 → 伊宁。来源：察布查尔县政府官网、伊犁州政府绕行公告。
   6: [
     { keyword: "昭苏县", city: "伊犁哈萨克自治州" },
-    { keyword: "白石峰", city: "伊犁哈萨克自治州" },
+    { keyword: "加尕斯台镇", city: "伊犁哈萨克自治州" },
+    { keyword: "察布查尔锡伯自治县", city: "伊犁哈萨克自治州" },
     { keyword: "伊宁市", city: "伊宁市" },
   ],
   7: [
-    { keyword: "伊宁市六星街", city: "伊宁市" },
+    { keyword: "伊宁市", city: "伊宁市" },
     { keyword: "果子沟大桥", city: "伊犁哈萨克自治州" },
     { keyword: "赛里木湖", city: "博尔塔拉蒙古自治州" },
   ],
@@ -155,7 +163,8 @@ const WAYPOINTS_CN_P2 = {
   ],
   9: [
     { keyword: "奎屯市", city: "奎屯市" },
-    { keyword: "世界魔鬼城", city: "克拉玛依市" },
+    { keyword: "克拉玛依市", city: "克拉玛依市" },
+    { keyword: "乌尔禾区", city: "克拉玛依市" },
     { keyword: "布尔津县", city: "阿勒泰地区" },
   ],
   10: [
@@ -680,9 +689,21 @@ const JS_HELPERS = `
       g.getLocation(address, function(status, result){
         if (status === "complete" && result.geocodes && result.geocodes.length) {
           resolve(result.geocodes[0].location);
-        } else {
-          resolve(null);
+          return;
         }
+        // v34修复：AMap.Geocoder 是"地址"解析器，只对行政地名（市/县/区/乡镇）可靠，
+        // 对"哈希勒根达坂""乔尔玛烈士陵园""唐布拉草原""白石峰"这类 POI 名称经常解析失败。
+        // 失败的途经点会被静默跳过，导致地图空白或画出完全错误的路线。
+        // 这里退回 AMap.PlaceSearch（POI 检索）再试一次。
+        var ps = new AMap.PlaceSearch({ pageSize: 1, extensions: "base", citylimit: false });
+        if (city) { try { ps.setCity(city); } catch (e) {} }
+        ps.search(address, function(s2, r2){
+          if (s2 === "complete" && r2 && r2.poiList && r2.poiList.pois && r2.poiList.pois.length) {
+            resolve(r2.poiList.pois[0].location);
+          } else {
+            resolve(null);
+          }
+        });
       });
     });
   }
@@ -1106,11 +1127,63 @@ ${planSwitchHtml(0)}
       <div class="idx-summary"><strong>✅ 优势：</strong>新增昭苏、夏塔、伊昭公路（“小独库”）三个方案1没有的项目；免除了那拉提当天抢票这个最高风险环节，也不再需要白哈巴的边境管理区通行证；伊犁草原排在前半程，草相对更绿。<br><strong>⚠️ 代价：</strong>独库公路被排到D2（取车后第2天），预约提前量很紧，<strong>必须在出发前就拿到租车的车牌号并提前预约</strong>；8/17禾木和8/18贾登峪两笔<strong>不可取消</strong>的订单日期对不上，需要跟商家协商改期（不保证成功）；放弃那拉提、库尔德宁、白哈巴；喀纳斯压缩为1晚。</div>
       <a class="plan-go" href="plan2.html">进入方案2 →</a>
     </div>
-    <div class="warn-box"><strong>关于"反向是否更好"的诚实结论：</strong>提出反向方案的原始理由是"初秋去阿勒泰更好、夏末伊犁草泛黄要趁早"。本次核查后发现：喀纳斯/禾木的金秋期集中在<strong>9月中下旬至10月初</strong>（9月20日前后常被作为峰值参考），8月15-30日全程都是绿色夏景，所以<strong>阿勒泰段无论排在前还是后，看到的都是同一种景色，这个理由在本次时间窗口内并不成立</strong>；伊犁方向确实越早越绿（攻略原文：唐布拉"8月下旬开始偏黄"、那拉提"8月草木开始泛黄"、赛里木湖"8月草原开始变黄"），反向对伊犁段略有利，但属于"8月中旬 vs 8月下旬"的程度差异，不是质变——因为无论怎么排，最早也要8月17日前后才到伊犁，早已过了攻略反复强调的6-7月最佳花期。<strong>所以反向方案的真正价值在于它容纳了昭苏、夏塔和伊昭公路，而不在季节。</strong></div>
+    <div class="warn-box" id="season"><strong>关于"反向是否更好"的诚实结论：</strong>提出反向方案的原始理由是"初秋去阿勒泰更好、夏末伊犁草泛黄要趁早"。本次核查后发现：喀纳斯/禾木的金秋期集中在<strong>9月中下旬至10月初</strong>（9月20日前后常被作为峰值参考），8月15-30日全程都是绿色夏景，所以<strong>阿勒泰段无论排在前还是后，看到的都是同一种景色，这个理由在本次时间窗口内并不成立</strong>；伊犁方向确实越早越绿（攻略原文：唐布拉"8月下旬开始偏黄"、那拉提"8月草木开始泛黄"、赛里木湖"8月草原开始变黄"），反向对伊犁段略有利，但属于"8月中旬 vs 8月下旬"的程度差异，不是质变——因为无论怎么排，最早也要8月17日前后才到伊犁，早已过了攻略反复强调的6-7月最佳花期。<strong>所以反向方案的真正价值在于它容纳了昭苏、夏塔和伊昭公路，而不在季节。</strong></div>
   </div>
+  ${bookingSectionsHtml()}
+  ${breakdownSectionHtml()}
   <div class="disclaimer">${TRIP.disclaimer}</div>
 </main>
 ${footHtml()}`;
+}
+
+// v34新增：首页的三大通用板块——道路预约、景区预约、车辆故障处理
+function bookingItemHtml(b) {
+  return `
+    <div class="res-item">
+      <div class="res-name">${b.need} ${b.name}</div>
+      <div class="res-when">适用：${b.plans}</div>
+      <div class="res-body">
+        <p><strong>规则：</strong>${b.detail}</p>
+        <p><strong>渠道：</strong>${b.channel}</p>
+        <p><strong>注意：</strong>${b.risk}</p>
+      </div>
+    </div>`;
+}
+
+function bookingSectionsHtml() {
+  return `
+  <div class="section-card">
+    <h3><span class="icon">🛣️</span>全程道路预约与通行管制</h3>
+    <p class="empty-note">下面每一条都标注了它属于哪个方案。⚠️独库公路那一条是全程最容易翻车的环节，务必读完。</p>
+    ${ROAD_BOOKINGS.map(bookingItemHtml).join("")}
+  </div>
+  <div class="section-card">
+    <h3><span class="icon">🎫</span>全程景区预约与购票</h3>
+    <p class="empty-note">按"需不需要抢/需不需要提前办"排序，🚨的几项都有硬性时间要求，漏掉会直接影响当天行程。</p>
+    ${SITE_BOOKINGS.map(bookingItemHtml).join("")}
+  </div>`;
+}
+
+function breakdownSectionHtml() {
+  const blk = (b) => `
+    <div class="res-item">
+      <div class="res-name">${b.title}</div>
+      <div class="res-body">
+        ${b.intro ? `<p>${b.intro}</p>` : ""}
+        <ul style="margin:6px 0;padding-left:20px;">${b.items.map(i => `<li style="margin:5px 0;">${i}</li>`).join("")}</ul>
+      </div>
+    </div>`;
+  return `
+  <div class="section-card">
+    <h3><span class="icon">🔧</span>路上车辆发生故障怎么办</h3>
+    <div class="warn-box">${BREAKDOWN.principle}</div>
+    ${blk(BREAKDOWN.before)}
+    ${blk(BREAKDOWN.onSite)}
+    ${blk(BREAKDOWN.skills)}
+    ${blk(BREAKDOWN.routeRisks)}
+    ${blk(BREAKDOWN.noSignal)}
+    <p class="empty-note">${BREAKDOWN.disclaimer}</p>
+  </div>`;
 }
 
 // v33：每个方案各有一个独立的总览页（plan1.html / plan2.html）
