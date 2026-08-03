@@ -490,34 +490,43 @@ window._AMapSecurityConfig = { securityJsCode: "f5122d0c0aae74cc4c4e8f4ce0a196cc
   // own default (roughly Beijing) until setFitView() runs, which briefly (or, if something
   // downstream hangs, permanently) shows the wrong part of the country.
   var map = new AMap.Map("amap-index", { zoom: 6, center: [87.62, 43.82], resizeEnable: true });
-  var days = [{"num":0,"points":[{"keyword":"乌鲁木齐地窝堡国际机场","city":"乌鲁木齐市"}]},{"num":1,"points":[{"keyword":"乌鲁木齐市","city":"乌鲁木齐市"},{"keyword":"阿勒泰市","city":"阿勒泰地区"}]},{"num":2,"points":[{"keyword":"阿勒泰市","city":"阿勒泰地区"},{"keyword":"小东沟森林公园","city":"阿勒泰地区"},{"keyword":"禾木村","city":"阿勒泰地区"}]},{"num":3,"points":[{"keyword":"禾木村","city":"阿勒泰地区"},{"keyword":"喀纳斯景区贾登峪游客中心","city":"阿勒泰地区"}]},{"num":4,"points":[{"keyword":"喀纳斯景区贾登峪游客中心","city":"阿勒泰地区"},{"keyword":"喀纳斯湖","city":"阿勒泰地区"},{"keyword":"白哈巴","city":"阿勒泰地区"}]},{"num":5,"points":[{"keyword":"喀纳斯湖","city":"阿勒泰地区"}]},{"num":6,"points":[{"keyword":"喀纳斯湖","city":"阿勒泰地区"},{"keyword":"喀纳斯景区贾登峪游客中心","city":"阿勒泰地区"},{"keyword":"布尔津五彩滩风景区","city":"阿勒泰地区"}]},{"num":7,"points":[{"keyword":"布尔津县","city":"阿勒泰地区"},{"keyword":"世界魔鬼城","city":"克拉玛依市"},{"keyword":"奎屯市","city":"奎屯市"}]},{"num":8,"points":[{"keyword":"奎屯市","city":"奎屯市"},{"keyword":"赛里木湖","city":"博尔塔拉蒙古自治州"}]},{"num":9,"points":[{"keyword":"赛里木湖","city":"博尔塔拉蒙古自治州"},{"keyword":"松树头","city":"博尔塔拉蒙古自治州"},{"keyword":"伊宁市","city":"伊宁市"}]},{"num":10,"points":[{"keyword":"伊宁市六星街","city":"伊宁市"},{"keyword":"库尔德宁","city":"伊犁哈萨克自治州"},{"keyword":"那拉提镇","city":"伊犁哈萨克自治州"}]},{"num":11,"points":[{"keyword":"那拉提草原景区","city":"伊犁哈萨克自治州"}]},{"num":12,"points":[{"keyword":"那拉提镇","city":"伊犁哈萨克自治州"},{"keyword":"唐布拉草原","city":"伊犁哈萨克自治州"}]},{"num":13,"points":[{"keyword":"唐布拉草原","city":"伊犁哈萨克自治州"},{"keyword":"乔尔玛烈士陵园","city":"伊犁哈萨克自治州"},{"keyword":"哈希勒根达坂","city":"伊犁哈萨克自治州"},{"keyword":"独山子大峡谷","city":"克拉玛依市"},{"keyword":"独山子区","city":"克拉玛依市"}]},{"num":14,"points":[{"keyword":"独山子区","city":"克拉玛依市"},{"keyword":"乌鲁木齐地窝堡国际机场","city":"乌鲁木齐市"}]},{"num":15,"points":[{"keyword":"乌鲁木齐地窝堡国际机场","city":"乌鲁木齐市"}]}];
+  var days = [{"num":0,"points":[{"keyword":"乌鲁木齐地窝堡国际机场","city":"乌鲁木齐市"}],"policy":0},{"num":1,"points":[{"keyword":"乌鲁木齐市","city":"乌鲁木齐市"},{"keyword":"阿勒泰市","city":"阿勒泰地区"}],"policy":0},{"num":2,"points":[{"keyword":"阿勒泰市","city":"阿勒泰地区"},{"keyword":"小东沟森林公园","city":"阿勒泰地区"},{"keyword":"禾木村","city":"阿勒泰地区"}],"policy":0},{"num":3,"points":[{"keyword":"禾木村","city":"阿勒泰地区"},{"keyword":"喀纳斯景区贾登峪游客中心","city":"阿勒泰地区"}],"policy":0},{"num":4,"points":[{"keyword":"喀纳斯景区贾登峪游客中心","city":"阿勒泰地区"},{"keyword":"喀纳斯湖","city":"阿勒泰地区"},{"keyword":"白哈巴","city":"阿勒泰地区"}],"policy":0},{"num":5,"points":[{"keyword":"喀纳斯湖","city":"阿勒泰地区"}],"policy":0},{"num":6,"points":[{"keyword":"喀纳斯湖","city":"阿勒泰地区"},{"keyword":"喀纳斯景区贾登峪游客中心","city":"阿勒泰地区"},{"keyword":"布尔津五彩滩风景区","city":"阿勒泰地区"}],"policy":0},{"num":7,"points":[{"keyword":"布尔津县","city":"阿勒泰地区"},{"keyword":"世界魔鬼城","city":"克拉玛依市"},{"keyword":"奎屯市","city":"奎屯市"}],"policy":0},{"num":8,"points":[{"keyword":"奎屯市","city":"奎屯市"},{"keyword":"赛里木湖","city":"博尔塔拉蒙古自治州"}],"policy":0},{"num":9,"points":[{"keyword":"赛里木湖","city":"博尔塔拉蒙古自治州"},{"keyword":"松树头","city":"博尔塔拉蒙古自治州"},{"keyword":"伊宁市","city":"伊宁市"}],"policy":0},{"num":10,"points":[{"keyword":"伊宁市六星街","city":"伊宁市"},{"keyword":"库尔德宁","city":"伊犁哈萨克自治州"},{"keyword":"那拉提镇","city":"伊犁哈萨克自治州"}],"policy":0},{"num":11,"points":[{"keyword":"那拉提草原景区","city":"伊犁哈萨克自治州"}],"policy":0},{"num":12,"points":[{"keyword":"那拉提镇","city":"伊犁哈萨克自治州"},{"keyword":"唐布拉草原","city":"伊犁哈萨克自治州"}],"policy":0},{"num":13,"points":[{"keyword":"唐布拉草原","city":"伊犁哈萨克自治州"},{"keyword":"乔尔玛烈士陵园","city":"伊犁哈萨克自治州"},{"keyword":"哈希勒根达坂","city":"伊犁哈萨克自治州"},{"keyword":"独山子大峡谷","city":"克拉玛依市"},{"keyword":"独山子区","city":"克拉玛依市"}],"policy":2},{"num":14,"points":[{"keyword":"独山子区","city":"克拉玛依市"},{"keyword":"乌鲁木齐地窝堡国际机场","city":"乌鲁木齐市"}],"policy":0},{"num":15,"points":[{"keyword":"乌鲁木齐地窝堡国际机场","city":"乌鲁木齐市"}],"policy":0}];
   var pending = days.length;
   var doneCalled = {};
+  // v37：记录解析/规划失败的点和天，最后统一报告，不再静默丢失整段路线
+  var failedPoints = [];
+  var failedDays = [];
 
-  function geocode(address, city) {
+  // v37：多级兜底解析。AMap.Geocoder 是"地址"解析器，只对行政地名（市/县/区/乡镇）可靠；
+  // 对"哈希勒根达坂""乔尔玛烈士陵园""孟克特旅游景区""加尕斯台镇"这类 POI / 小地名经常失败。
+  // 失败的途经点如果被静默跳过，就会导致地图空白或画出完全错误的路线（例如伊昭公路被绕成走特克斯）。
+  // 这里按 4 级策略依次尝试，并把最终失败的关键词报告到页面上，不再静默吞掉。
+  function geocodeOnce(address, city, useCity) {
     return new Promise(function(resolve){
-      var opts = city ? { city: city } : {};
-      var g = new AMap.Geocoder(opts);
+      var g = new AMap.Geocoder(useCity && city ? { city: city } : {});
       g.getLocation(address, function(status, result){
         if (status === "complete" && result.geocodes && result.geocodes.length) {
           resolve(result.geocodes[0].location);
-          return;
-        }
-        // v34修复：AMap.Geocoder 是"地址"解析器，只对行政地名（市/县/区/乡镇）可靠，
-        // 对"哈希勒根达坂""乔尔玛烈士陵园""唐布拉草原""白石峰"这类 POI 名称经常解析失败。
-        // 失败的途经点会被静默跳过，导致地图空白或画出完全错误的路线。
-        // 这里退回 AMap.PlaceSearch（POI 检索）再试一次。
-        var ps = new AMap.PlaceSearch({ pageSize: 1, extensions: "base", citylimit: false });
-        if (city) { try { ps.setCity(city); } catch (e) {} }
-        ps.search(address, function(s2, r2){
-          if (s2 === "complete" && r2 && r2.poiList && r2.poiList.pois && r2.poiList.pois.length) {
-            resolve(r2.poiList.pois[0].location);
-          } else {
-            resolve(null);
-          }
-        });
+        } else { resolve(null); }
       });
     });
+  }
+  function placeOnce(address, city) {
+    return new Promise(function(resolve){
+      var ps = new AMap.PlaceSearch({ pageSize: 1, extensions: "base", citylimit: false });
+      if (city) { try { ps.setCity(city); } catch (e) {} }
+      ps.search(address, function(s2, r2){
+        if (s2 === "complete" && r2 && r2.poiList && r2.poiList.pois && r2.poiList.pois.length) {
+          resolve(r2.poiList.pois[0].location);
+        } else { resolve(null); }
+      });
+    });
+  }
+  function geocode(address, city) {
+    return geocodeOnce(address, city, true)
+      .then(function(l){ return l || placeOnce(address, city); })
+      .then(function(l){ return l || placeOnce(address, "新疆"); })
+      .then(function(l){ return l || geocodeOnce(address, city, false); });
   }
   function hotelIcon(){
     return new AMap.Icon({ size: new AMap.Size(25,34), image: "https://webapi.amap.com/theme/v1.3/markers/n/mark_r.png", imageSize: new AMap.Size(25,34) });
@@ -537,7 +546,21 @@ window._AMapSecurityConfig = { securityJsCode: "f5122d0c0aae74cc4c4e8f4ce0a196cc
     if (el) el.innerHTML = "正在加载全程" + days.length + "天真实驾车路线，已完成 " + (days.length - pending) + "/" + days.length + "…";
     if (pending <= 0) {
       map.setFitView();
-      if (el) el.innerHTML = "";
+      if (el) {
+        if (failedDays.length === 0 && failedPoints.length === 0) {
+          el.innerHTML = "";
+        } else {
+          var msg = "";
+          if (failedPoints.length > 0) {
+            msg += "⚠️ 以下途经点未能在高德地图中定位、已跳过：<strong>" + failedPoints.join("、") + "</strong>。";
+          }
+          if (failedDays.length > 0) {
+            msg += "🔺 <strong>" + failedDays.join("、") + "</strong> 未能规划出完整驾车路线，图上以<strong>红色虚线</strong>表示（直线示意，非真实道路轨迹）。";
+          }
+          msg += "请以各日页面的文字描述和出发前的导航实测为准。";
+          el.innerHTML = msg;
+        }
+      }
     }
   }
 
@@ -576,8 +599,15 @@ window._AMapSecurityConfig = { securityJsCode: "f5122d0c0aae74cc4c4e8f4ce0a196cc
       } else {
         Promise.all(pts.map(function(p){ return geocode(p.keyword, p.city); })).then(function(locs){
           var validIdx = [];
-          locs.forEach(function(l, idx){ if (l) validIdx.push(idx); });
-          if (validIdx.length < 2) { finish(); return; }
+          locs.forEach(function(l, idx){ if (l) validIdx.push(idx); else failedPoints.push("D" + day.num + "「" + pts[idx].keyword + "」"); });
+          if (validIdx.length < 2) {
+            // v37：即使无法规划路线，也至少把已定位的点标出来，并记入失败报告
+            failedDays.push("D" + day.num);
+            if (validIdx.length === 1) {
+              new AMap.Marker({ position: locs[validIdx[0]], map: map, label: { content: "D" + day.num, direction: "top" } });
+            }
+            finish(); return;
+          }
           var start = locs[validIdx[0]];
           var end = locs[validIdx[validIdx.length - 1]];
           var mid = validIdx.slice(1, -1).map(function(idx){ return locs[idx]; });
@@ -586,13 +616,18 @@ window._AMapSecurityConfig = { securityJsCode: "f5122d0c0aae74cc4c4e8f4ce0a196cc
           // with many day-routes chained onto one shared overview map that produced multiple
           // stray marker labels. We draw the route manually as a plain polyline instead, so the
           // only markers on this map are our intentional day-number labels.
-          var driving = new AMap.Driving({ policy: 0 });
+          var driving = new AMap.Driving({ policy: (typeof day.policy === "number" ? day.policy : 0) });
           try {
             driving.search(start, end, { waypoints: mid }, function(status, result){
               if (status === "complete" && result && result.routes && result.routes[0]) {
                 var path = [];
                 result.routes[0].steps.forEach(function(step){ path = path.concat(step.path); });
                 new AMap.Polyline({ map: map, path: path, strokeColor: "#2E6F86", strokeWeight: 4, strokeOpacity: 0.85 });
+              } else {
+                // v37：驾车规划失败时画红色虚线兜底，并记入报告，避免整段路线在总览图上凭空消失
+                failedDays.push("D" + day.num);
+                new AMap.Polyline({ map: map, path: validIdx.map(function(x){ return locs[x]; }),
+                  strokeColor: "#C0392B", strokeWeight: 3, strokeStyle: "dashed", strokeOpacity: 0.9 });
               }
               new AMap.Marker({ position: end, map: map, label: { content: "D" + day.num, direction: "top" }, title: pts[pts.length - 1].keyword });
               finish();

@@ -493,30 +493,36 @@ window._AMapSecurityConfig = { securityJsCode: "f5122d0c0aae74cc4c4e8f4ce0a196cc
   var hotels = [{"name":"乌鲁木齐环球国际大酒店","city":"乌鲁木齐市"},{"name":"迎港酒店(乌鲁木齐天山国际机场店)","city":"乌鲁木齐市"}];
   var rentals = [{"name":"神州租车(地窝堡国际机场店)","city":"乌鲁木齐市","label":"🚗 还车：神州租车(地窝堡国际机场店)"},{"name":"一嗨租车(地窝堡机场店)","city":"乌鲁木齐市","label":"🚗 还车：一嗨租车(地窝堡机场店)"}];
 
-  function geocode(address, city) {
+  // v37：多级兜底解析。AMap.Geocoder 是"地址"解析器，只对行政地名（市/县/区/乡镇）可靠；
+  // 对"哈希勒根达坂""乔尔玛烈士陵园""孟克特旅游景区""加尕斯台镇"这类 POI / 小地名经常失败。
+  // 失败的途经点如果被静默跳过，就会导致地图空白或画出完全错误的路线（例如伊昭公路被绕成走特克斯）。
+  // 这里按 4 级策略依次尝试，并把最终失败的关键词报告到页面上，不再静默吞掉。
+  function geocodeOnce(address, city, useCity) {
     return new Promise(function(resolve){
-      var opts = city ? { city: city } : {};
-      var g = new AMap.Geocoder(opts);
+      var g = new AMap.Geocoder(useCity && city ? { city: city } : {});
       g.getLocation(address, function(status, result){
         if (status === "complete" && result.geocodes && result.geocodes.length) {
           resolve(result.geocodes[0].location);
-          return;
-        }
-        // v34修复：AMap.Geocoder 是"地址"解析器，只对行政地名（市/县/区/乡镇）可靠，
-        // 对"哈希勒根达坂""乔尔玛烈士陵园""唐布拉草原""白石峰"这类 POI 名称经常解析失败。
-        // 失败的途经点会被静默跳过，导致地图空白或画出完全错误的路线。
-        // 这里退回 AMap.PlaceSearch（POI 检索）再试一次。
-        var ps = new AMap.PlaceSearch({ pageSize: 1, extensions: "base", citylimit: false });
-        if (city) { try { ps.setCity(city); } catch (e) {} }
-        ps.search(address, function(s2, r2){
-          if (s2 === "complete" && r2 && r2.poiList && r2.poiList.pois && r2.poiList.pois.length) {
-            resolve(r2.poiList.pois[0].location);
-          } else {
-            resolve(null);
-          }
-        });
+        } else { resolve(null); }
       });
     });
+  }
+  function placeOnce(address, city) {
+    return new Promise(function(resolve){
+      var ps = new AMap.PlaceSearch({ pageSize: 1, extensions: "base", citylimit: false });
+      if (city) { try { ps.setCity(city); } catch (e) {} }
+      ps.search(address, function(s2, r2){
+        if (s2 === "complete" && r2 && r2.poiList && r2.poiList.pois && r2.poiList.pois.length) {
+          resolve(r2.poiList.pois[0].location);
+        } else { resolve(null); }
+      });
+    });
+  }
+  function geocode(address, city) {
+    return geocodeOnce(address, city, true)
+      .then(function(l){ return l || placeOnce(address, city); })
+      .then(function(l){ return l || placeOnce(address, "新疆"); })
+      .then(function(l){ return l || geocodeOnce(address, city, false); });
   }
   function hotelIcon(){
     return new AMap.Icon({ size: new AMap.Size(25,34), image: "https://webapi.amap.com/theme/v1.3/markers/n/mark_r.png", imageSize: new AMap.Size(25,34) });
@@ -583,10 +589,30 @@ window._AMapSecurityConfig = { securityJsCode: "f5122d0c0aae74cc4c4e8f4ce0a196cc
     });
   } else {
     Promise.all(routePoints.map(function(p){ return geocode(p.keyword, p.city); })).then(function(locs){
-      var validIdx = [];
-      locs.forEach(function(l, i){ if (l) validIdx.push(i); });
+      var validIdx = [], failed = [];
+      locs.forEach(function(l, i){ if (l) validIdx.push(i); else failed.push(routePoints[i].keyword); });
+      var statusEl = document.getElementById("amap-status-13a");
+      // v37：不再静默跳过解析失败的途经点，明确报告出来
+      if (failed.length > 0 && statusEl) {
+        statusEl.innerHTML = "⚠️ 以下途经点未能在高德地图中定位、已从路线中跳过：<strong>" + failed.join("、") +
+          "</strong>。这会导致下方路线偏离本页文字描述的实际走法，<strong>请以文字描述和出发前的导航实测为准</strong>。";
+      }
+      // 兜底：至少把已解析的点用虚线连起来，保证地图不是空白
+      function drawFallbackLine(reason){
+        if (validIdx.length < 2) return;
+        new AMap.Polyline({
+          path: validIdx.map(function(i){ return locs[i]; }), map: map,
+          strokeColor: "#C0392B", strokeWeight: 3, strokeStyle: "dashed", strokeOpacity: 0.9
+        });
+        validIdx.forEach(function(i){
+          new AMap.Marker({ position: locs[i], map: map, title: routePoints[i].keyword,
+            label: { content: routePoints[i].keyword, direction: "top" } });
+        });
+        if (statusEl) statusEl.innerHTML += "<br>🔺 " + reason + "下方<strong>红色虚线为各已定位点之间的直线示意，不是真实道路轨迹</strong>，仅供判断大致方位。";
+        map.setFitView();
+      }
       if (validIdx.length < 2) {
-        document.getElementById("amap-status-13a").innerHTML = "部分地点定位失败，无法规划路线，请在高德地图App中手动搜索：" + routePoints.map(function(p){ return p.keyword; }).join(" → ");
+        if (statusEl) statusEl.innerHTML += "<br>可定位的点不足2个，无法规划路线，请在高德地图App中手动搜索：" + routePoints.map(function(p){ return p.keyword; }).join(" → ");
         addHotelMarkers();
         addRentalMarkers();
         return;
@@ -594,10 +620,10 @@ window._AMapSecurityConfig = { securityJsCode: "f5122d0c0aae74cc4c4e8f4ce0a196cc
       var start = locs[validIdx[0]];
       var end = locs[validIdx[validIdx.length - 1]];
       var mid = validIdx.slice(1, -1).map(function(i){ return locs[i]; });
-      var driving = new AMap.Driving({ map: map, policy: 0 });
+      var driving = new AMap.Driving({ map: map, policy: 2 });
       driving.search(start, end, { waypoints: mid }, function(status, result){
         if (status !== "complete") {
-          document.getElementById("amap-status-13a").innerHTML = "驾车路线规划失败，请在高德地图App中手动搜索：" + routePoints.map(function(p){ return p.keyword; }).join(" → ");
+          drawFallbackLine("高德未能规划出经过全部途经点的驾车路线。");
         } else if (result && result.routes && result.routes[0]) {
           var km = (result.routes[0].distance / 1000).toFixed(0);
           var totalMin = Math.round(result.routes[0].time / 60);

@@ -121,14 +121,16 @@ const WAYPOINTS_CN_P2 = {
   ],
   // v34：全部改用行政地名优先（Geocoder 对行政区划最可靠），POI 名称只在没有替代时使用，
   // 并已给 geocode() 加了 PlaceSearch 兜底，避免 POI 解析失败导致地图空白/路线画错。
+  // v37：改用与方案1的D13相同、已验证可解析的关键词组合（只是方向相反），
+  // 并配合 DRIVING_POLICY_P2 的"最短距离"策略，避免高德绕开独库公路走高速。
   2: [
     { keyword: "独山子区", city: "克拉玛依市" },
-    { keyword: "乔尔玛", city: "伊犁哈萨克自治州" },
-    { keyword: "孟克特旅游景区", city: "伊犁哈萨克自治州" },
+    { keyword: "哈希勒根达坂", city: "伊犁哈萨克自治州" },
+    { keyword: "乔尔玛烈士陵园", city: "伊犁哈萨克自治州" },
+    { keyword: "唐布拉草原", city: "伊犁哈萨克自治州" },
   ],
   3: [
-    { keyword: "孟克特旅游景区", city: "伊犁哈萨克自治州" },
-    { keyword: "尼勒克县种蜂场", city: "伊犁哈萨克自治州" },
+    { keyword: "唐布拉草原", city: "伊犁哈萨克自治州" },
     { keyword: "尼勒克县", city: "伊犁哈萨克自治州" },
   ],
   4: [
@@ -145,8 +147,13 @@ const WAYPOINTS_CN_P2 = {
   // v34修复：原来用"白石峰"（POI，解析失败）导致高德没有走 S237 伊昭公路，
   // 改用伊昭公路沿线的行政地名强制上线：昭苏 → 加尕斯台镇(S237 K44，进山前最后一个建制镇)
   // → 察布查尔县城 → 伊宁。来源：察布查尔县政府官网、伊犁州政府绕行公告。
+  // v37：D6 之前画成绕特克斯，是因为强制点没解析成功＋"最快"算法绕开了低限速山路。
+  // 现在改为多个沿线行政地名依次强制（察布查尔县境内97公里都属S237），并用"最短距离"策略。
+  // 依据：察布查尔县政府官网、伊犁州政府绕行公告——S237顺序为
+  // 伊宁伊犁河二桥 → 察布查尔镇(县城) → 加尕斯台镇(K44) → 乌孙山(安格列特达坂/白石峰) → 昭苏县城。
   6: [
     { keyword: "昭苏县", city: "伊犁哈萨克自治州" },
+    { keyword: "安格列特达坂", city: "伊犁哈萨克自治州" },
     { keyword: "加尕斯台镇", city: "伊犁哈萨克自治州" },
     { keyword: "察布查尔锡伯自治县", city: "伊犁哈萨克自治州" },
     { keyword: "伊宁市", city: "伊宁市" },
@@ -190,6 +197,18 @@ const WAYPOINTS_CN_P2 = {
     { keyword: "乌鲁木齐地窝堡国际机场", city: "乌鲁木齐市" },
   ],
   15: [{ keyword: "乌鲁木齐地窝堡国际机场", city: "乌鲁木齐市" }],
+};
+
+// v37：需要强制走山区风景公路的天数改用"最短距离"策略（2），其余用默认的"最快"（0）。
+// 依据：高德"速度最快"算法会为了省时间绕开限速低的独库公路、伊昭公路，画出的不是实际要走的路。
+const DRIVING_POLICY_P1 = {
+  13: 2,   // 唐布拉 → 乔尔玛 → 独库北段 → 独山子
+  "13a": 2,
+};
+const DRIVING_POLICY_P2 = {
+  2: 2,    // 独山子 → 独库北段 → 乔尔玛 → 唐布拉
+  3: 2,    // 孟克特 → S315百里画廊 → 尼勒克
+  6: 2,    // 昭苏 → 伊昭公路S237 → 伊宁
 };
 
 const HOTEL_CITY_BIAS_P2 = {
@@ -682,30 +701,36 @@ function renderTransportRow(label, value) {
 
 // Shared geocode/marker helper functions, inlined into every page's map script.
 const JS_HELPERS = `
-  function geocode(address, city) {
+  // v37：多级兜底解析。AMap.Geocoder 是"地址"解析器，只对行政地名（市/县/区/乡镇）可靠；
+  // 对"哈希勒根达坂""乔尔玛烈士陵园""孟克特旅游景区""加尕斯台镇"这类 POI / 小地名经常失败。
+  // 失败的途经点如果被静默跳过，就会导致地图空白或画出完全错误的路线（例如伊昭公路被绕成走特克斯）。
+  // 这里按 4 级策略依次尝试，并把最终失败的关键词报告到页面上，不再静默吞掉。
+  function geocodeOnce(address, city, useCity) {
     return new Promise(function(resolve){
-      var opts = city ? { city: city } : {};
-      var g = new AMap.Geocoder(opts);
+      var g = new AMap.Geocoder(useCity && city ? { city: city } : {});
       g.getLocation(address, function(status, result){
         if (status === "complete" && result.geocodes && result.geocodes.length) {
           resolve(result.geocodes[0].location);
-          return;
-        }
-        // v34修复：AMap.Geocoder 是"地址"解析器，只对行政地名（市/县/区/乡镇）可靠，
-        // 对"哈希勒根达坂""乔尔玛烈士陵园""唐布拉草原""白石峰"这类 POI 名称经常解析失败。
-        // 失败的途经点会被静默跳过，导致地图空白或画出完全错误的路线。
-        // 这里退回 AMap.PlaceSearch（POI 检索）再试一次。
-        var ps = new AMap.PlaceSearch({ pageSize: 1, extensions: "base", citylimit: false });
-        if (city) { try { ps.setCity(city); } catch (e) {} }
-        ps.search(address, function(s2, r2){
-          if (s2 === "complete" && r2 && r2.poiList && r2.poiList.pois && r2.poiList.pois.length) {
-            resolve(r2.poiList.pois[0].location);
-          } else {
-            resolve(null);
-          }
-        });
+        } else { resolve(null); }
       });
     });
+  }
+  function placeOnce(address, city) {
+    return new Promise(function(resolve){
+      var ps = new AMap.PlaceSearch({ pageSize: 1, extensions: "base", citylimit: false });
+      if (city) { try { ps.setCity(city); } catch (e) {} }
+      ps.search(address, function(s2, r2){
+        if (s2 === "complete" && r2 && r2.poiList && r2.poiList.pois && r2.poiList.pois.length) {
+          resolve(r2.poiList.pois[0].location);
+        } else { resolve(null); }
+      });
+    });
+  }
+  function geocode(address, city) {
+    return geocodeOnce(address, city, true)
+      .then(function(l){ return l || placeOnce(address, city); })
+      .then(function(l){ return l || placeOnce(address, "新疆"); })
+      .then(function(l){ return l || geocodeOnce(address, city, false); });
   }
   function hotelIcon(){
     return new AMap.Icon({ size: new AMap.Size(25,34), image: "https://webapi.amap.com/theme/v1.3/markers/n/mark_r.png", imageSize: new AMap.Size(25,34) });
@@ -721,10 +746,14 @@ const JS_HELPERS = `
 // Builds the AMap init script for a single day's map div: real driving route
 // (via geocoded coordinates, not keyword search, for reliability), hotel markers,
 // and rental car pickup/return markers (geocoded by each company's real name+city).
-function amapDayInitScript(dayNum, points, hotels, rentals) {
+function amapDayInitScript(dayNum, points, hotels, rentals, policy) {
   const mapId = `amap-day-${dayNum}`;
   const statusId = `amap-status-${dayNum}`;
   if (!points || points.length === 0) return "";
+  // v37：AMap.Driving 策略。0=最快（默认），2=最短距离。
+  // 独库公路、伊昭公路这类限速低的山区风景路，用"最快"算法高德会绕开走高速/绕城，
+  // 画出的根本不是本页描述的那条路；对这几天改用"最短距离"更贴近实际走法。
+  const drivingPolicy = typeof policy === "number" ? policy : 0;
 
   const pointsJson = JSON.stringify(points);
   const hotelsJson = JSON.stringify(hotels || []);
@@ -792,10 +821,30 @@ ${JS_HELPERS}
     });
   } else {
     Promise.all(routePoints.map(function(p){ return geocode(p.keyword, p.city); })).then(function(locs){
-      var validIdx = [];
-      locs.forEach(function(l, i){ if (l) validIdx.push(i); });
+      var validIdx = [], failed = [];
+      locs.forEach(function(l, i){ if (l) validIdx.push(i); else failed.push(routePoints[i].keyword); });
+      var statusEl = document.getElementById("${statusId}");
+      // v37：不再静默跳过解析失败的途经点，明确报告出来
+      if (failed.length > 0 && statusEl) {
+        statusEl.innerHTML = "⚠️ 以下途经点未能在高德地图中定位、已从路线中跳过：<strong>" + failed.join("、") +
+          "</strong>。这会导致下方路线偏离本页文字描述的实际走法，<strong>请以文字描述和出发前的导航实测为准</strong>。";
+      }
+      // 兜底：至少把已解析的点用虚线连起来，保证地图不是空白
+      function drawFallbackLine(reason){
+        if (validIdx.length < 2) return;
+        new AMap.Polyline({
+          path: validIdx.map(function(i){ return locs[i]; }), map: map,
+          strokeColor: "#C0392B", strokeWeight: 3, strokeStyle: "dashed", strokeOpacity: 0.9
+        });
+        validIdx.forEach(function(i){
+          new AMap.Marker({ position: locs[i], map: map, title: routePoints[i].keyword,
+            label: { content: routePoints[i].keyword, direction: "top" } });
+        });
+        if (statusEl) statusEl.innerHTML += "<br>🔺 " + reason + "下方<strong>红色虚线为各已定位点之间的直线示意，不是真实道路轨迹</strong>，仅供判断大致方位。";
+        map.setFitView();
+      }
       if (validIdx.length < 2) {
-        document.getElementById("${statusId}").innerHTML = "部分地点定位失败，无法规划路线，请在高德地图App中手动搜索：" + routePoints.map(function(p){ return p.keyword; }).join(" → ");
+        if (statusEl) statusEl.innerHTML += "<br>可定位的点不足2个，无法规划路线，请在高德地图App中手动搜索：" + routePoints.map(function(p){ return p.keyword; }).join(" → ");
         addHotelMarkers();
         addRentalMarkers();
         return;
@@ -803,10 +852,10 @@ ${JS_HELPERS}
       var start = locs[validIdx[0]];
       var end = locs[validIdx[validIdx.length - 1]];
       var mid = validIdx.slice(1, -1).map(function(i){ return locs[i]; });
-      var driving = new AMap.Driving({ map: map, policy: 0 });
+      var driving = new AMap.Driving({ map: map, policy: ${drivingPolicy} });
       driving.search(start, end, { waypoints: mid }, function(status, result){
         if (status !== "complete") {
-          document.getElementById("${statusId}").innerHTML = "驾车路线规划失败，请在高德地图App中手动搜索：" + routePoints.map(function(p){ return p.keyword; }).join(" → ");
+          drawFallbackLine("高德未能规划出经过全部途经点的驾车路线。");
         } else if (result && result.routes && result.routes[0]) {
           var km = (result.routes[0].distance / 1000).toFixed(0);
           var totalMin = Math.round(result.routes[0].time / 60);
@@ -990,7 +1039,7 @@ ${navHtml(d.num, plan)}
   <div class="disclaimer">${TRIP.disclaimer}</div>
 </main>
 ${amapLoaderScript()}
-${amapDayInitScript(d.num, points, hotels, rentals)}
+${amapDayInitScript(d.num, points, hotels, rentals, (plan === 2 ? DRIVING_POLICY_P2 : DRIVING_POLICY_P1)[d.num])}
 ${footHtml()}`;
 }
 
@@ -1001,9 +1050,10 @@ function amapIndexInitScript(plan) {
   plan = plan || 1;
   const srcDays = plan === 2 ? PLAN2_DAYS : DAYS;
   const srcWp = plan === 2 ? WAYPOINTS_CN_P2 : WAYPOINTS_CN;
+  const srcPolicy = plan === 2 ? DRIVING_POLICY_P2 : DRIVING_POLICY_P1;
   const dayList = srcDays
     .filter(d => (srcWp[d.num] || []).length > 0)
-    .map(d => ({ num: d.num, points: srcWp[d.num] }));
+    .map(d => ({ num: d.num, points: srcWp[d.num], policy: srcPolicy[d.num] || 0 }));
   const dayListJson = JSON.stringify(dayList);
 
   return `<script>
@@ -1015,6 +1065,9 @@ function amapIndexInitScript(plan) {
   var days = ${dayListJson};
   var pending = days.length;
   var doneCalled = {};
+  // v37：记录解析/规划失败的点和天，最后统一报告，不再静默丢失整段路线
+  var failedPoints = [];
+  var failedDays = [];
 ${JS_HELPERS}
   function markDone(dayNum){
     if (doneCalled[dayNum]) return; // guard against double-calling for the same day
@@ -1024,7 +1077,21 @@ ${JS_HELPERS}
     if (el) el.innerHTML = "正在加载全程" + days.length + "天真实驾车路线，已完成 " + (days.length - pending) + "/" + days.length + "…";
     if (pending <= 0) {
       map.setFitView();
-      if (el) el.innerHTML = "";
+      if (el) {
+        if (failedDays.length === 0 && failedPoints.length === 0) {
+          el.innerHTML = "";
+        } else {
+          var msg = "";
+          if (failedPoints.length > 0) {
+            msg += "⚠️ 以下途经点未能在高德地图中定位、已跳过：<strong>" + failedPoints.join("、") + "</strong>。";
+          }
+          if (failedDays.length > 0) {
+            msg += "🔺 <strong>" + failedDays.join("、") + "</strong> 未能规划出完整驾车路线，图上以<strong>红色虚线</strong>表示（直线示意，非真实道路轨迹）。";
+          }
+          msg += "请以各日页面的文字描述和出发前的导航实测为准。";
+          el.innerHTML = msg;
+        }
+      }
     }
   }
 
@@ -1063,8 +1130,15 @@ ${JS_HELPERS}
       } else {
         Promise.all(pts.map(function(p){ return geocode(p.keyword, p.city); })).then(function(locs){
           var validIdx = [];
-          locs.forEach(function(l, idx){ if (l) validIdx.push(idx); });
-          if (validIdx.length < 2) { finish(); return; }
+          locs.forEach(function(l, idx){ if (l) validIdx.push(idx); else failedPoints.push("D" + day.num + "「" + pts[idx].keyword + "」"); });
+          if (validIdx.length < 2) {
+            // v37：即使无法规划路线，也至少把已定位的点标出来，并记入失败报告
+            failedDays.push("D" + day.num);
+            if (validIdx.length === 1) {
+              new AMap.Marker({ position: locs[validIdx[0]], map: map, label: { content: "D" + day.num, direction: "top" } });
+            }
+            finish(); return;
+          }
           var start = locs[validIdx[0]];
           var end = locs[validIdx[validIdx.length - 1]];
           var mid = validIdx.slice(1, -1).map(function(idx){ return locs[idx]; });
@@ -1073,13 +1147,18 @@ ${JS_HELPERS}
           // with many day-routes chained onto one shared overview map that produced multiple
           // stray marker labels. We draw the route manually as a plain polyline instead, so the
           // only markers on this map are our intentional day-number labels.
-          var driving = new AMap.Driving({ policy: 0 });
+          var driving = new AMap.Driving({ policy: (typeof day.policy === "number" ? day.policy : 0) });
           try {
             driving.search(start, end, { waypoints: mid }, function(status, result){
               if (status === "complete" && result && result.routes && result.routes[0]) {
                 var path = [];
                 result.routes[0].steps.forEach(function(step){ path = path.concat(step.path); });
                 new AMap.Polyline({ map: map, path: path, strokeColor: "#2E6F86", strokeWeight: 4, strokeOpacity: 0.85 });
+              } else {
+                // v37：驾车规划失败时画红色虚线兜底，并记入报告，避免整段路线在总览图上凭空消失
+                failedDays.push("D" + day.num);
+                new AMap.Polyline({ map: map, path: validIdx.map(function(x){ return locs[x]; }),
+                  strokeColor: "#C0392B", strokeWeight: 3, strokeStyle: "dashed", strokeOpacity: 0.9 });
               }
               new AMap.Marker({ position: end, map: map, label: { content: "D" + day.num, direction: "top" }, title: pts[pts.length - 1].keyword });
               finish();
