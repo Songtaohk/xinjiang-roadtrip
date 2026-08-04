@@ -380,7 +380,8 @@ footer.site-footer {
   <div id="amap-day-14" class="map-frame-wrap"></div>
   <div id="amap-status-14" class="map-fallback-link"></div>
   <div id="amap-day-14-live" class="map-live-note"></div>
-  <div class="map-note">地图由高德地图 JS API 驱动，路线为高德"速度最快"算法实时规划结果，仅供参考；对于限速较低的山区风景公路（如独库公路）或刚通车、地图数据库可能尚未收录的新路（如阿禾公路），算法有可能判定绕行其它道路"更快"而没有真正画出本文描述的那条路，与下方"交通"表格里的文字描述（里程/车程/路名）如有出入，请以文字描述和出发前的导航实测结果为准。</div>
+  
+  <div class="map-note">地图由高德地图 JS API 驱动，路线为高德实时规划结果，仅供参考；对于限速较低的山区风景公路（如独库公路）或刚通车、地图数据库可能尚未收录的新路（如阿禾公路），算法有可能判定绕行其它道路"更快"而没有真正画出本文描述的那条路，与下方"交通"表格里的文字描述（里程/车程/路名）如有出入，请以文字描述和出发前的导航实测结果为准。</div>
   <div class="map-legend">蓝色路线＝高德实时驾车路线规划 · 🏨红色标记＝推荐酒店 · ⛽标记＝高德实时搜索到的沿途加油站（自动检索，非人工核实，仅供参考，出发前请以导航实际结果为准）</div>
   
     
@@ -484,7 +485,9 @@ window._AMapSecurityConfig = { securityJsCode: "f5122d0c0aae74cc4c4e8f4ce0a196cc
 <script src="https://webapi.amap.com/maps?v=2.0&key=1e292eeef1aae1b6eb63c7989ae14dbb&plugin=AMap.Driving,AMap.Geocoder,AMap.PlaceSearch"></script>
 <script>
 (function(){
-  var map = new AMap.Map("amap-day-14", { zoom: 6, resizeEnable: true });
+  // v38：显式指定新疆为初始中心。此前没有 center，一旦当天可定位的点不足2个就会提前返回、
+  // 永远不调用 setFitView()，地图就停在高德默认的华北视野（用户实际看到的是"北京/渤海湾"）。
+  var map = new AMap.Map("amap-day-14", { zoom: 6, center: [85.0, 44.0], resizeEnable: true });
   var routePoints = [{"keyword":"阿勒泰市","city":"阿勒泰地区"},{"keyword":"乌鲁木齐地窝堡国际机场","city":"乌鲁木齐市"}];
   var hotels = [{"name":"乌鲁木齐环球国际大酒店","city":"乌鲁木齐市"},{"name":"迎港酒店（乌鲁木齐天山国际机场店）","city":"乌鲁木齐市"},{"name":"全季酒店（乌鲁木齐米东店）","city":"乌鲁木齐市"}];
   var rentals = [];
@@ -493,6 +496,32 @@ window._AMapSecurityConfig = { securityJsCode: "f5122d0c0aae74cc4c4e8f4ce0a196cc
   // 对"哈希勒根达坂""乔尔玛烈士陵园""孟克特旅游景区""加尕斯台镇"这类 POI / 小地名经常失败。
   // 失败的途经点如果被静默跳过，就会导致地图空白或画出完全错误的路线（例如伊昭公路被绕成走特克斯）。
   // 这里按 4 级策略依次尝试，并把最终失败的关键词报告到页面上，不再静默吞掉。
+  // v38：WGS-84 → GCJ-02（火星坐标）转换。维基/OSM/GeoNames 给的都是 WGS-84，
+  // 高德底图用的是 GCJ-02，直接混用会有 300-600 米偏移，在山区垭口可能被吸附到错误的路上。
+  function wgs84ToGcj02(lng, lat) {
+    var a = 6378245.0, ee = 0.00669342162296594323;
+    function tLat(x, y) {
+      var r = -100.0 + 2.0*x + 3.0*y + 0.2*y*y + 0.1*x*y + 0.2*Math.sqrt(Math.abs(x));
+      r += (20.0*Math.sin(6.0*x*Math.PI) + 20.0*Math.sin(2.0*x*Math.PI)) * 2.0/3.0;
+      r += (20.0*Math.sin(y*Math.PI) + 40.0*Math.sin(y/3.0*Math.PI)) * 2.0/3.0;
+      r += (160.0*Math.sin(y/12.0*Math.PI) + 320.0*Math.sin(y*Math.PI/30.0)) * 2.0/3.0;
+      return r;
+    }
+    function tLng(x, y) {
+      var r = 300.0 + x + 2.0*y + 0.1*x*x + 0.1*x*y + 0.1*Math.sqrt(Math.abs(x));
+      r += (20.0*Math.sin(6.0*x*Math.PI) + 20.0*Math.sin(2.0*x*Math.PI)) * 2.0/3.0;
+      r += (20.0*Math.sin(x*Math.PI) + 40.0*Math.sin(x/3.0*Math.PI)) * 2.0/3.0;
+      r += (150.0*Math.sin(x/12.0*Math.PI) + 300.0*Math.sin(x/30.0*Math.PI)) * 2.0/3.0;
+      return r;
+    }
+    var dLat = tLat(lng - 105.0, lat - 35.0), dLng = tLng(lng - 105.0, lat - 35.0);
+    var radLat = lat / 180.0 * Math.PI;
+    var magic = Math.sin(radLat); magic = 1 - ee*magic*magic;
+    var sqrtMagic = Math.sqrt(magic);
+    dLat = (dLat * 180.0) / ((a * (1 - ee)) / (magic * sqrtMagic) * Math.PI);
+    dLng = (dLng * 180.0) / (a / sqrtMagic * Math.cos(radLat) * Math.PI);
+    return [lng + dLng, lat + dLat];
+  }
   function geocodeOnce(address, city, useCity) {
     return new Promise(function(resolve){
       var g = new AMap.Geocoder(useCity && city ? { city: city } : {});
@@ -514,10 +543,21 @@ window._AMapSecurityConfig = { securityJsCode: "f5122d0c0aae74cc4c4e8f4ce0a196cc
       });
     });
   }
+  // v38：已核实经纬度的地点直接用坐标，不再依赖高德的名称解析（这是D2整张图空白的根因：
+  // 4个途经点里3个是POI名，解析全失败，可用点不足2个就直接返回，地图停在高德默认的北京视野）。
+  // 坐标来源见 COORD_OVERRIDES 的注释，均为 WGS-84，在此转成高德用的 GCJ-02。
+  var COORDS = {"独山子区":[44.3278,84.8844],"哈希勒根达坂":[43.7311,84.4196],"尼勒克县":[43.8003,82.5117],"昭苏县":[43.1572,81.1311],"察布查尔锡伯自治县":[43.8408,81.1514],"伊宁市":[43.9081,81.2778],"特克斯县":[43.2136,81.8372],"巩留县":[43.4667,82.1489],"夏塔古道":[42.6682,80.5863]};
   function geocode(address, city) {
+    var c = COORDS[address];
+    if (c) {
+      var g = wgs84ToGcj02(c[1], c[0]);
+      return Promise.resolve(new AMap.LngLat(g[0], g[1]));
+    }
     return geocodeOnce(address, city, true)
       .then(function(l){ return l || placeOnce(address, city); })
-      .then(function(l){ return l || placeOnce(address, "新疆"); })
+      // v38：第3级不再传州级地名（"伊犁哈萨克自治州"这类 setCity 会让 PlaceSearch 返回空），
+      // 改为完全不限定城市，让关键词在全国范围检索。
+      .then(function(l){ return l || placeOnce(address, null); })
       .then(function(l){ return l || geocodeOnce(address, city, false); });
   }
   function hotelIcon(){
