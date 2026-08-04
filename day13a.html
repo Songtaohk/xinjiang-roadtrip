@@ -408,6 +408,7 @@ footer.site-footer {
     <div class="warn-box"><strong>驾车注意事项：</strong>⚠这是一个体力消耗很大的合并方案：在翻越3400米高海拔垭口、经历一整天山区弯道驾驶（限速30-40km/h、精神高度集中）之后，还要再连续驾驶4-4.5小时高速才能到乌鲁木齐，对司机疲劳驾驶风险明显高于默认方案，务必安排副驾驶轮换或视精力现场决定是否在独山子/奎屯改为默认方案过夜；⏰建议时间预算（估算，仅供参考）：6:00起床，6:30从唐布拉出发，44km/约1小时抵乔尔玛入口（凭预约凭证，建议约8:00-10:00时段），之后驾车独库公路北段5.5小时（中值），预计13:15-13:30抵独山子，午餐+休息1-1.5小时（务必强制休息，不要连续驾驶超过2小时不停），15:00左右从独山子出发，4.25小时车程（中值），预计19:15-19:30抵乌鲁木齐机场附近还车，还车手续30-45分钟，20:00后入住酒店，当天不再安排市区游览（如需大巴扎晚饭，视抵达时间和体力现场决定，不建议勉强）；乌鲁木齐8月28日日落时间没有查到当天精确数据，外推估算约21:05左右，19:30后天色已近黄昏，不适合再安排景点游览</div>
   </div>
   
+  
   <div class="section-card">
     <h3><span class="icon">☀️</span>日出日落 &amp; 穿衣建议</h3>
     <table class="info-table"><tr><td class="label">日出</td><td>唐布拉07:40</td></tr><tr><td class="label">日落</td><td>乌鲁木齐20:52</td></tr><tr><td class="label">白天气温参考</td><td>唐布拉晨约7-11℃；哈希勒根达坂5-12℃（可能0-5℃，推算，非8月实测）；乌鲁木齐当晚31℃（近3年均值，2025同日实况33℃）</td></tr><tr><td class="label">夜间气温参考</td><td>乌鲁木齐17℃（近3年均值，2025同日实况21℃）</td></tr><tr><td class="label">紫外线</td><td>达坂垭口很强（5级+，推算）；乌鲁木齐市区常年偏强（6-7级）</td></tr></table>
@@ -495,6 +496,7 @@ window._AMapSecurityConfig = { securityJsCode: "f5122d0c0aae74cc4c4e8f4ce0a196cc
   var routePoints = [{"keyword":"唐布拉草原","city":"伊犁哈萨克自治州"},{"keyword":"乔尔玛烈士陵园","city":"伊犁哈萨克自治州"},{"keyword":"哈希勒根达坂","city":"伊犁哈萨克自治州"},{"keyword":"独山子大峡谷","city":"克拉玛依市"},{"keyword":"乌鲁木齐地窝堡国际机场","city":"乌鲁木齐市"}];
   var hotels = [{"name":"乌鲁木齐环球国际大酒店","city":"乌鲁木齐市"},{"name":"迎港酒店(乌鲁木齐天山国际机场店)","city":"乌鲁木齐市"}];
   var rentals = [{"name":"神州租车(地窝堡国际机场店)","city":"乌鲁木齐市","label":"🚗 还车：神州租车(地窝堡国际机场店)"},{"name":"一嗨租车(地窝堡机场店)","city":"乌鲁木齐市","label":"🚗 还车：一嗨租车(地窝堡机场店)"}];
+  var heritagePts = [];
 
   // v37：多级兜底解析。AMap.Geocoder 是"地址"解析器，只对行政地名（市/县/区/乡镇）可靠；
   // 对"哈希勒根达坂""乔尔玛烈士陵园""孟克特旅游景区""加尕斯台镇"这类 POI / 小地名经常失败。
@@ -570,6 +572,9 @@ window._AMapSecurityConfig = { securityJsCode: "f5122d0c0aae74cc4c4e8f4ce0a196cc
   function rentalIcon(){
     return new AMap.Icon({ size: new AMap.Size(25,34), image: "https://webapi.amap.com/theme/v1.3/markers/n/mark_g.png", imageSize: new AMap.Size(25,34) });
   }
+  function heritageIcon(){
+    return new AMap.Icon({ size: new AMap.Size(25,34), image: "https://webapi.amap.com/theme/v1.3/markers/n/mark_b.png", imageSize: new AMap.Size(25,34) });
+  }
   function gasIcon(){
     return new AMap.Icon({ size: new AMap.Size(19,33), image: "https://webapi.amap.com/theme/v1.3/markers/n/mark_bs.png", imageSize: new AMap.Size(19,33) });
   }
@@ -579,6 +584,15 @@ window._AMapSecurityConfig = { securityJsCode: "f5122d0c0aae74cc4c4e8f4ce0a196cc
       geocode(h.name, h.city).then(function(loc){
         if (!loc) return;
         new AMap.Marker({ position: loc, map: map, icon: hotelIcon(), title: h.name, label: { content: "🏨 " + h.name, direction: "top" } });
+      });
+    });
+  }
+  function addHeritageMarkers(){
+    heritagePts.forEach(function(kw){
+      geocode(kw, null).then(function(loc){
+        if (!loc) return;
+        new AMap.Marker({ position: loc, map: map, icon: heritageIcon(), title: kw,
+          label: { content: "🏛️ 世界遗产：" + kw, direction: "bottom" } });
       });
     });
   }
@@ -626,6 +640,7 @@ window._AMapSecurityConfig = { securityJsCode: "f5122d0c0aae74cc4c4e8f4ce0a196cc
       }
       addHotelMarkers();
       addRentalMarkers();
+      addHeritageMarkers();
     });
   } else {
     Promise.all(routePoints.map(function(p){ return geocode(p.keyword, p.city); })).then(function(locs){
@@ -655,6 +670,7 @@ window._AMapSecurityConfig = { securityJsCode: "f5122d0c0aae74cc4c4e8f4ce0a196cc
         if (statusEl) statusEl.innerHTML += "<br>可定位的点不足2个，无法规划路线，请在高德地图App中手动搜索：" + routePoints.map(function(p){ return p.keyword; }).join(" → ");
         addHotelMarkers();
         addRentalMarkers();
+        addHeritageMarkers();
         return;
       }
       var start = locs[validIdx[0]];
@@ -675,6 +691,7 @@ window._AMapSecurityConfig = { securityJsCode: "f5122d0c0aae74cc4c4e8f4ce0a196cc
         map.setFitView();
         addHotelMarkers();
         addRentalMarkers();
+        addHeritageMarkers();
         addGasStationMarkers(validIdx.map(function(i){ return locs[i]; }));
       });
     });

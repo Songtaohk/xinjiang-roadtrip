@@ -407,6 +407,7 @@ footer.site-footer {
     <div class="warn-box"><strong>驾车注意事项：</strong>⚠️<strong>上午进园/环湖走逆时针</strong>（与昨天下午的顺时针相反）：攻略作者的结论是上午A区顺光最出片，逆时针走A区光线最好。⚠️看日出的机位推荐度：克勒涌珠＝点将台＞松树头＝网红灯塔（金花紫卉）＝西海草原。正儿八经看太阳日出选<strong>点将台</strong>（地势更高、能拍到的湖面更广阔，从老东门进入也是看日出最近的点）；想拍日照金山尤其是粉色雪山选<strong>克勒涌珠</strong>——⚠️关键细节：不要停到克勒涌珠正正的停车场，在它前面一点靠近湖那边还有个山包，要在天亮前爬上那个山包，否则日出天空会被山包遮挡。⚠️节假日赛湖有两个位置会堵车（下高速位置和检票口），如果不住湖边要多预留5-10分钟。⚠️<strong>为什么选奎屯而不是克拉玛依过夜</strong>：这段总里程约780公里（赛里木湖→魔鬼城→布尔津），克拉玛依就在奎屯往北145公里的同一条路上，两种拆法总里程完全相同，区别只是这145公里放在今天开还是明天开。选奎屯的理由是今天能在湖边多留约2小时（赛里木湖是本次资料里评价最高的一站），而且奎屯的酒店已经核实过好几家；代价是明天会变成较重的一天（约480公里）。⏰建议时间预算（估算，仅供参考）：5:30起床，6:00-6:30抵达日出机位（务必天亮前到位并爬上克勒涌珠前面的山包），07:38日出（推算），拍到8:30，早餐，9:00-12:00逆时针补完剩下的湖区，12:00-13:00午餐，13:00出园东行，3.5-4小时车程，16:30-17:00抵达奎屯，休整后晚餐。</div>
   </div>
   
+  
   <div class="section-card">
     <h3><span class="icon">☀️</span>日出日落 &amp; 穿衣建议</h3>
     <table class="info-table"><tr><td class="label">日出</td><td>赛里木湖约07:38（推算）</td></tr><tr><td class="label">日落</td><td>奎屯约21:13（推算）</td></tr><tr><td class="label">白天气温参考</td><td>赛里木湖白天约15-21℃；奎屯29-34℃</td></tr><tr><td class="label">夜间气温参考</td><td>赛里木湖清晨最冷，接近0-5℃；奎屯夜间17-21℃</td></tr><tr><td class="label">紫外线</td><td>赛里木湖强至很强；奎屯平原中等（约3级）</td></tr></table>
@@ -484,6 +485,7 @@ window._AMapSecurityConfig = { securityJsCode: "f5122d0c0aae74cc4c4e8f4ce0a196cc
   var routePoints = [{"keyword":"赛里木湖","city":"博尔塔拉蒙古自治州"},{"keyword":"精河县","city":"博尔塔拉蒙古自治州"},{"keyword":"奎屯市","city":"奎屯市"}];
   var hotels = [{"name":"初禾酒店（奎屯）","city":"奎屯市"},{"name":"丽枫酒店（奎屯中心公园店）","city":"奎屯市"},{"name":"奎屯柏曼假日酒店 / 星程酒店（奎屯体育中心西公园店）","city":"奎屯市"}];
   var rentals = [];
+  var heritagePts = [];
 
   // v37：多级兜底解析。AMap.Geocoder 是"地址"解析器，只对行政地名（市/县/区/乡镇）可靠；
   // 对"哈希勒根达坂""乔尔玛烈士陵园""孟克特旅游景区""加尕斯台镇"这类 POI / 小地名经常失败。
@@ -559,6 +561,9 @@ window._AMapSecurityConfig = { securityJsCode: "f5122d0c0aae74cc4c4e8f4ce0a196cc
   function rentalIcon(){
     return new AMap.Icon({ size: new AMap.Size(25,34), image: "https://webapi.amap.com/theme/v1.3/markers/n/mark_g.png", imageSize: new AMap.Size(25,34) });
   }
+  function heritageIcon(){
+    return new AMap.Icon({ size: new AMap.Size(25,34), image: "https://webapi.amap.com/theme/v1.3/markers/n/mark_b.png", imageSize: new AMap.Size(25,34) });
+  }
   function gasIcon(){
     return new AMap.Icon({ size: new AMap.Size(19,33), image: "https://webapi.amap.com/theme/v1.3/markers/n/mark_bs.png", imageSize: new AMap.Size(19,33) });
   }
@@ -568,6 +573,15 @@ window._AMapSecurityConfig = { securityJsCode: "f5122d0c0aae74cc4c4e8f4ce0a196cc
       geocode(h.name, h.city).then(function(loc){
         if (!loc) return;
         new AMap.Marker({ position: loc, map: map, icon: hotelIcon(), title: h.name, label: { content: "🏨 " + h.name, direction: "top" } });
+      });
+    });
+  }
+  function addHeritageMarkers(){
+    heritagePts.forEach(function(kw){
+      geocode(kw, null).then(function(loc){
+        if (!loc) return;
+        new AMap.Marker({ position: loc, map: map, icon: heritageIcon(), title: kw,
+          label: { content: "🏛️ 世界遗产：" + kw, direction: "bottom" } });
       });
     });
   }
@@ -615,6 +629,7 @@ window._AMapSecurityConfig = { securityJsCode: "f5122d0c0aae74cc4c4e8f4ce0a196cc
       }
       addHotelMarkers();
       addRentalMarkers();
+      addHeritageMarkers();
     });
   } else {
     Promise.all(routePoints.map(function(p){ return geocode(p.keyword, p.city); })).then(function(locs){
@@ -644,6 +659,7 @@ window._AMapSecurityConfig = { securityJsCode: "f5122d0c0aae74cc4c4e8f4ce0a196cc
         if (statusEl) statusEl.innerHTML += "<br>可定位的点不足2个，无法规划路线，请在高德地图App中手动搜索：" + routePoints.map(function(p){ return p.keyword; }).join(" → ");
         addHotelMarkers();
         addRentalMarkers();
+        addHeritageMarkers();
         return;
       }
       var start = locs[validIdx[0]];
@@ -664,6 +680,7 @@ window._AMapSecurityConfig = { securityJsCode: "f5122d0c0aae74cc4c4e8f4ce0a196cc
         map.setFitView();
         addHotelMarkers();
         addRentalMarkers();
+        addHeritageMarkers();
         addGasStationMarkers(validIdx.map(function(i){ return locs[i]; }));
       });
     });

@@ -406,6 +406,7 @@ footer.site-footer {
     <div class="warn-box"><strong>驾车注意事项：</strong>⚠️<strong>方案2专属提醒：这一天最重要的事情不是住宿，而是独库公路的预约</strong>。方案2的D2（8/17）就要开独库北段，而独库预约必须绑定车牌号、且线上不支持改车牌。因此<strong>在出发来新疆之前</strong>就应该联系租车公司要到指定车牌号，并提前1-7天在「游新疆一码游」小程序预约好8/17的时段（建议选8:00-10:00的第一个时段，全天时间最从容）。如果等到落地后甚至取车后才去约，按攻略作者的说法"大概率抢不到票"。落地当晚可以再刷一次小程序确认预约状态正常。</div>
   </div>
   
+  
   <div class="section-card">
     <h3><span class="icon">☀️</span>日出日落 &amp; 穿衣建议</h3>
     <table class="info-table"><tr><td class="label">日出</td><td>07:14</td></tr><tr><td class="label">日落</td><td>21:14</td></tr><tr><td class="label">白天气温参考</td><td>31℃（近3年8月均值）</td></tr><tr><td class="label">夜间气温参考</td><td>17℃（近3年8月均值）</td></tr><tr><td class="label">紫外线</td><td>未查到当日精确预报值；乌鲁木齐8月常年紫外线偏强（6-7级）</td></tr></table>
@@ -449,6 +450,7 @@ window._AMapSecurityConfig = { securityJsCode: "f5122d0c0aae74cc4c4e8f4ce0a196cc
   var routePoints = [{"keyword":"乌鲁木齐地窝堡国际机场","city":"乌鲁木齐市"}];
   var hotels = [{"name":"天缘景瑞酒店（机场店）","city":"乌鲁木齐市"}];
   var rentals = [];
+  var heritagePts = [];
 
   // v37：多级兜底解析。AMap.Geocoder 是"地址"解析器，只对行政地名（市/县/区/乡镇）可靠；
   // 对"哈希勒根达坂""乔尔玛烈士陵园""孟克特旅游景区""加尕斯台镇"这类 POI / 小地名经常失败。
@@ -524,6 +526,9 @@ window._AMapSecurityConfig = { securityJsCode: "f5122d0c0aae74cc4c4e8f4ce0a196cc
   function rentalIcon(){
     return new AMap.Icon({ size: new AMap.Size(25,34), image: "https://webapi.amap.com/theme/v1.3/markers/n/mark_g.png", imageSize: new AMap.Size(25,34) });
   }
+  function heritageIcon(){
+    return new AMap.Icon({ size: new AMap.Size(25,34), image: "https://webapi.amap.com/theme/v1.3/markers/n/mark_b.png", imageSize: new AMap.Size(25,34) });
+  }
   function gasIcon(){
     return new AMap.Icon({ size: new AMap.Size(19,33), image: "https://webapi.amap.com/theme/v1.3/markers/n/mark_bs.png", imageSize: new AMap.Size(19,33) });
   }
@@ -533,6 +538,15 @@ window._AMapSecurityConfig = { securityJsCode: "f5122d0c0aae74cc4c4e8f4ce0a196cc
       geocode(h.name, h.city).then(function(loc){
         if (!loc) return;
         new AMap.Marker({ position: loc, map: map, icon: hotelIcon(), title: h.name, label: { content: "🏨 " + h.name, direction: "top" } });
+      });
+    });
+  }
+  function addHeritageMarkers(){
+    heritagePts.forEach(function(kw){
+      geocode(kw, null).then(function(loc){
+        if (!loc) return;
+        new AMap.Marker({ position: loc, map: map, icon: heritageIcon(), title: kw,
+          label: { content: "🏛️ 世界遗产：" + kw, direction: "bottom" } });
       });
     });
   }
@@ -580,6 +594,7 @@ window._AMapSecurityConfig = { securityJsCode: "f5122d0c0aae74cc4c4e8f4ce0a196cc
       }
       addHotelMarkers();
       addRentalMarkers();
+      addHeritageMarkers();
     });
   } else {
     Promise.all(routePoints.map(function(p){ return geocode(p.keyword, p.city); })).then(function(locs){
@@ -609,6 +624,7 @@ window._AMapSecurityConfig = { securityJsCode: "f5122d0c0aae74cc4c4e8f4ce0a196cc
         if (statusEl) statusEl.innerHTML += "<br>可定位的点不足2个，无法规划路线，请在高德地图App中手动搜索：" + routePoints.map(function(p){ return p.keyword; }).join(" → ");
         addHotelMarkers();
         addRentalMarkers();
+        addHeritageMarkers();
         return;
       }
       var start = locs[validIdx[0]];
@@ -629,6 +645,7 @@ window._AMapSecurityConfig = { securityJsCode: "f5122d0c0aae74cc4c4e8f4ce0a196cc
         map.setFitView();
         addHotelMarkers();
         addRentalMarkers();
+        addHeritageMarkers();
         addGasStationMarkers(validIdx.map(function(i){ return locs[i]; }));
       });
     });

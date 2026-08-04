@@ -405,6 +405,7 @@ footer.site-footer {
     <div class="warn-box"><strong>驾车注意事项：</strong>⚠v18变更：这天不再回那拉提过夜，改为就近住唐布拉附近民宿，为明天直接从乔尔玛入口衔接独库公路省掉一趟来回130-220km的重复路线；黑蜂庄园/小华山（轻量版）与孟克特古道（深度版，完整线路3-5小时）时间有限建议二选一，沥青+砂石路面，雨天路滑建议四驱车；⏰建议时间预算（估算，仅供参考）：7:30早餐，8:00出发，约2小时车程（中值），10:00抵达唐布拉/孟克特入口，游览3-5小时（孟克特深度版取中值4小时，10:00-14:00），午餐可安排在活动前后或自备干粮，14:00前往唐布拉附近民宿（短途，30分钟内），15:00左右入住休息，18:00-19:00晚餐；这天相对宽松，没有需要赶的日落或末班车</div>
   </div>
   
+  
   <div class="section-card">
     <h3><span class="icon">☀️</span>日出日落 &amp; 穿衣建议</h3>
     <table class="info-table"><tr><td class="label">日出</td><td>那拉提07:33</td></tr><tr><td class="label">日落</td><td>唐布拉21:17</td></tr><tr><td class="label">白天气温参考</td><td>唐布拉（1500-1800米）约22-27℃（推算）</td></tr><tr><td class="label">夜间气温参考</td><td>7-11℃（推算）</td></tr><tr><td class="label">紫外线</td><td>强（约4级，历史同期典型）</td></tr></table>
@@ -478,6 +479,7 @@ window._AMapSecurityConfig = { securityJsCode: "f5122d0c0aae74cc4c4e8f4ce0a196cc
   var routePoints = [{"keyword":"那拉提镇","city":"伊犁哈萨克自治州"},{"keyword":"唐布拉草原","city":"伊犁哈萨克自治州"}];
   var hotels = [{"name":"唐布拉草原放蜂人家民宿","city":"伊犁哈萨克自治州"},{"name":"古道·Grassland180°草原观景民宿(孟克特景区店)","city":"伊犁哈萨克自治州"},{"name":"舒泊瑞斯酒店（唐布拉孟克特景区店，500元以上备选）","city":"伊犁哈萨克自治州"}];
   var rentals = [];
+  var heritagePts = [];
 
   // v37：多级兜底解析。AMap.Geocoder 是"地址"解析器，只对行政地名（市/县/区/乡镇）可靠；
   // 对"哈希勒根达坂""乔尔玛烈士陵园""孟克特旅游景区""加尕斯台镇"这类 POI / 小地名经常失败。
@@ -553,6 +555,9 @@ window._AMapSecurityConfig = { securityJsCode: "f5122d0c0aae74cc4c4e8f4ce0a196cc
   function rentalIcon(){
     return new AMap.Icon({ size: new AMap.Size(25,34), image: "https://webapi.amap.com/theme/v1.3/markers/n/mark_g.png", imageSize: new AMap.Size(25,34) });
   }
+  function heritageIcon(){
+    return new AMap.Icon({ size: new AMap.Size(25,34), image: "https://webapi.amap.com/theme/v1.3/markers/n/mark_b.png", imageSize: new AMap.Size(25,34) });
+  }
   function gasIcon(){
     return new AMap.Icon({ size: new AMap.Size(19,33), image: "https://webapi.amap.com/theme/v1.3/markers/n/mark_bs.png", imageSize: new AMap.Size(19,33) });
   }
@@ -562,6 +567,15 @@ window._AMapSecurityConfig = { securityJsCode: "f5122d0c0aae74cc4c4e8f4ce0a196cc
       geocode(h.name, h.city).then(function(loc){
         if (!loc) return;
         new AMap.Marker({ position: loc, map: map, icon: hotelIcon(), title: h.name, label: { content: "🏨 " + h.name, direction: "top" } });
+      });
+    });
+  }
+  function addHeritageMarkers(){
+    heritagePts.forEach(function(kw){
+      geocode(kw, null).then(function(loc){
+        if (!loc) return;
+        new AMap.Marker({ position: loc, map: map, icon: heritageIcon(), title: kw,
+          label: { content: "🏛️ 世界遗产：" + kw, direction: "bottom" } });
       });
     });
   }
@@ -609,6 +623,7 @@ window._AMapSecurityConfig = { securityJsCode: "f5122d0c0aae74cc4c4e8f4ce0a196cc
       }
       addHotelMarkers();
       addRentalMarkers();
+      addHeritageMarkers();
     });
   } else {
     Promise.all(routePoints.map(function(p){ return geocode(p.keyword, p.city); })).then(function(locs){
@@ -638,6 +653,7 @@ window._AMapSecurityConfig = { securityJsCode: "f5122d0c0aae74cc4c4e8f4ce0a196cc
         if (statusEl) statusEl.innerHTML += "<br>可定位的点不足2个，无法规划路线，请在高德地图App中手动搜索：" + routePoints.map(function(p){ return p.keyword; }).join(" → ");
         addHotelMarkers();
         addRentalMarkers();
+        addHeritageMarkers();
         return;
       }
       var start = locs[validIdx[0]];
@@ -658,6 +674,7 @@ window._AMapSecurityConfig = { securityJsCode: "f5122d0c0aae74cc4c4e8f4ce0a196cc
         map.setFitView();
         addHotelMarkers();
         addRentalMarkers();
+        addHeritageMarkers();
         addGasStationMarkers(validIdx.map(function(i){ return locs[i]; }));
       });
     });

@@ -406,6 +406,7 @@ footer.site-footer {
     <div class="warn-box"><strong>驾车注意事项：</strong>⚠v27变更说明：原方案魔鬼城安排在傍晚17:00-21:00看日落，是雅丹地貌摄影的最佳光线，但如果看完日落再开2小时以上山路/戈壁路去奎屯，等于夜里9点以后才出发、11点后才能到，与本行程反复强调的"避免天黑后在偏远路段行车"原则冲突；用户已确认放弃日落光线，改为白天/午后游览魔鬼城，代价是失去最佳摄影光线（正午前后光线偏平、游客更多更热），换来的是当天能安全抵达奎屯，天黑前入住；⚠布尔津-乌尔禾的公里数本次多个来源不一致（220-350km），建议出发前务必用高德/百度地图核实实时路况，按用户口头确认的"3小时"车程预留时间余量；⏰建议时间预算（按放弃日落的白天版重新估算）：7:00早餐，7:30从布尔津出发，3小时车程，10:30左右抵达魔鬼城，游览2-3小时（10:30-13:30，含简餐），13:30-14:00出发前往奎屯，2小时以上车程，16:00-16:30左右抵达奎屯，入住休息，18:00-19:00晚餐；这个时间线全程在天黑前完成，比原方案更早结束一天的行程</div>
   </div>
   
+  
   <div class="section-card">
     <h3><span class="icon">☀️</span>日出日落 &amp; 穿衣建议</h3>
     <table class="info-table"><tr><td class="label">日出</td><td>布尔津07:17（奎屯07:31）</td></tr><tr><td class="label">日落</td><td>奎屯21:15（乌尔禾景区约21:14）</td></tr><tr><td class="label">白天气温参考</td><td>魔鬼城29-36℃；奎屯约31℃（另一数据源18-32℃区间）</td></tr><tr><td class="label">夜间气温参考</td><td>魔鬼城19-26℃；奎屯约17℃</td></tr><tr><td class="label">紫外线</td><td>很强（4级，UVI正午常达8-9，魔鬼城戈壁裸地紫外线反射强）</td></tr></table>
@@ -464,6 +465,7 @@ window._AMapSecurityConfig = { securityJsCode: "f5122d0c0aae74cc4c4e8f4ce0a196cc
   var routePoints = [{"keyword":"布尔津县","city":"阿勒泰地区"},{"keyword":"世界魔鬼城","city":"克拉玛依市"},{"keyword":"奎屯市","city":"奎屯市"}];
   var hotels = [{"name":"丽枫酒店(奎屯中心公园店)","city":"奎屯市"},{"name":"星程酒店(奎屯体育中心西公园店)","city":"奎屯市"}];
   var rentals = [];
+  var heritagePts = [];
 
   // v37：多级兜底解析。AMap.Geocoder 是"地址"解析器，只对行政地名（市/县/区/乡镇）可靠；
   // 对"哈希勒根达坂""乔尔玛烈士陵园""孟克特旅游景区""加尕斯台镇"这类 POI / 小地名经常失败。
@@ -539,6 +541,9 @@ window._AMapSecurityConfig = { securityJsCode: "f5122d0c0aae74cc4c4e8f4ce0a196cc
   function rentalIcon(){
     return new AMap.Icon({ size: new AMap.Size(25,34), image: "https://webapi.amap.com/theme/v1.3/markers/n/mark_g.png", imageSize: new AMap.Size(25,34) });
   }
+  function heritageIcon(){
+    return new AMap.Icon({ size: new AMap.Size(25,34), image: "https://webapi.amap.com/theme/v1.3/markers/n/mark_b.png", imageSize: new AMap.Size(25,34) });
+  }
   function gasIcon(){
     return new AMap.Icon({ size: new AMap.Size(19,33), image: "https://webapi.amap.com/theme/v1.3/markers/n/mark_bs.png", imageSize: new AMap.Size(19,33) });
   }
@@ -548,6 +553,15 @@ window._AMapSecurityConfig = { securityJsCode: "f5122d0c0aae74cc4c4e8f4ce0a196cc
       geocode(h.name, h.city).then(function(loc){
         if (!loc) return;
         new AMap.Marker({ position: loc, map: map, icon: hotelIcon(), title: h.name, label: { content: "🏨 " + h.name, direction: "top" } });
+      });
+    });
+  }
+  function addHeritageMarkers(){
+    heritagePts.forEach(function(kw){
+      geocode(kw, null).then(function(loc){
+        if (!loc) return;
+        new AMap.Marker({ position: loc, map: map, icon: heritageIcon(), title: kw,
+          label: { content: "🏛️ 世界遗产：" + kw, direction: "bottom" } });
       });
     });
   }
@@ -595,6 +609,7 @@ window._AMapSecurityConfig = { securityJsCode: "f5122d0c0aae74cc4c4e8f4ce0a196cc
       }
       addHotelMarkers();
       addRentalMarkers();
+      addHeritageMarkers();
     });
   } else {
     Promise.all(routePoints.map(function(p){ return geocode(p.keyword, p.city); })).then(function(locs){
@@ -624,6 +639,7 @@ window._AMapSecurityConfig = { securityJsCode: "f5122d0c0aae74cc4c4e8f4ce0a196cc
         if (statusEl) statusEl.innerHTML += "<br>可定位的点不足2个，无法规划路线，请在高德地图App中手动搜索：" + routePoints.map(function(p){ return p.keyword; }).join(" → ");
         addHotelMarkers();
         addRentalMarkers();
+        addHeritageMarkers();
         return;
       }
       var start = locs[validIdx[0]];
@@ -644,6 +660,7 @@ window._AMapSecurityConfig = { securityJsCode: "f5122d0c0aae74cc4c4e8f4ce0a196cc
         map.setFitView();
         addHotelMarkers();
         addRentalMarkers();
+        addHeritageMarkers();
         addGasStationMarkers(validIdx.map(function(i){ return locs[i]; }));
       });
     });

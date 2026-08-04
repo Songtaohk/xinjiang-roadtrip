@@ -407,6 +407,7 @@ footer.site-footer {
     <div class="warn-box"><strong>驾车注意事项：</strong>⚠️这一天刻意安排得很轻松，是为了给次日的独库长途日留足精力，同时留出处理突发状况（取车手续、车牌不符、预约异常）的缓冲时间。⏰建议时间预算（估算，仅供参考）：8:00早餐，8:30到机场租车门店取车（手续约30-45分钟），9:15出发，3-3.5小时车程，12:30-13:00抵达奎屯，午餐后如有精力可下午去独山子大峡谷（奎屯到独山子约30km/30分钟，大峡谷再往南约20km），18:00-19:00返回奎屯晚餐；当晚务必再刷一次「游新疆一码游」小程序，确认次日独库预约状态正常、时段无误。</div>
   </div>
   
+  
   <div class="section-card">
     <h3><span class="icon">☀️</span>日出日落 &amp; 穿衣建议</h3>
     <table class="info-table"><tr><td class="label">日出</td><td>约07:24（推算）</td></tr><tr><td class="label">日落</td><td>约21:25（推算）</td></tr><tr><td class="label">白天气温参考</td><td>29-34℃（奎屯8月历史统计）</td></tr><tr><td class="label">夜间气温参考</td><td>17-21℃</td></tr><tr><td class="label">紫外线</td><td>强（约3-4级）；戈壁绿洲地带日照强烈</td></tr></table>
@@ -479,6 +480,7 @@ window._AMapSecurityConfig = { securityJsCode: "f5122d0c0aae74cc4c4e8f4ce0a196cc
   var routePoints = [{"keyword":"乌鲁木齐地窝堡国际机场","city":"乌鲁木齐市"},{"keyword":"石河子市","city":"石河子市"},{"keyword":"奎屯市","city":"奎屯市"}];
   var hotels = [{"name":"初禾酒店（奎屯）","city":"奎屯市"},{"name":"丽枫酒店（奎屯中心公园店）","city":"奎屯市"},{"name":"星程酒店（奎屯体育中心西公园店）","city":"奎屯市"}];
   var rentals = [];
+  var heritagePts = [];
 
   // v37：多级兜底解析。AMap.Geocoder 是"地址"解析器，只对行政地名（市/县/区/乡镇）可靠；
   // 对"哈希勒根达坂""乔尔玛烈士陵园""孟克特旅游景区""加尕斯台镇"这类 POI / 小地名经常失败。
@@ -554,6 +556,9 @@ window._AMapSecurityConfig = { securityJsCode: "f5122d0c0aae74cc4c4e8f4ce0a196cc
   function rentalIcon(){
     return new AMap.Icon({ size: new AMap.Size(25,34), image: "https://webapi.amap.com/theme/v1.3/markers/n/mark_g.png", imageSize: new AMap.Size(25,34) });
   }
+  function heritageIcon(){
+    return new AMap.Icon({ size: new AMap.Size(25,34), image: "https://webapi.amap.com/theme/v1.3/markers/n/mark_b.png", imageSize: new AMap.Size(25,34) });
+  }
   function gasIcon(){
     return new AMap.Icon({ size: new AMap.Size(19,33), image: "https://webapi.amap.com/theme/v1.3/markers/n/mark_bs.png", imageSize: new AMap.Size(19,33) });
   }
@@ -563,6 +568,15 @@ window._AMapSecurityConfig = { securityJsCode: "f5122d0c0aae74cc4c4e8f4ce0a196cc
       geocode(h.name, h.city).then(function(loc){
         if (!loc) return;
         new AMap.Marker({ position: loc, map: map, icon: hotelIcon(), title: h.name, label: { content: "🏨 " + h.name, direction: "top" } });
+      });
+    });
+  }
+  function addHeritageMarkers(){
+    heritagePts.forEach(function(kw){
+      geocode(kw, null).then(function(loc){
+        if (!loc) return;
+        new AMap.Marker({ position: loc, map: map, icon: heritageIcon(), title: kw,
+          label: { content: "🏛️ 世界遗产：" + kw, direction: "bottom" } });
       });
     });
   }
@@ -610,6 +624,7 @@ window._AMapSecurityConfig = { securityJsCode: "f5122d0c0aae74cc4c4e8f4ce0a196cc
       }
       addHotelMarkers();
       addRentalMarkers();
+      addHeritageMarkers();
     });
   } else {
     Promise.all(routePoints.map(function(p){ return geocode(p.keyword, p.city); })).then(function(locs){
@@ -639,6 +654,7 @@ window._AMapSecurityConfig = { securityJsCode: "f5122d0c0aae74cc4c4e8f4ce0a196cc
         if (statusEl) statusEl.innerHTML += "<br>可定位的点不足2个，无法规划路线，请在高德地图App中手动搜索：" + routePoints.map(function(p){ return p.keyword; }).join(" → ");
         addHotelMarkers();
         addRentalMarkers();
+        addHeritageMarkers();
         return;
       }
       var start = locs[validIdx[0]];
@@ -659,6 +675,7 @@ window._AMapSecurityConfig = { securityJsCode: "f5122d0c0aae74cc4c4e8f4ce0a196cc
         map.setFitView();
         addHotelMarkers();
         addRentalMarkers();
+        addHeritageMarkers();
         addGasStationMarkers(validIdx.map(function(i){ return locs[i]; }));
       });
     });

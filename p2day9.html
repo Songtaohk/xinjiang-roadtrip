@@ -407,6 +407,7 @@ footer.site-footer {
     <div class="warn-box"><strong>驾车注意事项：</strong>⚠️这是方案2里第二重的一天（仅次于D2独库日）。选择住奎屯而非克拉玛依的代价就体现在今天：如果昨晚住克拉玛依，今天只需约335公里/4-4.5小时。⚠️<strong>魔鬼城正好是正午到达</strong>（约11:30-12:00），这是戈壁一天中最热、光线最硬的时候（29-36℃），拍照效果不如清晨傍晚，且体感很晒——建议带足水、遮阳帽和防晒，游览控制在2小时内，不要在正午暴晒下久留。⚠️五彩滩日落约21:10（推算），今天17:00前后就能到布尔津，有充足时间先吃饭休整再去五彩滩，不必赶。⏰建议时间预算（估算，仅供参考）：7:00早餐，7:30从奎屯出发，3-3.5小时车程，11:00-11:30抵达魔鬼城，游览＋午餐约3小时（14:00离开），3小时车程，17:00抵达布尔津办理入住，17:30-18:30晚餐，19:00前往五彩滩（布尔津县城到五彩滩很近），19:30-21:30在栈道等光线变化到日落，22:00返回酒店。<br>❓<strong>能不能今天就一口气开到贾登峪、省下布尔津这一晚？（算过了，不建议）</strong>：把布尔津→贾登峪这150公里/3小时接在今天后面，全天会变成<strong>约630公里、11-11.5小时</strong>（奎屯→魔鬼城245km/3-3.5h ＋ 魔鬼城游览2h ＋ 魔鬼城→布尔津235km/3h ＋ 布尔津→贾登峪150km/3h）。7:00出发约18:00-18:30能到，天还亮（日落21:09推算），<strong>理论上跑得完，但代价很大</strong>：①<strong>五彩滩日落彻底没了</strong>——它的全部价值就在傍晚那一小时，21:10日落，要看就到不了贾登峪；②这会成为全程最重的一天，<strong>比D2独库那天还重</strong>，而且昨天刚在赛里木湖看完日出（早起），今天最后一段又是山路，疲劳驾驶风险最高；③贾登峪那张改期的房要从8/25再改到8/24，等于跟商家谈第二次。<strong>如果确实需要省一天，砍掉D10的贾登峪那一晚是更划算的做法</strong>（同样省一天，但保住五彩滩日落，且没有任何一天超过5小时车程），详见D10页面。</div>
   </div>
   
+  
   <div class="section-card">
     <h3><span class="icon">☀️</span>日出日落 &amp; 穿衣建议</h3>
     <table class="info-table"><tr><td class="label">日出</td><td>奎屯约07:33（推算）</td></tr><tr><td class="label">日落</td><td>布尔津/五彩滩约21:10（推算）</td></tr><tr><td class="label">白天气温参考</td><td>魔鬼城29-36℃（戈壁裸地正午体感更高）；布尔津28-33℃</td></tr><tr><td class="label">夜间气温参考</td><td>布尔津夜间13-22℃</td></tr><tr><td class="label">紫外线</td><td>🔴很强（4级以上，魔鬼城戈壁裸地正午UVI常达8-9，地表反射强）</td></tr></table>
@@ -475,6 +476,7 @@ window._AMapSecurityConfig = { securityJsCode: "f5122d0c0aae74cc4c4e8f4ce0a196cc
   var routePoints = [{"keyword":"奎屯市","city":"奎屯市"},{"keyword":"克拉玛依市","city":"克拉玛依市"},{"keyword":"乌尔禾区","city":"克拉玛依市"},{"keyword":"布尔津县","city":"阿勒泰地区"}];
   var hotels = [{"name":"布尔津神湖大酒店","city":"阿勒泰地区"},{"name":"布尔津颐馨精品酒店（中俄老码头俄罗斯风情步行街店）","city":"阿勒泰地区"}];
   var rentals = [];
+  var heritagePts = [];
 
   // v37：多级兜底解析。AMap.Geocoder 是"地址"解析器，只对行政地名（市/县/区/乡镇）可靠；
   // 对"哈希勒根达坂""乔尔玛烈士陵园""孟克特旅游景区""加尕斯台镇"这类 POI / 小地名经常失败。
@@ -550,6 +552,9 @@ window._AMapSecurityConfig = { securityJsCode: "f5122d0c0aae74cc4c4e8f4ce0a196cc
   function rentalIcon(){
     return new AMap.Icon({ size: new AMap.Size(25,34), image: "https://webapi.amap.com/theme/v1.3/markers/n/mark_g.png", imageSize: new AMap.Size(25,34) });
   }
+  function heritageIcon(){
+    return new AMap.Icon({ size: new AMap.Size(25,34), image: "https://webapi.amap.com/theme/v1.3/markers/n/mark_b.png", imageSize: new AMap.Size(25,34) });
+  }
   function gasIcon(){
     return new AMap.Icon({ size: new AMap.Size(19,33), image: "https://webapi.amap.com/theme/v1.3/markers/n/mark_bs.png", imageSize: new AMap.Size(19,33) });
   }
@@ -559,6 +564,15 @@ window._AMapSecurityConfig = { securityJsCode: "f5122d0c0aae74cc4c4e8f4ce0a196cc
       geocode(h.name, h.city).then(function(loc){
         if (!loc) return;
         new AMap.Marker({ position: loc, map: map, icon: hotelIcon(), title: h.name, label: { content: "🏨 " + h.name, direction: "top" } });
+      });
+    });
+  }
+  function addHeritageMarkers(){
+    heritagePts.forEach(function(kw){
+      geocode(kw, null).then(function(loc){
+        if (!loc) return;
+        new AMap.Marker({ position: loc, map: map, icon: heritageIcon(), title: kw,
+          label: { content: "🏛️ 世界遗产：" + kw, direction: "bottom" } });
       });
     });
   }
@@ -606,6 +620,7 @@ window._AMapSecurityConfig = { securityJsCode: "f5122d0c0aae74cc4c4e8f4ce0a196cc
       }
       addHotelMarkers();
       addRentalMarkers();
+      addHeritageMarkers();
     });
   } else {
     Promise.all(routePoints.map(function(p){ return geocode(p.keyword, p.city); })).then(function(locs){
@@ -635,6 +650,7 @@ window._AMapSecurityConfig = { securityJsCode: "f5122d0c0aae74cc4c4e8f4ce0a196cc
         if (statusEl) statusEl.innerHTML += "<br>可定位的点不足2个，无法规划路线，请在高德地图App中手动搜索：" + routePoints.map(function(p){ return p.keyword; }).join(" → ");
         addHotelMarkers();
         addRentalMarkers();
+        addHeritageMarkers();
         return;
       }
       var start = locs[validIdx[0]];
@@ -655,6 +671,7 @@ window._AMapSecurityConfig = { securityJsCode: "f5122d0c0aae74cc4c4e8f4ce0a196cc
         map.setFitView();
         addHotelMarkers();
         addRentalMarkers();
+        addHeritageMarkers();
         addGasStationMarkers(validIdx.map(function(i){ return locs[i]; }));
       });
     });

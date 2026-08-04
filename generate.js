@@ -5,7 +5,7 @@ const { TRIP, DAYS, ALT_DAYS } = require("./data.js");
 // 页面输出为 p2day{n}.html，与方案1的 day{n}.html 完全隔离，互不覆盖。
 const { PLAN2_META, PLAN2_DAYS } = require("./plan2.js");
 // v34新增：两个方案通用的预约总表与车辆故障处理，渲染在首页
-const { ROAD_BOOKINGS, SITE_BOOKINGS, BREAKDOWN } = require("./common.js");
+const { ROAD_BOOKINGS, SITE_BOOKINGS, BREAKDOWN, HK_LICENCE } = require("./common.js");
 
 const OUT = __dirname;
 
@@ -129,19 +129,20 @@ const WAYPOINTS_CN_P2 = {
     { keyword: "乔尔玛烈士陵园", city: "伊犁哈萨克自治州" },
     { keyword: "唐布拉草原", city: "伊犁哈萨克自治州" },
   ],
+  // v39：孟克特景区封闭施工，D3改为直达昭苏，D4=夏塔，D5=昭苏机动日
   3: [
     { keyword: "唐布拉草原", city: "伊犁哈萨克自治州" },
     { keyword: "尼勒克县", city: "伊犁哈萨克自治州" },
-  ],
-  4: [
-    { keyword: "尼勒克县", city: "伊犁哈萨克自治州" },
     { keyword: "巩留县", city: "伊犁哈萨克自治州" },
     { keyword: "特克斯县", city: "伊犁哈萨克自治州" },
+  ],
+  4: [
+    { keyword: "特克斯县", city: "伊犁哈萨克自治州" },
+    { keyword: "喀拉峻景区", city: "伊犁哈萨克自治州" },
     { keyword: "昭苏县", city: "伊犁哈萨克自治州" },
   ],
   5: [
     { keyword: "昭苏县", city: "伊犁哈萨克自治州" },
-    { keyword: "夏塔乡", city: "伊犁哈萨克自治州" },
     { keyword: "夏塔古道", city: "伊犁哈萨克自治州" },
   ],
   // v34修复：原来用"白石峰"（POI，解析失败）导致高德没有走 S237 伊昭公路，
@@ -207,7 +208,6 @@ const DRIVING_POLICY_P1 = {
 };
 const DRIVING_POLICY_P2 = {
   2: 2,    // 独山子 → 独库北段 → 乔尔玛 → 唐布拉
-  3: 2,    // 孟克特 → S315百里画廊 → 尼勒克
   6: 2,    // 昭苏 → 伊昭公路S237 → 伊宁
 };
 
@@ -716,6 +716,21 @@ const COORD_OVERRIDES = {
   "夏塔古道": [42.6682, 80.5863],              // OSM node 9026734017「夏塔景区」
 };
 
+// v40：世界遗产片区的地图标记点（按关键词检索定位，非官方边界）
+const HERITAGE_POINTS = {
+  p1: {
+    2:["禾木村"], 3:["喀纳斯景区贾登峪游客中心"], 4:["喀纳斯湖","白哈巴村"], 5:["喀纳斯湖"], 6:["喀纳斯湖"],
+    9:["惠远古城"], 10:["库尔德宁","伊犁将军府"], 13:["乔尔玛烈士陵园"],
+    1:["切木尔切克石人"], 14:["乌鲁木齐文庙","陕西大寺"], "14a":["天山天池"],
+  },
+  p2: {
+    2:["乔尔玛烈士陵园"], 3:["特克斯八卦城","库尔德宁"], 4:["喀拉峻景区","昭苏圣佑庙"],
+    5:["夏塔古城遗址"], 6:["靖远寺","伊宁市"], 7:["惠远古城"],
+    10:["喀纳斯景区贾登峪游客中心"], 11:["喀纳斯湖"], 12:["禾木村"], 13:["切木尔切克石人"],
+    14:["乌鲁木齐文庙","陕西大寺"],
+  },
+};
+
 // Shared geocode/marker helper functions, inlined into every page's map script.
 const JS_HELPERS = `
   // v37：多级兜底解析。AMap.Geocoder 是"地址"解析器，只对行政地名（市/县/区/乡镇）可靠；
@@ -792,6 +807,9 @@ const JS_HELPERS = `
   function rentalIcon(){
     return new AMap.Icon({ size: new AMap.Size(25,34), image: "https://webapi.amap.com/theme/v1.3/markers/n/mark_g.png", imageSize: new AMap.Size(25,34) });
   }
+  function heritageIcon(){
+    return new AMap.Icon({ size: new AMap.Size(25,34), image: "https://webapi.amap.com/theme/v1.3/markers/n/mark_b.png", imageSize: new AMap.Size(25,34) });
+  }
   function gasIcon(){
     return new AMap.Icon({ size: new AMap.Size(19,33), image: "https://webapi.amap.com/theme/v1.3/markers/n/mark_bs.png", imageSize: new AMap.Size(19,33) });
   }
@@ -800,7 +818,7 @@ const JS_HELPERS = `
 // Builds the AMap init script for a single day's map div: real driving route
 // (via geocoded coordinates, not keyword search, for reliability), hotel markers,
 // and rental car pickup/return markers (geocoded by each company's real name+city).
-function amapDayInitScript(dayNum, points, hotels, rentals, policy) {
+function amapDayInitScript(dayNum, points, hotels, rentals, policy, heritagePts) {
   const mapId = `amap-day-${dayNum}`;
   const statusId = `amap-status-${dayNum}`;
   if (!points || points.length === 0) return "";
@@ -812,6 +830,7 @@ function amapDayInitScript(dayNum, points, hotels, rentals, policy) {
   const pointsJson = JSON.stringify(points);
   const hotelsJson = JSON.stringify(hotels || []);
   const rentalsJson = JSON.stringify(rentals || []);
+  const heritageJson = JSON.stringify(heritagePts || []);
 
   return `<script>
 (function(){
@@ -821,12 +840,22 @@ function amapDayInitScript(dayNum, points, hotels, rentals, policy) {
   var routePoints = ${pointsJson};
   var hotels = ${hotelsJson};
   var rentals = ${rentalsJson};
+  var heritagePts = ${heritageJson};
 ${JS_HELPERS}
   function addHotelMarkers(){
     hotels.forEach(function(h){
       geocode(h.name, h.city).then(function(loc){
         if (!loc) return;
         new AMap.Marker({ position: loc, map: map, icon: hotelIcon(), title: h.name, label: { content: "🏨 " + h.name, direction: "top" } });
+      });
+    });
+  }
+  function addHeritageMarkers(){
+    heritagePts.forEach(function(kw){
+      geocode(kw, null).then(function(loc){
+        if (!loc) return;
+        new AMap.Marker({ position: loc, map: map, icon: heritageIcon(), title: kw,
+          label: { content: "🏛️ 世界遗产：" + kw, direction: "bottom" } });
       });
     });
   }
@@ -874,6 +903,7 @@ ${JS_HELPERS}
       }
       addHotelMarkers();
       addRentalMarkers();
+      addHeritageMarkers();
     });
   } else {
     Promise.all(routePoints.map(function(p){ return geocode(p.keyword, p.city); })).then(function(locs){
@@ -903,6 +933,7 @@ ${JS_HELPERS}
         if (statusEl) statusEl.innerHTML += "<br>可定位的点不足2个，无法规划路线，请在高德地图App中手动搜索：" + routePoints.map(function(p){ return p.keyword; }).join(" → ");
         addHotelMarkers();
         addRentalMarkers();
+        addHeritageMarkers();
         return;
       }
       var start = locs[validIdx[0]];
@@ -923,6 +954,7 @@ ${JS_HELPERS}
         map.setFitView();
         addHotelMarkers();
         addRentalMarkers();
+        addHeritageMarkers();
         addGasStationMarkers(validIdx.map(function(i){ return locs[i]; }));
       });
     });
@@ -947,6 +979,7 @@ function renderDayPage(d, idx, navOverride, plan) {
   if (points.length > 1) legendParts.push("蓝色路线＝高德实时驾车路线规划");
   if (hotels.length > 0) legendParts.push("🏨红色标记＝推荐酒店");
   if (rentals.length > 0) legendParts.push("🚗绿色标记＝租车门店");
+  if (d.heritage && d.heritage.length > 0) legendParts.push("🏛️蓝色标记＝世界遗产片区大致位置（按名称检索，非官方边界）");
   if (points.length > 1) legendParts.push("⛽标记＝高德实时搜索到的沿途加油站（自动检索，非人工核实，仅供参考，出发前请以导航实际结果为准）");
 
   const mapSection = points.length > 0 ? `
@@ -966,6 +999,19 @@ function renderDayPage(d, idx, navOverride, plan) {
   </div>` : "";
 
   const terrainSection = d.terrain ? `<div class="terrain-box"><strong>🏔️ 地形地貌：</strong>${d.terrain}</div>` : "";
+
+  // v40新增：沿途世界遗产 / 世界遗产预备名单
+  const heritageSection = (d.heritage && d.heritage.length > 0) ? `
+  <div class="section-card">
+    <h3><span class="icon">🏛️</span>沿途世界级 / 国家级遗产与保护建筑</h3>
+    ${d.heritage.map(h => `
+    <div class="res-item">
+      <div class="res-name">${h.name}</div>
+      <div class="res-when">${h.type}</div>
+      <div class="res-body"><p>${h.note}</p></div>
+    </div>`).join("")}
+    <div class="map-note">收录范围：<strong>世界遗产（含预备名单）、世界地质公园、国家地质公园、全国重点文物保护单位（国保）、国家历史文化名城/名村、中国历史文化街区、中国传统村落</strong>。凡只有自治区级/州级身份的，已在条目中明确标注，不冒充国家级。<br>资料来源：UNESCO 世界遗产中心（whc.unesco.org）、UNESCO 世界地质公园网络（unesco.org/en/iggp）、国家文物局、住房和城乡建设部、新疆维吾尔自治区自然资源厅、国家林草局及新疆各级政府官网。地图上的 🏛️ 标记为遗产/地质公园的大致位置，由高德地图按名称检索得出，<strong>不是官方公布的边界</strong>，仅供定位参考。<br>📌 已核查但<strong>不在本次路线上</strong>的：新疆境内唯一一处 UNESCO 世界地质公园是<strong>可可托海世界地质公园</strong>（阿勒泰地区富蕴县，2017年列入，中国第35家），距阿勒泰市约290公里、距布尔津约390公里，往返需额外1.5-2天，本次未纳入。另经核查，<strong>乌尔禾世界魔鬼城、五彩滩、独山子大峡谷、赛里木湖、那拉提、喀拉峻</strong>均<strong>不是</strong>地质公园（魔鬼城是5A景区，其白垩纪鸟类足迹化石产地被列为自治区级重要地质遗迹，但未查到地质公园批复）。</div>
+  </div>` : "";
 
   const t = d.transport || {};
   const transportRows = [
@@ -1074,6 +1120,7 @@ ${navHtml(d.num, plan)}
     ${resAlertBox}
     ${notesBox}
   </div>
+  ${heritageSection}
   ${sunClothingCard}
 
   <div class="section-card">
@@ -1096,7 +1143,7 @@ ${navHtml(d.num, plan)}
   <div class="disclaimer">${TRIP.disclaimer}</div>
 </main>
 ${amapLoaderScript()}
-${amapDayInitScript(d.num, points, hotels, rentals, (plan === 2 ? DRIVING_POLICY_P2 : DRIVING_POLICY_P1)[d.num])}
+${amapDayInitScript(d.num, points, hotels, rentals, (plan === 2 ? DRIVING_POLICY_P2 : DRIVING_POLICY_P1)[d.num], (plan === 2 ? HERITAGE_POINTS.p2 : HERITAGE_POINTS.p1)[d.num])}
 ${footHtml()}`;
 }
 
@@ -1265,6 +1312,7 @@ ${planSwitchHtml(0)}
     </div>
     <div class="warn-box" id="season"><strong>关于"反向是否更好"的诚实结论：</strong>提出反向方案的原始理由是"初秋去阿勒泰更好、夏末伊犁草泛黄要趁早"。本次核查后发现：喀纳斯/禾木的金秋期集中在<strong>9月中下旬至10月初</strong>（9月20日前后常被作为峰值参考），8月15-30日全程都是绿色夏景，所以<strong>阿勒泰段无论排在前还是后，看到的都是同一种景色，这个理由在本次时间窗口内并不成立</strong>；伊犁方向确实越早越绿（攻略原文：唐布拉"8月下旬开始偏黄"、那拉提"8月草木开始泛黄"、赛里木湖"8月草原开始变黄"），反向对伊犁段略有利，但属于"8月中旬 vs 8月下旬"的程度差异，不是质变——因为无论怎么排，最早也要8月17日前后才到伊犁，早已过了攻略反复强调的6-7月最佳花期。<strong>所以反向方案的真正价值在于它容纳了昭苏、夏塔和伊昭公路，而不在季节。</strong></div>
   </div>
+  ${hkLicenceSectionHtml()}
   ${bookingSectionsHtml()}
   ${breakdownSectionHtml()}
   <div class="disclaimer">${TRIP.disclaimer}</div>
@@ -1297,6 +1345,17 @@ function bookingSectionsHtml() {
     <h3><span class="icon">🎫</span>全程景区预约与购票</h3>
     <p class="empty-note">按"需不需要抢/需不需要提前办"排序，🚨的几项都有硬性时间要求，漏掉会直接影响当天行程。</p>
     ${SITE_BOOKINGS.map(bookingItemHtml).join("")}
+  </div>`;
+}
+
+function hkLicenceSectionHtml() {
+  return `
+  <div class="section-card">
+    <h3><span class="icon">🪪</span>${HK_LICENCE.title}</h3>
+    <div class="warn-box">${HK_LICENCE.status}</div>
+    <ul style="font-size:13.5px;padding-left:20px;">${HK_LICENCE.items.map(i => `<li style="margin:7px 0;">${i}</li>`).join("")}</ul>
+    <div class="res-item"><div class="res-body"><p>${HK_LICENCE.ifOnlyHK}</p></div></div>
+    <p class="empty-note">${HK_LICENCE.sources}</p>
   </div>`;
 }
 
