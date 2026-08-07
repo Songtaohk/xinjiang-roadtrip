@@ -5,7 +5,7 @@ const { TRIP, DAYS, ALT_DAYS } = require("./data.js");
 // 页面输出为 p2day{n}.html，与方案1的 day{n}.html 完全隔离，互不覆盖。
 const { PLAN2_META, PLAN2_DAYS } = require("./plan2.js");
 // v34新增：两个方案通用的预约总表与车辆故障处理，渲染在首页
-const { ROAD_BOOKINGS, SITE_BOOKINGS, BREAKDOWN, HK_LICENCE } = require("./common.js");
+const { ROAD_BOOKINGS, SITE_BOOKINGS, BREAKDOWN, HK_LICENCE, VEHICLES } = require("./common.js");
 
 const OUT = __dirname;
 
@@ -116,8 +116,10 @@ const WAYPOINTS_CN_P2 = {
   0: [{ keyword: "乌鲁木齐地窝堡国际机场", city: "乌鲁木齐市" }],
   1: [
     { keyword: "乌鲁木齐地窝堡国际机场", city: "乌鲁木齐市" },
-    { keyword: "石河子市", city: "石河子市" },
-    { keyword: "奎屯市", city: "奎屯市" },
+    { keyword: "沙湾市", city: "塔城地区" },
+    { keyword: "安集海大峡谷", city: "塔城地区" },
+    { keyword: "独山子大峡谷", city: "克拉玛依市" },
+    { keyword: "独山子区", city: "克拉玛依市" },
   ],
   // v34：全部改用行政地名优先（Geocoder 对行政区划最可靠），POI 名称只在没有替代时使用，
   // 并已给 geocode() 加了 PlaceSearch 兜底，避免 POI 解析失败导致地图空白/路线画错。
@@ -125,6 +127,7 @@ const WAYPOINTS_CN_P2 = {
   // 并配合 DRIVING_POLICY_P2 的"最短距离"策略，避免高德绕开独库公路走高速。
   2: [
     { keyword: "独山子区", city: "克拉玛依市" },
+    { keyword: "乌苏驿", city: "塔城地区" },
     { keyword: "哈希勒根达坂", city: "伊犁哈萨克自治州" },
     { keyword: "乔尔玛烈士陵园", city: "伊犁哈萨克自治州" },
     { keyword: "唐布拉草原", city: "伊犁哈萨克自治州" },
@@ -207,13 +210,14 @@ const DRIVING_POLICY_P1 = {
   "13a": 2,
 };
 const DRIVING_POLICY_P2 = {
+  1: 2,    // 走S101山区段，用"最短距离"避免高德绕回G30
   2: 2,    // 独山子 → 独库北段 → 乔尔玛 → 唐布拉
   6: 2,    // 昭苏 → 伊昭公路S237 → 伊宁
 };
 
 const HOTEL_CITY_BIAS_P2 = {
   0: "乌鲁木齐市",
-  1: "奎屯市",
+  1: "克拉玛依市",
   2: "伊犁哈萨克自治州",
   3: "伊犁哈萨克自治州",
   4: "伊犁哈萨克自治州",
@@ -1312,6 +1316,7 @@ ${planSwitchHtml(0)}
     </div>
     <div class="warn-box" id="season"><strong>关于"反向是否更好"的诚实结论：</strong>提出反向方案的原始理由是"初秋去阿勒泰更好、夏末伊犁草泛黄要趁早"。本次核查后发现：喀纳斯/禾木的金秋期集中在<strong>9月中下旬至10月初</strong>（9月20日前后常被作为峰值参考），8月15-30日全程都是绿色夏景，所以<strong>阿勒泰段无论排在前还是后，看到的都是同一种景色，这个理由在本次时间窗口内并不成立</strong>；伊犁方向确实越早越绿（攻略原文：唐布拉"8月下旬开始偏黄"、那拉提"8月草木开始泛黄"、赛里木湖"8月草原开始变黄"），反向对伊犁段略有利，但属于"8月中旬 vs 8月下旬"的程度差异，不是质变——因为无论怎么排，最早也要8月17日前后才到伊犁，早已过了攻略反复强调的6-7月最佳花期。<strong>所以反向方案的真正价值在于它容纳了昭苏、夏塔和伊昭公路，而不在季节。</strong></div>
   </div>
+  ${vehicleSectionHtml()}
   ${hkLicenceSectionHtml()}
   ${bookingSectionsHtml()}
   ${breakdownSectionHtml()}
@@ -1345,6 +1350,50 @@ function bookingSectionsHtml() {
     <h3><span class="icon">🎫</span>全程景区预约与购票</h3>
     <p class="empty-note">按"需不需要抢/需不需要提前办"排序，🚨的几项都有硬性时间要求，漏掉会直接影响当天行程。</p>
     ${SITE_BOOKINGS.map(bookingItemHtml).join("")}
+  </div>`;
+}
+
+function vehicleSectionHtml() {
+  const rows = VEHICLES.list.map(v => `
+    <div class="res-item">
+      <div class="res-name">${v.name}</div>
+      <div class="res-when">${v.tag}</div>
+      <div class="res-body">
+        <table class="defer-table">
+          <tr><th style="width:22%;">车身尺寸</th><td>${v.size}</td></tr>
+          <tr><th>最小离地间隙</th><td>${v.clearance}</td></tr>
+          <tr><th>油箱容量</th><td>${v.tank}</td></tr>
+          <tr><th>动力</th><td>${v.power}</td></tr>
+          <tr><th>油耗 / 燃油标号</th><td>${v.fuel}</td></tr>
+          <tr><th>满油续航估算</th><td>${v.range}</td></tr>
+          <tr><th>适合场景</th><td>${v.scene}</td></tr>
+          <tr><th>稳定性</th><td>${v.stability}</td></tr>
+          <tr><th>其它特点</th><td>${v.other}</td></tr>
+          <tr><th>主要缺点</th><td>${v.cons}</td></tr>
+        </table>
+      </div>
+    </div>`).join("");
+  return `
+  <div class="section-card">
+    <h3><span class="icon">🚙</span>租车选车对比（8款候选）</h3>
+    <p class="idx-summary">${VEHICLES.intro}</p>
+    <div class="res-item">
+      <div class="res-name">${VEHICLES.routeFactors.title}</div>
+      <div class="res-body"><ul style="margin:6px 0;padding-left:20px;">${VEHICLES.routeFactors.items.map(i => `<li style="margin:6px 0;">${i}</li>`).join("")}</ul></div>
+    </div>
+    ${rows}
+    <div class="res-item">
+      <div class="res-name">🔋 ${VEHICLES.hybridExplainer.title}</div>
+      <div class="res-body">
+        <p>${VEHICLES.hybridExplainer.body}</p>
+        <p style="margin-top:10px;"><strong>对本次行程的实际影响：</strong></p>
+        <ul style="margin:6px 0;padding-left:20px;">${VEHICLES.hybridExplainer.forThisTrip.map(i => `<li style="margin:6px 0;">${i}</li>`).join("")}</ul>
+      </div>
+    </div>
+    <div class="warn-box"><strong>🎯 ${VEHICLES.recommendation.title}</strong><br>${VEHICLES.recommendation.body}</div>
+    <div class="warn-box">${VEHICLES.recommendation.fuelNote}</div>
+    <div class="warn-box">${VEHICLES.recommendation.caveat}</div>
+    <div class="map-note">数据来源：各厂商官网（长城坦克、212越野、捷途）、汽车之家/太平洋汽车/易车官方参数页、车质网与汽车之家车主口碑。缺点部分取自车主口碑与投诉平台的集中反馈，非个别案例。⚠️各车年款/配置差异很大，<strong>提车时请以实车铭牌和行驶证为准</strong>。</div>
   </div>`;
 }
 
