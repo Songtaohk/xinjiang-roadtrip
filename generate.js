@@ -116,9 +116,9 @@ const WAYPOINTS_CN_P2 = {
   0: [{ keyword: "乌鲁木齐地窝堡国际机场", city: "乌鲁木齐市" }],
   1: [
     { keyword: "乌鲁木齐地窝堡国际机场", city: "乌鲁木齐市" },
+    { keyword: "肯斯瓦特水库", city: "昌吉回族自治州" },
     { keyword: "沙湾市", city: "塔城地区" },
-    { keyword: "安集海大峡谷", city: "塔城地区" },
-    { keyword: "独山子大峡谷", city: "克拉玛依市" },
+    { keyword: "奎屯市", city: "伊犁哈萨克自治州" },
     { keyword: "独山子区", city: "克拉玛依市" },
   ],
   // v34：全部改用行政地名优先（Geocoder 对行政区划最可靠），POI 名称只在没有替代时使用，
@@ -209,11 +209,7 @@ const DRIVING_POLICY_P1 = {
   13: 2,   // 唐布拉 → 乔尔玛 → 独库北段 → 独山子
   "13a": 2,
 };
-const DRIVING_POLICY_P2 = {
-  1: 2,    // 走S101山区段，用"最短距离"避免高德绕回G30
-  2: 2,    // 独山子 → 独库北段 → 乔尔玛 → 唐布拉
-  6: 2,    // 昭苏 → 伊昭公路S237 → 伊宁
-};
+const DRIVING_POLICY_P2 = { 1: 2, 2: 2, 6: 2 };
 
 const HOTEL_CITY_BIAS_P2 = {
   0: "乌鲁木齐市",
