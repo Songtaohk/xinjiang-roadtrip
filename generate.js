@@ -5,7 +5,7 @@ const { TRIP, DAYS, ALT_DAYS } = require("./data.js");
 // 页面输出为 p2day{n}.html，与方案1的 day{n}.html 完全隔离，互不覆盖。
 const { PLAN2_META, PLAN2_DAYS } = require("./plan2.js");
 // v34新增：两个方案通用的预约总表与车辆故障处理，渲染在首页
-const { ROAD_BOOKINGS, SITE_BOOKINGS, BREAKDOWN, HK_LICENCE, VEHICLES } = require("./common.js");
+const { ROAD_BOOKINGS, SITE_BOOKINGS, BREAKDOWN, HK_LICENCE, VEHICLES, LEISURE } = require("./common.js");
 
 const OUT = __dirname;
 
@@ -1315,6 +1315,7 @@ ${planSwitchHtml(0)}
   ${vehicleSectionHtml()}
   ${hkLicenceSectionHtml()}
   ${bookingSectionsHtml()}
+  ${leisureSectionHtml()}
   ${breakdownSectionHtml()}
   <div class="disclaimer">${TRIP.disclaimer}</div>
 </main>
@@ -1423,6 +1424,57 @@ function breakdownSectionHtml() {
     ${blk(BREAKDOWN.routeRisks)}
     ${blk(BREAKDOWN.noSignal)}
     <p class="empty-note">${BREAKDOWN.disclaimer}</p>
+  </div>`;
+}
+
+
+// v50：休闲补充（骑马 / 电影院）
+function leisureSectionHtml() {
+  const H = LEISURE.horses, C = LEISURE.cinemas;
+  const horseRows = H.others.map(o => `
+    <tr><td style="white-space:nowrap;font-weight:600;">${o.d}</td><td>${o.info}</td></tr>`).join("");
+  const cineRows = C.rows.map(r => `
+    <tr>
+      <td style="white-space:nowrap;font-weight:600;">${r.d}</td>
+      <td style="white-space:nowrap;">${r.city}</td>
+      <td>${r.cinema}</td>
+      <td>${r.verdict}</td>
+    </tr>`).join("");
+  return `
+  <div class="section-card">
+    <h3><span class="icon">🐎</span>${H.title}</h3>
+    <div class="warn-box">${H.verdict}</div>
+    <div class="res-item"><div class="res-body"><p>${H.split}</p></div></div>
+    <div class="res-item">
+      <div class="res-name">${H.star.name}</div>
+      <div class="res-body"><ul style="margin:6px 0;padding-left:20px;">${H.star.items.map(i => `<li style="margin:5px 0;">${i}</li>`).join("")}</ul></div>
+    </div>
+    <div class="res-item"><div class="res-name">怎么排进行程</div><div class="res-body"><p>${H.slot}</p></div></div>
+    <div style="overflow-x:auto;">
+      <table style="width:100%;border-collapse:collapse;font-size:13px;margin:10px 0;">
+        <thead><tr style="background:#f4f6f8;"><th style="text-align:left;padding:8px;">其它可骑马的地方</th><th style="text-align:left;padding:8px;">情况</th></tr></thead>
+        <tbody>${horseRows}</tbody>
+      </table>
+    </div>
+    <p class="empty-note">${H.safety}</p>
+  </div>
+
+  <div class="section-card">
+    <h3><span class="icon">🎬</span>${C.title}</h3>
+    <div class="res-item"><div class="res-body"><p>${C.intro}</p></div></div>
+    <div style="overflow-x:auto;">
+      <table style="width:100%;border-collapse:collapse;font-size:13px;margin:10px 0;">
+        <thead><tr style="background:#f4f6f8;">
+          <th style="text-align:left;padding:8px;">过夜日</th>
+          <th style="text-align:left;padding:8px;">住宿地</th>
+          <th style="text-align:left;padding:8px;">电影院情况</th>
+          <th style="text-align:left;padding:8px;">是否值得纳入计划</th>
+        </tr></thead>
+        <tbody>${cineRows}</tbody>
+      </table>
+    </div>
+    <div class="warn-box">${C.pick}</div>
+    <p class="empty-note">${C.caveat}</p>
   </div>`;
 }
 
