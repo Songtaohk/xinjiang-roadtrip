@@ -3,7 +3,7 @@ const path = require("path");
 const { TRIP, DAYS, ALT_DAYS } = require("./data.js");
 // v32新增：方案2（反向环线）。方案1（DAYS）保持完全不变，方案2的数据独立放在 plan2.js，
 // 页面输出为 p2day{n}.html，与方案1的 day{n}.html 完全隔离，互不覆盖。
-const { PLAN2_META, PLAN2_DAYS } = require("./plan2.js");
+const { PLAN2_META, PLAN2_DAYS, PLAN2_CINEMA_NOTES } = require("./plan2.js");
 // v34新增：两个方案通用的预约总表与车辆故障处理，渲染在首页
 const { ROAD_BOOKINGS, SITE_BOOKINGS, BREAKDOWN, HK_LICENCE, VEHICLES, LEISURE } = require("./common.js");
 
@@ -213,7 +213,7 @@ const DRIVING_POLICY_P2 = { 1: 2, 2: 2, 6: 2 };
 
 const HOTEL_CITY_BIAS_P2 = {
   0: "乌鲁木齐市",
-  1: "克拉玛依市",
+  1: "奎屯市",
   2: "伊犁哈萨克自治州",
   3: "伊犁哈萨克自治州",
   4: "伊犁哈萨克自治州",
@@ -1026,6 +1026,9 @@ function renderDayPage(d, idx, navOverride, plan) {
 
   const notesBox = t.notes ? `<div class="warn-box"><strong>驾车注意事项：</strong>${t.notes}</div>` : "";
   const resAlertBox = d.reservationAlert ? `<div class="warn-box"><strong>预约提醒：</strong>${d.reservationAlert}</div>` : "";
+  const latestUpdateBox = d.latestUpdate ? `<div class="warn-box"><strong>📌 最新行程更新：</strong>${d.latestUpdate}</div>` : "";
+  const cinemaNote = d.cinemaNote || (plan === 2 ? PLAN2_CINEMA_NOTES[d.num] : "");
+  const cinemaBox = cinemaNote ? `<div class="warn-box"><strong>🎬 今晚的电影院：</strong>${cinemaNote}</div>` : "";
 
   const sc = d.sunClothing;
   const sunClothingRows = sc ? [
@@ -1101,6 +1104,7 @@ function renderDayPage(d, idx, navOverride, plan) {
 ${navHtml(d.num, plan)}
 <main>
   ${altBanner}${planBanner}
+  ${latestUpdateBox}
   <div class="day-title-block">
     <span class="day-num">Day ${d.num} · ${d.date}</span>
     <h2>${d.title}</h2>
@@ -1126,12 +1130,13 @@ ${navHtml(d.num, plan)}
   <div class="section-card">
     <h3><span class="icon">📍</span>活动安排</h3>
     ${activitiesHtml}
+    ${cinemaBox}
   </div>
 
   <div class="section-card">
     <h3><span class="icon">🍽️</span>饮食 / 住宿</h3>
     <div style="margin-bottom:10px;"><strong style="font-size:13.5px;color:var(--muted);">推荐饮食</strong>${foodHtml}</div>
-    <div><strong style="font-size:13.5px;color:var(--muted);">当晚住宿（3-4星，推荐1-3选）</strong>${hotelsHtml}</div>
+    <div><strong style="font-size:13.5px;color:var(--muted);">${d.hotelHeading || "当晚住宿（3-4星，推荐1-3选）"}</strong>${hotelsHtml}</div>
   </div>
   ${rentalCard}
 
