@@ -1,11 +1,10 @@
 const fs = require("fs");
 const path = require("path");
 const { TRIP, DAYS, ALT_DAYS } = require("./data.js");
-// v32新增：方案2（反向环线）。方案1（DAYS）保持完全不变，方案2的数据独立放在 plan2.js，
-// 页面输出为 p2day{n}.html，与方案1的 day{n}.html 完全隔离，互不覆盖。
+// 实际采用的伊犁-阿勒泰行程数据。
 const { PLAN2_META, PLAN2_DAYS, PLAN2_CINEMA_NOTES } = require("./plan2.js");
 const { JOURNAL_DAYS } = require("./journal.js");
-// v34新增：两个方案通用的预约总表与车辆故障处理，渲染在首页
+// 行前预约、车辆与故障处理信息统一渲染在首页。
 const { ROAD_BOOKINGS, SITE_BOOKINGS, BREAKDOWN, HK_LICENCE, VEHICLES, LEISURE } = require("./common.js");
 
 const OUT = __dirname;
@@ -122,7 +121,7 @@ const HOTEL_CITY_BIAS = {
   "14a": "乌鲁木齐市",
 };
 
-// ---- v32新增：方案2（反向环线）的地图途经点 ----
+// ---- 实际行程的地图途经点 ----
 const WAYPOINTS_CN_P2 = {
   0: [{ keyword: "乌鲁木齐地窝堡国际机场", city: "乌鲁木齐市" }],
   1: [
@@ -134,8 +133,7 @@ const WAYPOINTS_CN_P2 = {
   ],
   // v34：全部改用行政地名优先（Geocoder 对行政区划最可靠），POI 名称只在没有替代时使用，
   // 并已给 geocode() 加了 PlaceSearch 兜底，避免 POI 解析失败导致地图空白/路线画错。
-  // v37：改用与方案1的D13相同、已验证可解析的关键词组合（只是方向相反），
-  // 并配合 DRIVING_POLICY_P2 的"最短距离"策略，避免高德绕开独库公路走高速。
+  // 使用已验证可解析的关键词组合，并配合"最短距离"策略，避免高德绕开独库公路走高速。
   2: [
     { keyword: "独山子区", city: "克拉玛依市" },
     { keyword: "乌苏驿", city: "塔城地区" },
@@ -444,7 +442,7 @@ nav.day-nav .nav-sep {
   .journal-index-grid { grid-template-columns: 1fr; }
   .journal-photo-grid { grid-template-columns: 1fr; }
 }
-/* v32新增：方案1/方案2 切换条与总览页的方案卡片 */
+/* 顶部主导航与路线决策记录 */
 nav.plan-switch {
   display: flex; gap: 8px; flex-wrap: wrap;
   background: #12333f; padding: 8px 12px;
@@ -468,6 +466,25 @@ nav.plan-switch a.active { background: var(--warn-border); color: #2B2B2B; borde
   background: var(--teal); color: #fff; text-decoration: none;
   border-radius: 999px; font-size: 13.5px; font-weight: 600;
 }
+.decision-flow { display: grid; gap: 14px; }
+.decision-step {
+  border-left: 4px solid var(--teal-light);
+  padding: 2px 0 2px 14px;
+}
+.decision-step.final { border-left-color: #B45F35; }
+.decision-step h4 { margin: 0 0 5px; color: var(--teal); font-size: 15px; }
+.decision-step p { margin: 0; font-size: 13.5px; }
+.route-map-figure { margin: 0; text-align: center; }
+.route-map-figure img {
+  display: block;
+  width: auto;
+  max-width: 100%;
+  max-height: 78vh;
+  height: auto;
+  margin: 0 auto;
+  border: 1px solid var(--border);
+}
+.route-map-figure figcaption { margin-top: 8px; color: var(--muted); font-size: 12.5px; }
 .res-item { border-left: 3px solid var(--warn-border); padding: 8px 0 8px 12px; margin-bottom: 16px; }
 .res-item .res-name { font-weight: 700; font-size: 14.5px; color: var(--teal); }
 .res-item .res-when { font-size: 12.5px; color: var(--muted); margin: 2px 0 6px; }
@@ -767,34 +784,21 @@ function elevChartSvg(profile) {
   </svg>`;
 }
 
-// v32新增 / v33调整：方案切换条。activePlan: 0=首页（只有两个方案入口）, 1=方案1（正向）, 2=方案2（反向）
-// v33变更：首页 index.html 现在只做方案选择，每个方案各有独立的总览页 plan1.html / plan2.html
+// 网站只保留规划过程首页和实际采用的伊犁-阿勒泰行程。
 function planSwitchHtml(activePlan) {
   return `<nav class="plan-switch">
   <a href="index.html" class="${activePlan === 0 ? "active" : ""}">🏠 首页</a>
-  <a href="plan1.html" class="${activePlan === 1 ? "active" : ""}">方案1 · 正向（阿勒泰→伊犁）</a>
-  <a href="plan2.html" class="${activePlan === 2 ? "active" : ""}">方案2 · 反向（伊犁→阿勒泰）</a>
+  <a href="plan2.html" class="${activePlan === 2 ? "active" : ""}">伊犁-阿勒泰</a>
 </nav>`;
 }
 
 function navHtml(activeNum, plan, isOverview, isJournal) {
-  plan = plan || 1;
-  const days = plan === 2 ? PLAN2_DAYS : DAYS;
-  const pfx = plan === 2 ? "p2day" : "day";
-  const overviewHref = plan === 2 ? "plan2.html" : "plan1.html";
-  let items = `<a href="${overviewHref}" class="${isOverview ? "active" : ""}">总览</a>`;
-  if (plan === 2) items += `<a href="journal-preview.html" class="${isJournal ? "active" : ""}">旅行实录</a>`;
-  for (const d of days) {
-    items += `<a href="${pfx}${d.num}.html" class="${activeNum === d.num ? "active" : ""}">D${d.num}</a>`;
+  let items = `<a href="plan2.html" class="${isOverview ? "active" : ""}">总览</a>`;
+  items += `<a href="journal-preview.html" class="${isJournal ? "active" : ""}">旅行实录</a>`;
+  for (const d of PLAN2_DAYS) {
+    items += `<a href="p2day${d.num}.html" class="${activeNum === d.num ? "active" : ""}">D${d.num}</a>`;
   }
-  // 备选的D13a/D14a合并方案只属于方案1，方案2不适用
-  if (plan === 1 && ALT_DAYS && ALT_DAYS.length > 0) {
-    items += `<span class="nav-sep">备选：</span>`;
-    for (const d of ALT_DAYS) {
-      items += `<a href="day${d.num}.html" class="${activeNum === d.num ? "active" : ""}">D${d.num}</a>`;
-    }
-  }
-  return `${planSwitchHtml(plan)}<nav class="day-nav">${items}</nav>`;
+  return `${planSwitchHtml(2)}<nav class="day-nav">${items}</nav>`;
 }
 
 function headHtml(title) {
@@ -1439,8 +1443,7 @@ function renderDayPage(d, idx, navOverride, plan) {
   const altBanner = isAlt ? `
   <div class="warn-box">🔀 这是一个<strong>可选替代方案</strong>页面，与默认的16天行程二选一使用，<strong>不计入正式16天总天数</strong>。使用本方案请同时查看对应的另一半备选页面，并相应忽略默认方案里被替代的那几天的住宿/还车安排。</div>` : "";
 
-  const planBanner = plan === 2 ? `
-  <div class="warn-box">🔄 你正在浏览的是 <strong>方案2 · 反向环线</strong>（伊犁先 → 阿勒泰后，含昭苏/夏塔/伊昭公路，放弃那拉提/库尔德宁/白哈巴）。它与 <a href="day${d.num}.html">方案1 · 正向的同一天</a> 是<strong>二选一</strong>的关系，机票日期完全相同，不能同时执行。切换到方案2之前，请务必先看<a href="plan2.html">方案2总览页</a>里的「预约总览」和「酒店改期方案」——特别是独库公路的预约风险，以及8/17禾木、8/18贾登峪那两晚不可取消订单的改期问题。</div>` : "";
+  const planBanner = "";
 
   return `${headHtml(`D${d.num} ${d.title} - ${TRIP.title}`)}
 <header class="site-header">
@@ -1640,37 +1643,46 @@ ${JS_HELPERS}
 </script>`;
 }
 
-// v33：首页只做方案选择，不再承载任何逐日内容或总览地图
+// 首页保留路线取舍过程，并集中放置所有行前准备与风险信息。
 function renderLandingPage() {
   return `${headHtml(TRIP.title)}
 <header class="site-header">
   <h1>${TRIP.title}</h1>
-  <p>${TRIP.subtitle}</p>
+  <p>2026年8月15日-30日 · 从路线推演到实际完成的北疆自驾记录</p>
 </header>
 ${planSwitchHtml(0)}
 <main>
   <div class="section-card">
-    <h3><span class="icon">🔀</span>请选择一个方案</h3>
-    <p class="idx-summary">两个方案都是16天（8月15日-8月30日），<strong>机票日期完全相同，只能二选一执行</strong>。点进任一方案可以看到它自己的总览地图、逐日行程和预约说明。</p>
-    <div class="plan-card">
-      <h4>方案1 · 正向环线（阿勒泰 → 伊犁）</h4>
-      <div class="plan-sub">乌鲁木齐 → 阿勒泰 → 禾木 → 贾登峪 → 喀纳斯 → 白哈巴 → 布尔津 → 魔鬼城 → 赛里木湖 → 伊宁 → 库尔德宁 → 那拉提 → 唐布拉 → 独库北段 → 乌鲁木齐</div>
-      <div class="idx-summary"><strong>✅ 优势：</strong>已确认的4笔住宿订单全部适用，不需要跟商家协商改期；独库公路排在行程末段（D13），从取车日算起有12天提前量，预约从容；喀纳斯连住2晚，节奏更宽松；包含白哈巴、库尔德宁、那拉提。<br><strong>⚠️ 代价：</strong>需要在那拉提当天早上7:40线上抢自驾票（人必须在那拉提镇或新源县城附近，攻略明确说在乔尔玛/唐布拉的很多人都没抢到），这是全程风险最高的环节；不含昭苏、夏塔、伊昭公路。</div>
-      <a class="plan-go" href="plan1.html">进入方案1 →</a>
+    <h3><span class="icon">↔</span>路线是怎样确定的</h3>
+    <p class="idx-summary">规划阶段曾认真比较“阿勒泰先、伊犁后”和“伊犁先、阿勒泰后”两种走法。旧方案不再作为可执行行程展示，以下只保留当时的取舍过程。</p>
+    <div class="decision-flow">
+      <article class="decision-step">
+        <h4>最初考虑：先阿勒泰，后伊犁</h4>
+        <p>最初希望先走阿勒泰、禾木、喀纳斯和白哈巴，再经赛里木湖进入伊犁，最后从唐布拉翻越独库公路返回乌鲁木齐。这样喀纳斯可连住两晚，独库公路也有更充足的预约准备时间，并能保留那拉提、库尔德宁和白哈巴。</p>
+      </article>
+      <article class="decision-step">
+        <h4>重新比较：为什么改为先走伊犁</h4>
+        <p>8月下旬伊犁草场逐渐泛黄，而喀纳斯、禾木真正明显的金秋通常要到9月中下旬；把阿勒泰提前十天并不会看到秋色。相反，先走伊犁更有利于保留唐布拉、昭苏、夏塔和伊昭公路，也避开了那拉提自驾票当天抢票及白哈巴边境通行证等不确定环节。</p>
+      </article>
+      <article class="decision-step final">
+        <h4>最终采用：伊犁-阿勒泰</h4>
+        <p>实际路线从乌鲁木齐先经S101、独库北段和唐布拉进入伊犁，游览喀拉峻、昭苏、夏塔、伊昭公路及赛里木湖，再北上魔鬼城、布尔津、喀纳斯、禾木和阿禾公路。最终放弃那拉提、库尔德宁和白哈巴；孟克特古道因临时封闭也未能进入。</p>
+      </article>
     </div>
-    <div class="plan-card">
-      <h4>方案2 · 反向环线（伊犁 → 阿勒泰）</h4>
-      <div class="plan-sub">乌鲁木齐 → 奎屯 → 独库北段 → 唐布拉/孟克特 → 昭苏/夏塔 → 伊昭公路 → 伊宁 → 赛里木湖 → 奎屯 → 魔鬼城 → 布尔津 → 贾登峪 → 喀纳斯 → 禾木 → 阿勒泰 → 乌鲁木齐</div>
-      <div class="idx-summary"><strong>✅ 优势：</strong>新增昭苏、夏塔、伊昭公路（“小独库”）三个方案1没有的项目；免除了那拉提当天抢票这个最高风险环节，也不再需要白哈巴的边境管理区通行证；伊犁草原排在前半程，草相对更绿。<br><strong>⚠️ 代价：</strong>独库公路被排到D2（取车后第2天），预约提前量很紧，<strong>必须在出发前就拿到租车的车牌号并提前预约</strong>；8/17禾木和8/18贾登峪两笔<strong>不可取消</strong>的订单日期对不上，需要跟商家协商改期（不保证成功）；放弃那拉提、库尔德宁、白哈巴；喀纳斯压缩为1晚。</div>
-      <a class="plan-go" href="plan2.html">进入方案2 →</a>
-    </div>
-    <div class="warn-box" id="season"><strong>关于"反向是否更好"的诚实结论：</strong>提出反向方案的原始理由是"初秋去阿勒泰更好、夏末伊犁草泛黄要趁早"。本次核查后发现：喀纳斯/禾木的金秋期集中在<strong>9月中下旬至10月初</strong>（9月20日前后常被作为峰值参考），8月15-30日全程都是绿色夏景，所以<strong>阿勒泰段无论排在前还是后，看到的都是同一种景色，这个理由在本次时间窗口内并不成立</strong>；伊犁方向确实越早越绿（攻略原文：唐布拉"8月下旬开始偏黄"、那拉提"8月草木开始泛黄"、赛里木湖"8月草原开始变黄"），反向对伊犁段略有利，但属于"8月中旬 vs 8月下旬"的程度差异，不是质变——因为无论怎么排，最早也要8月17日前后才到伊犁，早已过了攻略反复强调的6-7月最佳花期。<strong>所以反向方案的真正价值在于它容纳了昭苏、夏塔和伊昭公路，而不在季节。</strong></div>
+    <a class="plan-go" href="plan2.html">查看实际行程 →</a>
   </div>
+  <div class="section-card">
+    <h3><span class="icon">🗺️</span>本次完整驾车线路</h3>
+    <figure class="route-map-figure">
+      <img src="assets/xinjiang-driving-route.jpg" alt="北疆自驾完整线路图：乌鲁木齐出发，经伊犁、赛里木湖、阿勒泰后返回乌鲁木齐">
+      <figcaption>红线为本次实际驾车轨迹，线路从乌鲁木齐向西进入伊犁，再北上阿勒泰后返回乌鲁木齐。</figcaption>
+    </figure>
+  </div>
+  ${bookingSectionsHtml()}
   ${vehicleSectionHtml()}
   ${hkLicenceSectionHtml()}
-  ${bookingSectionsHtml()}
-  ${leisureSectionHtml()}
   ${breakdownSectionHtml()}
+  ${leisureSectionHtml()}
   <div class="disclaimer">${TRIP.disclaimer}</div>
 </main>
 ${footHtml()}`;
@@ -1694,7 +1706,7 @@ function bookingSectionsHtml() {
   return `
   <div class="section-card">
     <h3><span class="icon">🛣️</span>全程道路预约与通行管制</h3>
-    <p class="empty-note">下面每一条都标注了它属于哪个方案。⚠️独库公路那一条是全程最容易翻车的环节，务必读完。</p>
+    <p class="empty-note">下面每一条均标注实际适用日期。⚠️独库公路预约与临时管制最容易影响全程衔接，务必读完。</p>
     ${ROAD_BOOKINGS.map(bookingItemHtml).join("")}
   </div>
   <div class="section-card">
@@ -1832,115 +1844,42 @@ function leisureSectionHtml() {
   </div>`;
 }
 
-// v33：每个方案各有一个独立的总览页（plan1.html / plan2.html）
-function renderPlanOverviewPage(plan) {
-  const isP2 = plan === 2;
-  const days = isP2 ? PLAN2_DAYS : DAYS;
-  const pfx = isP2 ? "p2day" : "day";
-  const planTitle = isP2 ? "方案2 · 反向环线（伊犁 → 阿勒泰）" : "方案1 · 正向环线（阿勒泰 → 伊犁）";
-
-  const listHtml = days.map(d => `
-    <li><a href="${pfx}${d.num}.html">
+// 实际采用路线的独立总览页，只保留路线与逐日细节。
+function renderPlanOverviewPage() {
+  const planTitle = "伊犁-阿勒泰";
+  const listHtml = PLAN2_DAYS.map(d => `
+    <li><a href="p2day${d.num}.html">
       <span class="idx-day">Day ${d.num} · ${d.date}</span>
       <div class="idx-title">${d.title}</div>
       <div class="idx-summary">${d.summary}</div>
     </a></li>`).join("");
 
-  const altListHtml = (!isP2 && ALT_DAYS && ALT_DAYS.length > 0) ? ALT_DAYS.map(d => `
-    <li><a href="day${d.num}.html">
-      <span class="idx-day">D${d.num} · ${d.date}</span>
-      <div class="idx-title">${d.title}</div>
-      <div class="idx-summary">${d.summary}</div>
-    </a></li>`).join("") : "";
-
-  const altSection = altListHtml ? `
-  <div class="section-card">
-    <h3><span class="icon">🔀</span>备选方案（可选，不计入正式16天）</h3>
-    <p class="empty-note">D13a+D14a 是"独库公路当天直达乌鲁木齐"的合并方案，与默认的D13+D14二选一使用，详见各自页面内的说明。</p>
-    <ul class="index-list">${altListHtml}</ul>
-  </div>` : "";
-
-  // 方案2专属：预约总览 + 酒店改期方案
-  let p2Sections = "";
-  if (isP2) {
-    const resHtml = PLAN2_META.reservations.map(r => `
-    <div class="res-item">
-      <div class="res-name">${r.name}</div>
-      <div class="res-when">对应：${r.when}</div>
-      <div class="res-body">
-        <p><strong>规则：</strong>${r.rule}</p>
-        ${r.channel && r.channel !== "—" ? `<p><strong>渠道：</strong>${r.channel}</p>` : ""}
-        <p><strong>注意：</strong>${r.critical}</p>
-      </div>
-    </div>`).join("");
-
-    const hd = PLAN2_META.hotelDeferral;
-    const deferRows = hd.items.map(it => `
-    <tr>
-      <td><strong>${it.hotel}</strong><br><span style="color:var(--muted);font-size:12.5px;">${it.platform} · ${it.cancelPolicy}</span></td>
-      <td>${it.origDate}</td>
-      <td>${it.newDate}</td>
-      <td>${it.feasibility}</td>
-    </tr>
-    <tr><td colspan="4" style="background:#FBFAF7;font-size:13px;">${it.advice}</td></tr>`).join("");
-
-    p2Sections = `
-  <div class="section-card">
-    <h3><span class="icon">🚨</span>道路与景点预约总览</h3>
-    <p class="empty-note">以下是方案2各天涉及的全部预约规则，按重要性排序。独库公路那一条是本方案最大的单点风险，务必读完。</p>
-    ${resHtml}
-  </div>
-  <div class="section-card">
-    <h3><span class="icon">🏨</span>已订酒店的改期方案</h3>
-    <p class="idx-summary">${hd.intro}</p>
-    <table class="defer-table">
-      <tr><th style="width:30%;">订单</th><th>原定日期</th><th>方案2对应日期</th><th>可行性</th></tr>
-      ${deferRows}
-    </table>
-    <div class="res-item">
-      <div class="res-name">🟢 ${hd.bonus.hotel}</div>
-      <div class="res-when">${hd.bonus.platform} · ${hd.bonus.cancelPolicy}</div>
-      <div class="res-body"><p>${hd.bonus.note}</p></div>
-    </div>
-    <div class="res-item">
-      <div class="res-name">✅ ${hd.unaffected.hotel}</div>
-      <div class="res-body"><p>${hd.unaffected.note}</p></div>
-    </div>
-    <div class="warn-box">${hd.caveat}</div>
-  </div>`;
-  }
-
-  const p2Intro = isP2 ? `
-  <div class="warn-box">🔄 <strong>${PLAN2_META.subtitle}</strong><br>${PLAN2_META.intro} 与 <a href="plan1.html">方案1</a> 二选一，机票日期相同，不能同时执行。</div>` : "";
-
   return `${headHtml(planTitle + " - " + TRIP.title)}
 <header class="site-header">
   <h1>${TRIP.title}</h1>
-  <p>${TRIP.subtitle}</p>
+  <p>实际完成路线 · 2026年8月15日-30日</p>
 </header>
-${navHtml(null, plan, true)}
+${navHtml(null, 2, true)}
 <main>
   <div class="day-title-block">
     <span class="day-num">总览</span>
     <h2>${planTitle}</h2>
+    <div class="summary">乌鲁木齐出发，先走独库北段、唐布拉、昭苏与伊犁，再经赛里木湖北上阿勒泰，最后由阿禾公路和S21返回乌鲁木齐。</div>
   </div>
-  ${p2Intro}
   <div class="section-card">
     <h3><span class="icon">🗺️</span>全程路线总览</h3>
     <div id="amap-index" class="map-frame-wrap"></div>
     <div id="amap-index-status" class="map-fallback-link"></div>
-    <div class="map-note">每日路段均为高德实时驾车路线规划结果（真实道路轨迹），首次加载需依次请求${days.length}天路线，可能需要几秒钟。这张图画的是<strong>${isP2 ? "方案2（反向）" : "方案1（正向）"}</strong>的路线。</div>
+    <div class="map-note">地图按每天的实际途经点依次绘制，共${PLAN2_DAYS.length}天；首次加载需要几秒钟。</div>
   </div>
   <div class="section-card">
     <h3><span class="icon">📅</span>逐日行程</h3>
     <ul class="index-list">${listHtml}</ul>
   </div>
-  ${altSection}
-  ${p2Sections}
   <div class="disclaimer">${TRIP.disclaimer}</div>
 </main>
 ${amapLoaderScript()}
-${amapIndexInitScript(plan)}
+${amapIndexInitScript(2)}
 ${footHtml()}`;
 }
 
@@ -1954,19 +1893,18 @@ function renderJournalOverviewPage() {
     </a>`;
   }).join("");
 
-  return `${headHtml("北疆环游 · 旅行实录预览")}
+  return `${headHtml("北疆环游 · 旅行实录")}
 <header class="site-header">
   <h1>${TRIP.title}</h1>
-  <p>旅行实录文字预览 · 正式网页尚未更新</p>
+  <p>伊犁-阿勒泰 · 按实际日期整理的旅行实录</p>
 </header>
 ${navHtml(null, 2, false, true)}
 <main>
   <div class="day-title-block">
     <span class="day-num">D0–D15</span>
     <h2>北疆环游 · 旅行实录</h2>
-    <div class="summary">依据 Google Docs 原稿按实际日期重新编排。每个细节的媒体位置已预留，可加入照片或视频，合计最多 3 个。</div>
+    <div class="summary">依据旅途日记按实际日期和路线编排，并配有沿途照片与视频。</div>
   </div>
-  <div class="warn-box"><strong>预览状态：</strong>这是一份独立本地预览。当前正式网页与 GitHub 源文件均未修改；照片暂存在本机浏览器中，不会自动发布到 GitHub。</div>
   <div class="section-card">
     <h3><span class="icon">✎</span>逐日实录</h3>
     <div class="journal-index-grid">${items}</div>
@@ -1975,168 +1913,25 @@ ${navHtml(null, 2, false, true)}
 ${footHtml()}`;
 }
 
-function renderIndexPageLegacy() {
-  const listHtml = DAYS.map(d => `
-    <li><a href="day${d.num}.html">
-      <span class="idx-day">Day ${d.num} · ${d.date}</span>
-      <div class="idx-title">${d.title}</div>
-      <div class="idx-summary">${d.summary}</div>
-    </a></li>`).join("");
-
-  const altListHtml = (ALT_DAYS && ALT_DAYS.length > 0) ? ALT_DAYS.map(d => `
-    <li><a href="day${d.num}.html">
-      <span class="idx-day">D${d.num} · ${d.date}</span>
-      <div class="idx-title">${d.title}</div>
-      <div class="idx-summary">${d.summary}</div>
-    </a></li>`).join("") : "";
-
-  const altSection = altListHtml ? `
-  <div class="section-card">
-    <h3><span class="icon">🔀</span>备选方案（可选，不计入正式16天）</h3>
-    <p class="empty-note">D13a+D14a 是"独库公路当天直达乌鲁木齐"的合并方案，与默认的D13+D14二选一使用，详见各自页面内的说明。</p>
-    <ul class="index-list">${altListHtml}</ul>
-  </div>` : "";
-
-  // v32新增：方案2逐日列表
-  const p2ListHtml = PLAN2_DAYS.map(d => `
-    <li><a href="p2day${d.num}.html">
-      <span class="idx-day">Day ${d.num} · ${d.date}</span>
-      <div class="idx-title">${d.title}</div>
-      <div class="idx-summary">${d.summary}</div>
-    </a></li>`).join("");
-
-  // v32新增：方案选择卡片
-  const planChooser = `
-  <div class="section-card">
-    <h3><span class="icon">🔀</span>两个方案（二选一，机票日期相同）</h3>
-    <div class="plan-card">
-      <h4>方案1 · 正向环线（阿勒泰 → 伊犁）</h4>
-      <div class="plan-sub">乌鲁木齐 → 阿勒泰 → 禾木 → 贾登峪 → 喀纳斯 → 白哈巴 → 布尔津 → 魔鬼城 → 赛里木湖 → 伊宁 → 库尔德宁 → 那拉提 → 唐布拉 → 独库北段 → 乌鲁木齐</div>
-      <div class="idx-summary">原始方案，包含白哈巴、库尔德宁、那拉提，喀纳斯连住2晚。独库公路排在行程末段（D13），预约提前量充足。⚠️但需要在那拉提当天7:40线上抢自驾票，是全程风险最高的环节。已确认的4笔住宿订单全部适用。</div>
-      <a class="plan-go" href="day0.html">查看方案1 →</a>
-    </div>
-    <div class="plan-card">
-      <h4>方案2 · 反向环线（伊犁 → 阿勒泰）</h4>
-      <div class="plan-sub">乌鲁木齐 → 奎屯 → 独库北段 → 唐布拉/孟克特 → 昭苏/夏塔 → 伊昭公路 → 伊宁 → 赛里木湖 → 奎屯 → 魔鬼城 → 布尔津 → 贾登峪 → 喀纳斯 → 禾木 → 阿勒泰 → 乌鲁木齐</div>
-      <div class="idx-summary">${PLAN2_META.intro} ✅免除了那拉提抢票和白哈巴边境证。⚠️但独库公路被排到D2（取车后第2天），预约提前量很紧，且有2笔不可取消的订单日期对不上，需要协商改期。</div>
-      <a class="plan-go" href="p2day0.html">查看方案2 →</a>
-    </div>
-    <div class="warn-box"><strong>季节因素的诚实结论：</strong>提出反向方案的原始理由是"初秋去阿勒泰更好、夏末伊犁草泛黄要趁早"。本次核查后发现：喀纳斯/禾木的金秋期集中在<strong>9月中下旬至10月初</strong>，8月15-30日全程都是绿色夏景，所以<strong>阿勒泰段排前排后看到的是同一种景色，这个理由在本次窗口内不成立</strong>；伊犁方向确实越早越绿（攻略原文：唐布拉"8月下旬开始偏黄"、赛里木湖"8月草原开始变黄"），反向对伊犁段略有利，但属于"8月中旬 vs 8月下旬"的程度差异，不是质变。<strong>反向方案的真正价值在于它容纳了昭苏、夏塔和伊昭公路</strong>，而不在季节。</div>
-  </div>`;
-
-  // v32新增：方案2预约总览
-  const resHtml = PLAN2_META.reservations.map(r => `
-    <div class="res-item">
-      <div class="res-name">${r.name}</div>
-      <div class="res-when">对应：${r.when}</div>
-      <div class="res-body">
-        <p><strong>规则：</strong>${r.rule}</p>
-        ${r.channel && r.channel !== "—" ? `<p><strong>渠道：</strong>${r.channel}</p>` : ""}
-        <p><strong>注意：</strong>${r.critical}</p>
-      </div>
-    </div>`).join("");
-
-  const resSection = `
-  <div class="section-card">
-    <h3><span class="icon">🚨</span>方案2 · 道路与景点预约总览</h3>
-    <p class="empty-note">以下预约规则主要适用于方案2。方案1的预约情况请见各日页面的"是否需预约"一栏。</p>
-    ${resHtml}
-  </div>`;
-
-  // v32新增：不可取消订单的改期方案
-  const hd = PLAN2_META.hotelDeferral;
-  const deferRows = hd.items.map(it => `
-    <tr>
-      <td><strong>${it.hotel}</strong><br><span style="color:var(--muted);font-size:12.5px;">${it.platform} · ${it.cancelPolicy}</span></td>
-      <td>${it.origDate}</td>
-      <td>${it.newDate}</td>
-      <td>${it.feasibility}</td>
-    </tr>
-    <tr><td colspan="4" style="background:#FBFAF7;font-size:13px;">${it.advice}</td></tr>`).join("");
-
-  const deferSection = `
-  <div class="section-card">
-    <h3><span class="icon">🏨</span>方案2 · 已订酒店的改期方案</h3>
-    <p class="idx-summary">${hd.intro}</p>
-    <table class="defer-table">
-      <tr><th style="width:30%;">订单</th><th>原定日期</th><th>方案2对应日期</th><th>可行性</th></tr>
-      ${deferRows}
-    </table>
-    <div class="res-item">
-      <div class="res-name">🟢 ${hd.bonus.hotel}</div>
-      <div class="res-when">${hd.bonus.platform} · ${hd.bonus.cancelPolicy}</div>
-      <div class="res-body"><p>${hd.bonus.note}</p></div>
-    </div>
-    <div class="res-item">
-      <div class="res-name">✅ ${hd.unaffected.hotel}</div>
-      <div class="res-body"><p>${hd.unaffected.note}</p></div>
-    </div>
-    <div class="warn-box">${hd.caveat}</div>
-  </div>`;
-
-  return `${headHtml(TRIP.title)}
-<header class="site-header">
-  <h1>${TRIP.title}</h1>
-  <p>${TRIP.subtitle}</p>
-</header>
-${planSwitchHtml(0)}
-<main>
-  ${planChooser}
-  <div class="section-card">
-    <h3><span class="icon">🗺️</span>全程路线总览（方案1 · 正向）</h3>
-    <div id="amap-index" class="map-frame-wrap"></div>
-    <div id="amap-index-status" class="map-fallback-link"></div>
-    <div class="map-note">每日路段均为高德实时驾车路线规划结果（真实道路轨迹），首次加载需依次请求${DAYS.length}天路线，可能需要几秒钟。⚠️这张总览图画的是<strong>方案1</strong>的路线；方案2走的是相反方向且景点不同，请在方案2的各日页面里查看当天的具体路线图。</div>
-  </div>
-  <div class="section-card">
-    <h3><span class="icon">📅</span>方案1 · 逐日行程（正向：阿勒泰 → 伊犁）</h3>
-    <ul class="index-list">${listHtml}</ul>
-  </div>
-  ${altSection}
-  <div class="section-card">
-    <h3><span class="icon">🔄</span>方案2 · 逐日行程（反向：伊犁 → 阿勒泰）</h3>
-    <p class="empty-note">${PLAN2_META.subtitle}</p>
-    <ul class="index-list">${p2ListHtml}</ul>
-  </div>
-  ${resSection}
-  ${deferSection}
-  <div class="disclaimer">${TRIP.disclaimer}</div>
-</main>
-${amapLoaderScript()}
-${amapIndexInitScript()}
-${footHtml()}`;
+// Write files. Legacy plan-one pages are removed from the published site.
+function writeHtml(filename, html) {
+  fs.writeFileSync(path.join(OUT, filename), html.replace(/[ \t]+$/gm, ""), "utf8");
 }
 
-// Write files
-// v33：index.html 只做方案选择；每个方案各有独立总览页 plan1.html / plan2.html
-fs.writeFileSync(path.join(OUT, "index.html"), renderLandingPage(), "utf8");
-fs.writeFileSync(path.join(OUT, "plan1.html"), renderPlanOverviewPage(1), "utf8");
-fs.writeFileSync(path.join(OUT, "plan2.html"), renderPlanOverviewPage(2), "utf8");
-fs.writeFileSync(path.join(OUT, "journal-preview.html"), renderJournalOverviewPage(), "utf8");
-DAYS.forEach((d, idx) => {
-  fs.writeFileSync(path.join(OUT, `day${d.num}.html`), renderDayPage(d, idx), "utf8");
-});
-
-// v23新增：D13a/D14a 备选合并方案页面，独立于主DAYS的prev/next链条渲染，
-// 避免打乱默认16天行程的"上一天/下一天"导航顺序；显式指定各自的prev/next。
-if (ALT_DAYS && ALT_DAYS.length > 0) {
-  const d13 = DAYS.find(d => d.num === 13);
-  const d15 = DAYS.find(d => d.num === 15);
-  const alt13a = ALT_DAYS.find(d => d.num === "13a");
-  const alt14a = ALT_DAYS.find(d => d.num === "14a");
-  if (alt13a) {
-    fs.writeFileSync(path.join(OUT, `day${alt13a.num}.html`), renderDayPage(alt13a, null, { prev: d13, next: alt14a }), "utf8");
-  }
-  if (alt14a) {
-    fs.writeFileSync(path.join(OUT, `day${alt14a.num}.html`), renderDayPage(alt14a, null, { prev: alt13a, next: d15 }), "utf8");
-  }
-}
-
-// v32新增：方案2（反向环线）页面，输出为 p2day{n}.html，与方案1的 day{n}.html 完全隔离。
-// 方案1的 day0-day15.html 内容不受影响（只有导航栏顶部多了一条方案切换条）。
+writeHtml("index.html", renderLandingPage());
+writeHtml("plan2.html", renderPlanOverviewPage());
+writeHtml("journal-preview.html", renderJournalOverviewPage());
 PLAN2_DAYS.forEach((d, idx) => {
-  fs.writeFileSync(path.join(OUT, `p2day${d.num}.html`), renderDayPage(d, idx, null, 2), "utf8");
+  writeHtml(`p2day${d.num}.html`, renderDayPage(d, idx, null, 2));
 });
 
-console.log("Generated:", 1 + DAYS.length + (ALT_DAYS ? ALT_DAYS.length : 0) + PLAN2_DAYS.length, "files",
-  `(index + 方案1 ${DAYS.length}天 + 备选 ${ALT_DAYS ? ALT_DAYS.length : 0}天 + 方案2 ${PLAN2_DAYS.length}天)`);
+const legacyFiles = [
+  "plan1.html",
+  ...fs.readdirSync(OUT).filter(filename => /^day.*\.html$/.test(filename)),
+];
+for (const filename of legacyFiles) {
+  const target = path.join(OUT, filename);
+  if (fs.existsSync(target)) fs.unlinkSync(target);
+}
+
+console.log("Generated:", 3 + PLAN2_DAYS.length, "files (home + actual overview + journal + 16 days)");

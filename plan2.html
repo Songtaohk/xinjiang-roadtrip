@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>方案2 · 反向环线（伊犁 → 阿勒泰） - 北疆16日自驾行程</title>
+<title>伊犁-阿勒泰 - 北疆16日自驾行程</title>
 <style>
 :root {
   --teal: #1F4E5F;
@@ -184,7 +184,7 @@ nav.day-nav .nav-sep {
   .journal-index-grid { grid-template-columns: 1fr; }
   .journal-photo-grid { grid-template-columns: 1fr; }
 }
-/* v32新增：方案1/方案2 切换条与总览页的方案卡片 */
+/* 顶部主导航与路线决策记录 */
 nav.plan-switch {
   display: flex; gap: 8px; flex-wrap: wrap;
   background: #12333f; padding: 8px 12px;
@@ -208,6 +208,25 @@ nav.plan-switch a.active { background: var(--warn-border); color: #2B2B2B; borde
   background: var(--teal); color: #fff; text-decoration: none;
   border-radius: 999px; font-size: 13.5px; font-weight: 600;
 }
+.decision-flow { display: grid; gap: 14px; }
+.decision-step {
+  border-left: 4px solid var(--teal-light);
+  padding: 2px 0 2px 14px;
+}
+.decision-step.final { border-left-color: #B45F35; }
+.decision-step h4 { margin: 0 0 5px; color: var(--teal); font-size: 15px; }
+.decision-step p { margin: 0; font-size: 13.5px; }
+.route-map-figure { margin: 0; text-align: center; }
+.route-map-figure img {
+  display: block;
+  width: auto;
+  max-width: 100%;
+  max-height: 78vh;
+  height: auto;
+  margin: 0 auto;
+  border: 1px solid var(--border);
+}
+.route-map-figure figcaption { margin-top: 8px; color: var(--muted); font-size: 12.5px; }
 .res-item { border-left: 3px solid var(--warn-border); padding: 8px 0 8px 12px; margin-bottom: 16px; }
 .res-item .res-name { font-weight: 700; font-size: 14.5px; color: var(--teal); }
 .res-item .res-when { font-size: 12.5px; color: var(--muted); margin: 2px 0 6px; }
@@ -475,25 +494,23 @@ footer.site-footer {
 <body>
 <header class="site-header">
   <h1>北疆16日自驾行程</h1>
-  <p>香港 ⇄ 乌鲁木齐 · 8月15日–8月30日 · 全自驾</p>
+  <p>实际完成路线 · 2026年8月15日-30日</p>
 </header>
 <nav class="plan-switch">
   <a href="index.html" class="">🏠 首页</a>
-  <a href="plan1.html" class="">方案1 · 正向（阿勒泰→伊犁）</a>
-  <a href="plan2.html" class="active">方案2 · 反向（伊犁→阿勒泰）</a>
+  <a href="plan2.html" class="active">伊犁-阿勒泰</a>
 </nav><nav class="day-nav"><a href="plan2.html" class="active">总览</a><a href="journal-preview.html" class="">旅行实录</a><a href="p2day0.html" class="">D0</a><a href="p2day1.html" class="">D1</a><a href="p2day2.html" class="">D2</a><a href="p2day3.html" class="">D3</a><a href="p2day4.html" class="">D4</a><a href="p2day5.html" class="">D5</a><a href="p2day6.html" class="">D6</a><a href="p2day7.html" class="">D7</a><a href="p2day8.html" class="">D8</a><a href="p2day9.html" class="">D9</a><a href="p2day10.html" class="">D10</a><a href="p2day11.html" class="">D11</a><a href="p2day12.html" class="">D12</a><a href="p2day13.html" class="">D13</a><a href="p2day14.html" class="">D14</a><a href="p2day15.html" class="">D15</a></nav>
 <main>
   <div class="day-title-block">
     <span class="day-num">总览</span>
-    <h2>方案2 · 反向环线（伊犁 → 阿勒泰）</h2>
+    <h2>伊犁-阿勒泰</h2>
+    <div class="summary">乌鲁木齐出发，先走独库北段、唐布拉、昭苏与伊犁，再经赛里木湖北上阿勒泰，最后由阿禾公路和S21返回乌鲁木齐。</div>
   </div>
-  
-  <div class="warn-box">🔄 <strong>伊犁先 → 阿勒泰后 · 含昭苏/夏塔/伊昭公路 · 放弃那拉提/库尔德宁/白哈巴</strong><br>与方案1（正向）二选一。核心差异：把独库公路放在行程第3天、伊犁草原放在前半程（趁草未黄），阿勒泰放在后半程；新增昭苏、夏塔、伊昭公路，放弃那拉提、库尔德宁、白哈巴。总天数仍为16天，机票不变。 与 <a href="plan1.html">方案1</a> 二选一，机票日期相同，不能同时执行。</div>
   <div class="section-card">
     <h3><span class="icon">🗺️</span>全程路线总览</h3>
     <div id="amap-index" class="map-frame-wrap"></div>
     <div id="amap-index-status" class="map-fallback-link"></div>
-    <div class="map-note">每日路段均为高德实时驾车路线规划结果（真实道路轨迹），首次加载需依次请求16天路线，可能需要几秒钟。这张图画的是<strong>方案2（反向）</strong>的路线。</div>
+    <div class="map-note">地图按每天的实际途经点依次绘制，共16天；首次加载需要几秒钟。</div>
   </div>
   <div class="section-card">
     <h3><span class="icon">📅</span>逐日行程</h3>
@@ -576,112 +593,8 @@ footer.site-footer {
     <li><a href="p2day15.html">
       <span class="idx-day">Day 15 · 8月30日（周日）</span>
       <div class="idx-title">乌鲁木齐 → 香港（返程日）</div>
-      <div class="idx-summary">与方案1完全相同：上午可在市区补最后一点行程，午后前往机场，乘南航CZ603返回香港</div>
+      <div class="idx-summary">上午可在市区补最后一点行程，午后前往机场，乘南航CZ603返回香港</div>
     </a></li></ul>
-  </div>
-  
-  
-  <div class="section-card">
-    <h3><span class="icon">🚨</span>道路与景点预约总览</h3>
-    <p class="empty-note">以下是方案2各天涉及的全部预约规则，按重要性排序。独库公路那一条是本方案最大的单点风险，务必读完。</p>
-    
-    <div class="res-item">
-      <div class="res-name">🚨 独库公路北段（G217 乌苏驿—乔尔玛—那拉提入口，185km）</div>
-      <div class="res-when">对应：方案2 的 D2（8/17）</div>
-      <div class="res-body">
-        <p><strong>规则：</strong>2026年6月25日起试行预约制，7月10日起正式处罚（未预约罚款200元记1分）。管控路段全长185公里，三个入口进山都必须预约。每日通行窗口8:00-19:00，分5个时段（8-10 / 10-12 / 12-14 / 14-16 / 16-19）；19:00至次日8:00封闭施工，禁止社会车辆驶入，务必在19点前驶出山区。可提前1-7天预约，零点释放新名额。错过进场时段可申请延后1小时（单次预约仅可延后一次，不计爽约）；预约成功未通行又未取消视为爽约，全年累计爽约超3次将取消本年度预约资格。</p>
-        <p><strong>渠道：</strong>「游新疆一码游」小程序，或「平安天山」「新疆交警」「新疆路网」「新疆发布」公众号，或石榴云/丝路视听客户端。预约全程免费，需填写车辆、驾驶人信息并选定日期、入口、时段。</p>
-        <p><strong>注意：</strong>⚠️必须反复核实，这是方案2最大的单点风险：①<strong>预约绑定车牌号，且线上不支持改车牌</strong>——租车的话必须在取车前就向租车公司要到指定车牌号，否则落地当天才拿到车牌就来不及提前预约（攻略原文："如果是乌鲁木齐出发租车的，就不能直接当天或第二天开独库了，大概率抢不到票"）。方案2把独库排在D2（取车后第2天），这个提前量本身是不够的，<strong>唯一的解法就是提前拿到车牌号并在出发前1-7天预约好</strong>。②关于名额松紧：官方通告从头到尾<strong>从未公布过每日名额上限</strong>；网上流传的"每日3000辆""热门时段1小时抢空"等说法，经核查全部出自2026年7月的批量SEO/AI文章（连通行时段都与官方通告对不上），不可采信；用户咨询的攻略作者（近期实地）反馈8月很好预约。本次核查到的最新权威信息止于2026年7月13日的阿克苏日报报道，只讲规则不涉及余量。③因此结论是：<strong>"好约"和"难约"都缺乏权威证据，只能自己看实时余量</strong>。出发前7天开始每天刷小程序确认，并且注意<strong>允许当天预约</strong>，即使提前没抢到还有兜底窗口。④路况/临时封闭查「新疆交通警察」公众号，没发通知就是开放的。⑤已预约北段，当日驶出后再次进山不用二次预约。</p>
-      </div>
-    </div>
-    <div class="res-item">
-      <div class="res-name">夏塔景区</div>
-      <div class="res-when">对应：方案2 的 D5（8/20）</div>
-      <div class="res-body">
-        <p><strong>规则：</strong>自驾票共￥140；不自驾则是门票￥30＋区间车￥60。开园时间旺季（5/1-10/7）9:00-18:00。返程末班：观光车19:30从天空之境发车，区间车20:00从温泉酒店发车。⚠️2026年起自驾只能开到温泉酒店停车场，后面必须换乘观光车（2025年之前可以一路自驾到将军桥），自驾的灵活性比老攻略描述的差很多。</p>
-        <p><strong>渠道：</strong>「智游昭苏」/夏塔官方小程序，可提前7天预定。</p>
-        <p><strong>注意：</strong>⚠️暑假门票容易售罄，一定要提前买；万一没买上，可以早上8点到游客中心现场排队。⚠️夏塔临时闭园非常频繁——雨季暴雨叠加高山融水易诱发山洪、边坡落石，景区常临时半天限流或全天闭园，且预警发布滞后、消息传递不畅，很难提前预判。⚠️务必安排上午游览：6-9月旺季上午7:00-13:00晴天/高能见度占比70%以上，14:00后起雾、多云、阵雨概率升至65%-72%，16-19点是降雨峰值。</p>
-      </div>
-    </div>
-    <div class="res-item">
-      <div class="res-name">伊昭公路 S237</div>
-      <div class="res-when">对应：方案2 的 D6（8/21）</div>
-      <div class="res-body">
-        <p><strong>规则：</strong>无需预约，但有硬性通行时间限制：<strong>每日21:00至次日9:00禁止通行</strong>，所以当天不能早于9点上路。全长120-122公里（察布查尔县政府官网120公里、百度百科122公里；网上流传的132公里不准确），纯赶路约3小时，要停车游玩再加2-3小时。</p>
-        <p><strong>渠道：</strong>临时封闭查「察布查尔县零距离」公众号（没发通知就是开放的）；全疆整体路况查「新疆路网」公众号。</p>
-        <p><strong>注意：</strong>⚠️按往年情况，大概有20%-25%的时间因下雨、山体滑坡临时封路（2026年6月曾从6月8日直接封到6月17日）。方案2走的是反向（昭苏→伊宁），车流量约为正向的55%-67%，比正向轻松；代价是攻略作者认为正向（伊宁→昭苏）是上坡+临崖外侧、视野更开阔。建议出发当天早上再确认一次路况。</p>
-      </div>
-    </div>
-    <div class="res-item">
-      <div class="res-name">赛里木湖</div>
-      <div class="res-when">对应：方案2 的 D7-D8（8/22-8/23）</div>
-      <div class="res-body">
-        <p><strong>规则：</strong>旺季（4/26-10/25）24小时自驾票￥145（基础门票￥70＋自驾车￥75）；48小时自驾票￥190，仅线下或官方小程序售卖。<strong>方案2建议买24小时自驾票</strong>：D7傍晚18点进园、D8傍晚18点前出园，正好卡满24小时，比￥190的48小时票省钱且时间完全够用。</p>
-        <p><strong>渠道：</strong>线上OTA/官方小程序，或景区现场购票。</p>
-        <p><strong>注意：</strong>环湖一圈约92公里，景区内限速50，光开一圈就要2-3小时，加拍照至少6小时以上。⚠️进园方向有讲究：下午进园走顺时针、上午进园走逆时针（攻略作者的实测结论，与湖区A/C两个最美区域的光线方向有关）。⚠️看日出从高德地图的「老东门」（＝百度地图的「东门」，白天专用入口8:00-21:00）进；高德的「东门」（＝百度的「东1门」）是晚上车辆入口＋24小时出口。</p>
-      </div>
-    </div>
-    <div class="res-item">
-      <div class="res-name">🚫 孟克特古道（唐布拉支线）—— 已封闭施工，v39起移出行程</div>
-      <div class="res-when">对应：原方案2 的 D3（8/18），现已取消</div>
-      <div class="res-body">
-        <p><strong>规则：</strong>据景区公告，<strong>自2026年8月10日22:00起孟克特景区全面封闭施工</strong>，实施全域主干道加宽及全线桥涵升级改造，封闭范围为"景区全部主通行道路，包含景区入口至各核心景点全线区域"；遇恶劣天气或工程特殊情况工期顺延，恢复时间另行公告。<strong>我们8月18日正在封闭期内。</strong>旁证：2026年5月底另一份公告称孟克特因道路病害整治、山体滑坡隐患加固及强降雨，区间观光车暂停运营。（原票价供参考：￥200/车含1-5人，超5人每人加￥40，单次有效。）</p>
-        <p><strong>渠道：</strong>📞出发前请主动致电确认是否恢复：尼勒克县文旅局 0999-4621291 / 唐布拉景区 0999-4888678。</p>
-        <p><strong>注意：</strong>⚠️<strong>这份公告在网上检索不到</strong>（尼勒克县政府网、新疆文旅厅均无原文），意味着它恢复开放时<strong>大概率也不会有渠道通知你</strong>，只能主动打电话问。<br>✅<strong>不影响S315百里画廊主干道</strong>：孟克特是S315旁的独立收费支沟，不是百里画廊的一段；S315唐布拉段不圈地、不卖大门票、无检票口，可直接驶入（限7座及以下，乔尔玛口通常19:00后禁入）。<br>🔄<strong>本方案的应对</strong>：D3改为上午走完百里画廊西段、下午直达昭苏，<strong>省出的一天放到D5作为夏塔缓冲日</strong>，反而解决了全程对天气最敏感的那个风险点。替代景点见D3页面（首选S315沿线免费观景点，小华山观景台全景最佳；布隆沟免费但2026年开放状态查不到、雨后易封，只能碰运气）。</p>
-      </div>
-    </div>
-    <div class="res-item">
-      <div class="res-name">喀纳斯 / 禾木</div>
-      <div class="res-when">对应：方案2 的 D11-D13（8/26-8/28）</div>
-      <div class="res-body">
-        <p><strong>规则：</strong>喀纳斯景区游览本身无需预约，可线上或现场购票。⚠️方案2的喀纳斯只跨8/26-8/27两个自然日，理论上「一进票」（有效期2天）即可覆盖，不再像方案1那样必须买「二进票」（有效期3天）——但请在购票前用实际入园/出园日期再核对一次有效期。禾木：门票有效期48小时，区间车票可往返一次。</p>
-        <p><strong>渠道：</strong>喀纳斯景区公众号 / 原行网小程序 / OTA平台 / 现场。</p>
-        <p><strong>注意：</strong>✅用户已实地确认：禾木村内不能驾车进入，车必须停在禾木游客服务中心，换乘景区大巴入村。⚠️喀纳斯湖区核心段私家车禁入，车停贾登峪，全程换乘区间车。</p>
-      </div>
-    </div>
-    <div class="res-item">
-      <div class="res-name">阿禾公路 S232（阿勒泰↔禾木）</div>
-      <div class="res-when">对应：方案2 的 D13（8/28，方向为禾木→阿勒泰）</div>
-      <div class="res-body">
-        <p><strong>规则：</strong>据阿勒泰地区文旅局/公安局/交通运输局2026年5月18日联合公告，2026年5月21日起9米及9米以下客车全时段通行。全长209.45公里。✅官方公告确认无需办理边境管理区通行证。</p>
-        <p><strong>渠道：</strong>「阿勒泰交通建设投资发展有限公司」公众号 或「原行网」小程序【阿禾自驾】板块。</p>
-        <p><strong>注意：</strong>⚠️<strong>全程209.45公里无加油站/充电桩</strong>，出发前必须加满油/充满电，这是硬性要求不是建议。⚠️此前部分资料提到"每日限2000辆/需提前3天在原行网预约"，与最新官方公告（只提通行时间和安全提醒，未提预约/限额）不完全一致，建议出发前再次确认是否仍需预约。⚠️遇极端天气交管部门可能临时封路，可致电阿勒泰交警 0906-2311001 确认路况。</p>
-      </div>
-    </div>
-    <div class="res-item">
-      <div class="res-name">✅ 方案2 已免除的预约风险</div>
-      <div class="res-when">对应：—</div>
-      <div class="res-body">
-        <p><strong>规则：</strong>方案2放弃了那拉提和库尔德宁，因此<strong>不再需要那拉提的当天抢票环节</strong>。作为对比，方案1里那拉提自驾票只能当天线上抢：7:20前必须填好司机、驾驶证、行驶证及全部乘客身份证信息，7:40页面刷新后立刻抢，且人必须在那拉提镇或新源县城附近（攻略明确写"在乔尔玛、唐布拉的，很多人都没买到当天"）。这是方案1里风险最高、最容易翻车的一个环节，方案2直接绕开了。</p>
-        
-        <p><strong>注意：</strong>同理，方案2也不再需要白哈巴的边境管理区通行证（"移民局12367"小程序办理）。</p>
-      </div>
-    </div>
-  </div>
-  <div class="section-card">
-    <h3><span class="icon">🏨</span>已订酒店的改期方案</h3>
-    <p class="idx-summary">方案2当前已订酒店已更新为：D0天缘景逸、D1初禾、D2良栖山宿、D3 RELAXTKS、D4-D5昭苏温度湾 S、D6伊宁星程、D7赛湖丽斯未来、D10喀纳斯童话故事。喀纳斯童话故事国际酒店已经对应8月25日入住，不再存在改期问题；目前仍需处理的是禾木旧订单。</p>
-    <table class="defer-table">
-      <tr><th style="width:30%;">订单</th><th>原定日期</th><th>方案2对应日期</th><th>可行性</th></tr>
-      
-    <tr>
-      <td><strong>禾木无也民宿（素也·温馨双床房）</strong><br><span style="color:var(--muted);font-size:12.5px;">大众点评 · ❌ 不可取消</span></td>
-      <td>8月17日（方案1 的 D2）</td>
-      <td>8月27日（方案2 的 D12）</td>
-      <td>🟢 日期完全对得上</td>
-    </tr>
-    <tr><td colspan="4" style="background:#FBFAF7;font-size:13px;">方案2的D12（8/27）当晚正好住禾木，和这张订单的目的地完全一致，只是日期从8/17推迟到8/27，整整10天。建议直接联系民宿老板（大众点评订单页里的商家电话）协商改期，而不是走平台退款流程——不可取消的订单走平台大概率退不了，但民宿老板对"同样是住我家、只是换个日子"通常更愿意通融，尤其是8月底比8月中旬更接近淡季、空房概率更高。</td></tr>
-    </table>
-    <div class="res-item">
-      <div class="res-name">🟢 初禾酒店（奎屯）</div>
-      <div class="res-when">携程 · ✅ 入住当日18:00前可免费取消</div>
-      <div class="res-body"><p>这笔订单已对应方案2的D1（8月16日），无需改期。若当天决定改住独山子，务必在当日18:00前根据实际抵达时间取消；保留初禾则D2最晚6:30从奎屯出发。</p></div>
-    </div>
-    <div class="res-item">
-      <div class="res-name">✅ 天缘景逸酒店（乌鲁木齐）</div>
-      <div class="res-body"><p>✅ 已订8月15日，大众点评订单标注入住当日18:00前免费取消。D0落地后直接入住并接收租车公司送车，路线逻辑匹配；酒店名称容易与机场附近其他天缘系酒店混淆，导航必须使用订单页的完整地址。</p></div>
-    </div>
-    <div class="warn-box">⚠️禾木旧订单如仍不可取消，改期能否成功取决于商家是否愿意通融。D10喀纳斯童话故事国际酒店则已按8月25日正式预订，不需要再联系商家办理改期；但因不可取消，D10原则上应保留贾登峪住宿，除非接受房费损失并启用机动方案。</div>
   </div>
   <div class="disclaimer">本网站所有里程、车程、预约规则、价格均为出行前整理的参考信息，存在多来源冲突或未查实的字段已逐一标注。请出发前用高德/百度地图核实实时路况，并通过官方渠道确认最新预约与门票政策。</div>
 </main>

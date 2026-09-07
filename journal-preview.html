@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>北疆环游 · 旅行实录预览</title>
+<title>北疆环游 · 旅行实录</title>
 <style>
 :root {
   --teal: #1F4E5F;
@@ -184,7 +184,7 @@ nav.day-nav .nav-sep {
   .journal-index-grid { grid-template-columns: 1fr; }
   .journal-photo-grid { grid-template-columns: 1fr; }
 }
-/* v32新增：方案1/方案2 切换条与总览页的方案卡片 */
+/* 顶部主导航与路线决策记录 */
 nav.plan-switch {
   display: flex; gap: 8px; flex-wrap: wrap;
   background: #12333f; padding: 8px 12px;
@@ -208,6 +208,25 @@ nav.plan-switch a.active { background: var(--warn-border); color: #2B2B2B; borde
   background: var(--teal); color: #fff; text-decoration: none;
   border-radius: 999px; font-size: 13.5px; font-weight: 600;
 }
+.decision-flow { display: grid; gap: 14px; }
+.decision-step {
+  border-left: 4px solid var(--teal-light);
+  padding: 2px 0 2px 14px;
+}
+.decision-step.final { border-left-color: #B45F35; }
+.decision-step h4 { margin: 0 0 5px; color: var(--teal); font-size: 15px; }
+.decision-step p { margin: 0; font-size: 13.5px; }
+.route-map-figure { margin: 0; text-align: center; }
+.route-map-figure img {
+  display: block;
+  width: auto;
+  max-width: 100%;
+  max-height: 78vh;
+  height: auto;
+  margin: 0 auto;
+  border: 1px solid var(--border);
+}
+.route-map-figure figcaption { margin-top: 8px; color: var(--muted); font-size: 12.5px; }
 .res-item { border-left: 3px solid var(--warn-border); padding: 8px 0 8px 12px; margin-bottom: 16px; }
 .res-item .res-name { font-weight: 700; font-size: 14.5px; color: var(--teal); }
 .res-item .res-when { font-size: 12.5px; color: var(--muted); margin: 2px 0 6px; }
@@ -475,20 +494,18 @@ footer.site-footer {
 <body>
 <header class="site-header">
   <h1>北疆16日自驾行程</h1>
-  <p>旅行实录文字预览 · 正式网页尚未更新</p>
+  <p>伊犁-阿勒泰 · 按实际日期整理的旅行实录</p>
 </header>
 <nav class="plan-switch">
   <a href="index.html" class="">🏠 首页</a>
-  <a href="plan1.html" class="">方案1 · 正向（阿勒泰→伊犁）</a>
-  <a href="plan2.html" class="active">方案2 · 反向（伊犁→阿勒泰）</a>
+  <a href="plan2.html" class="active">伊犁-阿勒泰</a>
 </nav><nav class="day-nav"><a href="plan2.html" class="">总览</a><a href="journal-preview.html" class="active">旅行实录</a><a href="p2day0.html" class="">D0</a><a href="p2day1.html" class="">D1</a><a href="p2day2.html" class="">D2</a><a href="p2day3.html" class="">D3</a><a href="p2day4.html" class="">D4</a><a href="p2day5.html" class="">D5</a><a href="p2day6.html" class="">D6</a><a href="p2day7.html" class="">D7</a><a href="p2day8.html" class="">D8</a><a href="p2day9.html" class="">D9</a><a href="p2day10.html" class="">D10</a><a href="p2day11.html" class="">D11</a><a href="p2day12.html" class="">D12</a><a href="p2day13.html" class="">D13</a><a href="p2day14.html" class="">D14</a><a href="p2day15.html" class="">D15</a></nav>
 <main>
   <div class="day-title-block">
     <span class="day-num">D0–D15</span>
     <h2>北疆环游 · 旅行实录</h2>
-    <div class="summary">依据 Google Docs 原稿按实际日期重新编排。每个细节的媒体位置已预留，可加入照片或视频，合计最多 3 个。</div>
+    <div class="summary">依据旅途日记按实际日期和路线编排，并配有沿途照片与视频。</div>
   </div>
-  <div class="warn-box"><strong>预览状态：</strong>这是一份独立本地预览。当前正式网页与 GitHub 源文件均未修改；照片暂存在本机浏览器中，不会自动发布到 GitHub。</div>
   <div class="section-card">
     <h3><span class="icon">✎</span>逐日实录</h3>
     <div class="journal-index-grid"><a class="journal-index-item" href="p2day0.html#travel-journal">

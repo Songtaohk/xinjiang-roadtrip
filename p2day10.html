@@ -184,7 +184,7 @@ nav.day-nav .nav-sep {
   .journal-index-grid { grid-template-columns: 1fr; }
   .journal-photo-grid { grid-template-columns: 1fr; }
 }
-/* v32新增：方案1/方案2 切换条与总览页的方案卡片 */
+/* 顶部主导航与路线决策记录 */
 nav.plan-switch {
   display: flex; gap: 8px; flex-wrap: wrap;
   background: #12333f; padding: 8px 12px;
@@ -208,6 +208,25 @@ nav.plan-switch a.active { background: var(--warn-border); color: #2B2B2B; borde
   background: var(--teal); color: #fff; text-decoration: none;
   border-radius: 999px; font-size: 13.5px; font-weight: 600;
 }
+.decision-flow { display: grid; gap: 14px; }
+.decision-step {
+  border-left: 4px solid var(--teal-light);
+  padding: 2px 0 2px 14px;
+}
+.decision-step.final { border-left-color: #B45F35; }
+.decision-step h4 { margin: 0 0 5px; color: var(--teal); font-size: 15px; }
+.decision-step p { margin: 0; font-size: 13.5px; }
+.route-map-figure { margin: 0; text-align: center; }
+.route-map-figure img {
+  display: block;
+  width: auto;
+  max-width: 100%;
+  max-height: 78vh;
+  height: auto;
+  margin: 0 auto;
+  border: 1px solid var(--border);
+}
+.route-map-figure figcaption { margin-top: 8px; color: var(--muted); font-size: 12.5px; }
 .res-item { border-left: 3px solid var(--warn-border); padding: 8px 0 8px 12px; margin-bottom: 16px; }
 .res-item .res-name { font-weight: 700; font-size: 14.5px; color: var(--teal); }
 .res-item .res-when { font-size: 12.5px; color: var(--muted); margin: 2px 0 6px; }
@@ -479,13 +498,11 @@ footer.site-footer {
 </header>
 <nav class="plan-switch">
   <a href="index.html" class="">🏠 首页</a>
-  <a href="plan1.html" class="">方案1 · 正向（阿勒泰→伊犁）</a>
-  <a href="plan2.html" class="active">方案2 · 反向（伊犁→阿勒泰）</a>
+  <a href="plan2.html" class="active">伊犁-阿勒泰</a>
 </nav><nav class="day-nav"><a href="plan2.html" class="">总览</a><a href="journal-preview.html" class="">旅行实录</a><a href="p2day0.html" class="">D0</a><a href="p2day1.html" class="">D1</a><a href="p2day2.html" class="">D2</a><a href="p2day3.html" class="">D3</a><a href="p2day4.html" class="">D4</a><a href="p2day5.html" class="">D5</a><a href="p2day6.html" class="">D6</a><a href="p2day7.html" class="">D7</a><a href="p2day8.html" class="">D8</a><a href="p2day9.html" class="">D9</a><a href="p2day10.html" class="active">D10</a><a href="p2day11.html" class="">D11</a><a href="p2day12.html" class="">D12</a><a href="p2day13.html" class="">D13</a><a href="p2day14.html" class="">D14</a><a href="p2day15.html" class="">D15</a></nav>
 <main>
-  
-  <div class="warn-box">🔄 你正在浏览的是 <strong>方案2 · 反向环线</strong>（伊犁先 → 阿勒泰后，含昭苏/夏塔/伊昭公路，放弃那拉提/库尔德宁/白哈巴）。它与 <a href="day10.html">方案1 · 正向的同一天</a> 是<strong>二选一</strong>的关系，机票日期完全相同，不能同时执行。切换到方案2之前，请务必先看<a href="plan2.html">方案2总览页</a>里的「预约总览」和「酒店改期方案」——特别是独库公路的预约风险，以及8/17禾木、8/18贾登峪那两晚不可取消订单的改期问题。</div>
-  
+
+
   <div class="day-title-block">
     <span class="day-num">Day 10 · 8月25日（周二）</span>
     <h2>布尔津 → 贾登峪（轻松日 / 全程唯一的机动缓冲日）</h2>
@@ -531,15 +548,15 @@ footer.site-footer {
 
   <div class="section-card">
     <h3><span class="icon">🗺️</span>路线图</h3>
-    
+
   <div id="amap-day-10" class="map-frame-wrap"></div>
   <div id="amap-status-10" class="map-fallback-link"></div>
   <div id="amap-day-10-live" class="map-live-note"></div>
-  
+
   <div class="map-note">地图由高德地图 JS API 驱动，路线为高德实时规划结果，仅供参考；对于限速较低的山区风景公路（如独库公路）或刚通车、地图数据库可能尚未收录的新路（如阿禾公路），算法有可能判定绕行其它道路"更快"而没有真正画出本文描述的那条路，与下方"交通"表格里的文字描述（里程/车程/路名）如有出入，请以文字描述和出发前的导航实测结果为准。</div>
   <div class="map-legend">蓝色路线＝高德实时驾车路线规划 · 🏨红色标记＝推荐酒店 · 🏛️蓝色标记＝世界遗产片区大致位置（按名称检索，非官方边界） · ⛽标记＝高德实时搜索到的沿途加油站（自动检索，非人工核实，仅供参考，出发前请以导航实际结果为准）</div>
-  
-    
+
+
   <div class="elev-chart-wrap">
     <svg viewBox="0 0 640 130" class="elev-chart" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
     <polygon points="8.0,100 8.0,100.0 632.0,26.0 632.0,100" fill="#2E6F86" fill-opacity="0.12"/>
@@ -556,14 +573,14 @@ footer.site-footer {
 
   <div class="section-card">
     <h3><span class="icon">🚗</span>交通</h3>
-    <table class="info-table"><tr><td class="label">路线</td><td>布尔津 → 贾登峪（S232/县道，山区公路）</td></tr><tr><td class="label">里程</td><td>约150公里（参考已核实的贾登峪→五彩滩147公里，两地基本同一路线）</td></tr><tr><td class="label">车程</td><td><strong>纯驾车约3小时</strong>（布尔津→贾登峪）。⚠️注意区分：这3小时只算到贾登峪停车场为止。如果按备选走法当天就要换乘进喀纳斯湖区，还要再加上停车、安检、排队买/验票、景区区间车、以及到湖区后办理住宿登记，<strong>这一串加起来通常还要1.5-2小时，门到门应按4.5-5小时预留</strong></td></tr><tr><td class="label">海拔变化</td><td>布尔津 ~480m → 贾登峪 ~1350m（爬升约870m）</td></tr><tr><td class="label">历史天气参考</td><td>布尔津日间较热，贾登峪因海拔高明显凉爽，日间约18-23℃、夜间5-9℃</td></tr><tr><td class="label">加油站</td><td>布尔津县城加满油；贾登峪有喀纳斯加油站（0906-6327566，09:00-23:00，来自"原行网"官方公众号名单）</td></tr><tr><td class="label">是否需预约</td><td>今天不进景区，无需门票。⚠️但<strong>今天要把明天的喀纳斯门票买好</strong>：方案2的喀纳斯只跨8/26-8/27两个自然日，理论上「一进票」（有效期2天）即可覆盖，不再像方案1那样必须买「二进票」（有效期3天）——但购票前请用实际入园/出园日期再核对一次有效期规则，以景区当日公告为准。</td></tr></table>
-    
+    <table class="info-table"><tr><td class="label">路线</td><td>布尔津 → 贾登峪（S232/县道，山区公路）</td></tr><tr><td class="label">里程</td><td>约150公里（参考已核实的贾登峪→五彩滩147公里，两地基本同一路线）</td></tr><tr><td class="label">车程</td><td><strong>纯驾车约3小时</strong>（布尔津→贾登峪）。⚠️注意区分：这3小时只算到贾登峪停车场为止。如果按备选走法当天就要换乘进喀纳斯湖区，还要再加上停车、安检、排队买/验票、景区区间车、以及到湖区后办理住宿登记，<strong>这一串加起来通常还要1.5-2小时，门到门应按4.5-5小时预留</strong></td></tr><tr><td class="label">海拔变化</td><td>布尔津 ~480m → 贾登峪 ~1350m（爬升约870m）</td></tr><tr><td class="label">历史天气参考</td><td>布尔津日间较热，贾登峪因海拔高明显凉爽，日间约18-23℃、夜间5-9℃</td></tr><tr><td class="label">加油站</td><td>布尔津县城加满油；贾登峪有喀纳斯加油站（0906-6327566，09:00-23:00，来自"原行网"官方公众号名单）</td></tr><tr><td class="label">是否需预约</td><td>今天不进景区，无需门票。⚠️但<strong>今天要把明天的喀纳斯门票买好</strong>：本次游览跨8/26-8/27两个自然日，购票前应按实际入园、出园次数核对一进票或二进票，以景区当日公告为准。</td></tr></table>
+
     <div class="warn-box"><strong>驾车注意事项：</strong>✅<strong>默认方案：按订单住贾登峪。</strong>喀纳斯童话故事国际酒店已经预订8月25日且不可取消，因此无需再办理改期；从布尔津沿S232抵达贾登峪后，酒店就在游客服务中心对面，路线高度匹配。这一晚可用于缓冲D8-D9连续转场，并提前处理门票、停车和行李分装。<br><br>🎯<strong>机动方案仍可用，但有明确成本：</strong>如前面因封路、车辆故障或夏塔顺延丢掉一天，可不住贾登峪，直接换乘进入喀纳斯湖区，门到门约4.5-5小时；由于订单不可取消，这样会损失当晚房费。D9不建议硬接着开到贾登峪，否则会形成约630公里/11小时以上的重载日并牺牲五彩滩日落。<br><br>⚠️贾登峪停车信息：这一带有多个停车场及酒店自有车位。入住时向酒店确认车辆能否连续停放两天两夜及收费标准，因为后续进喀纳斯和禾木期间车辆需要留在换乘区。<br><br>⏰<strong>建议时间预算——默认住贾登峪</strong>：8:00早餐，8:30从布尔津出发，11:30-12:00抵达酒店，午餐后办理门票、停车和行李分装，下午休整。<br>⏰<strong>机动方案——直接进喀纳斯</strong>：8:00出发 → 11:00到贾登峪 → 停车、寄存大件行李、安检验票和排队约1-1.5小时 → 12:30前后乘区间车 → 13:30-14:00抵达喀纳斯换乘中心 → 14:30前后安顿完毕。</div>
   </div>
-  
+
   <div class="section-card">
     <h3><span class="icon">🏛️</span>沿途世界级 / 国家级遗产与保护建筑</h3>
-    
+
     <div class="res-item">
       <div class="res-name">中国阿尔泰（世界遗产预备名单）</div>
       <div class="res-when">UNESCO 世界遗产预备名单 #5533（2013年提交，自然遗产类，拟按标准 vii/viii/ix/x 申报）</div>
@@ -571,7 +588,7 @@ footer.site-footer {
     </div>
     <div class="map-note">收录范围：<strong>世界遗产（含预备名单）、世界地质公园、国家地质公园、全国重点文物保护单位（国保）、国家历史文化名城/名村、中国历史文化街区、中国传统村落</strong>。凡只有自治区级/州级身份的，已在条目中明确标注，不冒充国家级。<br>资料来源：UNESCO 世界遗产中心（whc.unesco.org）、UNESCO 世界地质公园网络（unesco.org/en/iggp）、国家文物局、住房和城乡建设部、新疆维吾尔自治区自然资源厅、国家林草局及新疆各级政府官网。地图上的 🏛️ 标记为遗产/地质公园的大致位置，由高德地图按名称检索得出，<strong>不是官方公布的边界</strong>，仅供定位参考。<br>📌 已核查但<strong>不在本次路线上</strong>的：新疆境内唯一一处 UNESCO 世界地质公园是<strong>可可托海世界地质公园</strong>（阿勒泰地区富蕴县，2017年列入，中国第35家），距阿勒泰市约290公里、距布尔津约390公里，往返需额外1.5-2天，本次未纳入。另经核查，<strong>乌尔禾世界魔鬼城、五彩滩、独山子大峡谷、赛里木湖、那拉提、喀拉峻</strong>均<strong>不是</strong>地质公园（魔鬼城是5A景区，其白垩纪鸟类足迹化石产地被列为自治区级重要地质遗迹，但未查到地质公园批复）。</div>
   </div>
-  
+
   <div class="section-card">
     <h3><span class="icon">☀️</span>日出日落 &amp; 穿衣建议</h3>
     <table class="info-table"><tr><td class="label">日出</td><td>布尔津约07:20（推算）</td></tr><tr><td class="label">日落</td><td>贾登峪约21:09（推算）</td></tr><tr><td class="label">白天气温参考</td><td>布尔津28-33℃；贾登峪约18-23℃（折算值）</td></tr><tr><td class="label">夜间气温参考</td><td>贾登峪夜间约5-9℃</td></tr><tr><td class="label">紫外线</td><td>强（6-7级，山区略偏高）</td></tr></table>
@@ -581,27 +598,27 @@ footer.site-footer {
 
   <div class="section-card">
     <h3><span class="icon">📍</span>活动安排</h3>
-    
+
       <div class="activity-item">
         <div class="name">贾登峪国家森林公园（自由休整）</div>
         <div class="meta">游览时间：视精力而定</div>
         <div class="intro">贾登峪本身是国家森林公园，山间盆地地形，四周森林环抱，也是喀纳斯、禾木、白哈巴三大景区的统一售票换乘枢纽。</div>
         <div class="note">园区内有毡房群、山丘森林和欧式城堡风格建筑；这一天刻意不排满，把它当作前面两天长途转场后的缓冲日</div>
-        
+
       </div>
       <div class="activity-item">
         <div class="name">购票 + 车辆安置准备</div>
         <div class="meta">游览时间：约1小时</div>
         <div class="intro">接下来两晚分别住在喀纳斯湖区和禾木村内，车都停在贾登峪不动，行李分装是必要的准备。</div>
         <div class="note">买好明天的喀纳斯门票；向酒店确认车辆可以连续停放两天两夜（明天进湖区、后天中午才回来取车）；整理行李，把进湖区要用的东西单独打包，大件行李寄存在贾登峪</div>
-        
+
       </div>
       <div class="activity-item">
         <div class="name">五彩滩补看（可选）</div>
         <div class="meta">游览时间：约1.5小时</div>
         <div class="intro">额尔齐斯河北岸的彩色雅丹台地，早晚光线差异很大，两天分别去看会是完全不同的效果。</div>
         <div class="note">如果昨天在五彩滩没拍尽兴，今天上午出发前可以再去一次（布尔津县城到五彩滩很近），代价是抵达贾登峪的时间推迟约2小时，但今天本来就宽松</div>
-        
+
       </div>
     <div class="warn-box"><strong>🎬 今晚的电影院：</strong>贾登峪没有商业电影院；今晚按机动休整日安排。</div>
   </div>
@@ -621,7 +638,7 @@ footer.site-footer {
         <div class="note">仅在前段行程延误、必须追回一天时启用。当天从贾登峪直接换乘进喀纳斯，行程可提前一天，但已订的贾登峪酒店不可取消。</div>
       </div></div>
   </div>
-  
+
 
   <div class="prevnext">
     <a href="p2day9.html" class="">← 上一天：D9</a>
