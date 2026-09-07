@@ -67,6 +67,112 @@ nav.day-nav .nav-sep {
   margin-left: 4px;
   white-space: nowrap;
 }
+.journal-card {
+  border-top: 4px solid #B45F35;
+  padding-top: 16px;
+}
+.journal-card > h3 { color: #8A4326; }
+.journal-meta {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 10px;
+  align-items: start;
+  padding: 10px 12px;
+  background: #F7F3ED;
+  border-left: 3px solid #B45F35;
+  margin-bottom: 8px;
+}
+.journal-route { font-size: 14px; font-weight: 600; }
+.journal-status {
+  color: #7B3F27;
+  background: #F1DED2;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  white-space: nowrap;
+}
+.journal-editor-note { color: var(--muted); font-size: 12px; margin: 0 0 8px; }
+.journal-detail {
+  padding: 18px 0;
+  border-bottom: 1px solid var(--border);
+}
+.journal-detail:last-child { border-bottom: 0; padding-bottom: 0; }
+.journal-detail p { margin: 0; font-size: 15px; line-height: 1.85; }
+.journal-upload {
+  margin-top: 12px;
+  min-height: 104px;
+  border: 1px dashed #B8A999;
+  background: #FAF8F4;
+  display: grid;
+  place-items: center;
+  padding: 10px;
+}
+.journal-upload.has-photos { display: block; }
+.journal-upload-empty { text-align: center; color: var(--muted); font-size: 12px; }
+.journal-upload-empty strong { display: block; color: var(--text); font-size: 13px; margin-bottom: 5px; }
+.journal-upload-button {
+  border: 1px solid var(--teal-light);
+  background: white;
+  color: var(--teal);
+  padding: 6px 10px;
+  border-radius: 6px;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.journal-upload-button:hover { background: #EEF5F2; }
+.journal-photo-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+.journal-photo {
+  position: relative;
+  margin: 0;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  background: #E9E5DE;
+}
+.journal-photo img, .journal-photo video { width: 100%; height: 100%; object-fit: cover; display: block; }
+.journal-photo.video { grid-column: 1 / -1; aspect-ratio: 16 / 9; background: #171717; }
+.journal-photo-remove {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 30px;
+  height: 30px;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(25,25,25,.78);
+  color: white;
+  font-size: 19px;
+  line-height: 1;
+  cursor: pointer;
+}
+.journal-photo-actions { margin-top: 8px; display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.journal-photo-actions[hidden], .journal-upload-empty[hidden] { display: none !important; }
+.journal-photo-count { color: var(--muted); font-size: 12px; }
+.journal-index-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.journal-index-item {
+  display: block;
+  background: white;
+  border: 1px solid var(--border);
+  border-left: 3px solid #B45F35;
+  padding: 12px 14px;
+  text-decoration: none;
+  color: var(--text);
+}
+.journal-index-item:hover { border-color: #B45F35; }
+.journal-index-day { color: #8A4326; font-size: 12px; font-weight: 700; }
+.journal-index-route { font-size: 14px; font-weight: 600; margin: 3px 0; }
+.journal-index-excerpt { color: var(--muted); font-size: 12.5px; }
+@media (max-width: 620px) {
+  .journal-meta { grid-template-columns: 1fr; }
+  .journal-status { justify-self: start; }
+  .journal-index-grid { grid-template-columns: 1fr; }
+  .journal-photo-grid { grid-template-columns: 1fr; }
+}
 /* v32新增：方案1/方案2 切换条与总览页的方案卡片 */
 nav.plan-switch {
   display: flex; gap: 8px; flex-wrap: wrap;
@@ -364,7 +470,7 @@ footer.site-footer {
   <a href="index.html" class="">🏠 首页</a>
   <a href="plan1.html" class="">方案1 · 正向（阿勒泰→伊犁）</a>
   <a href="plan2.html" class="active">方案2 · 反向（伊犁→阿勒泰）</a>
-</nav><nav class="day-nav"><a href="plan2.html" class="">总览</a><a href="p2day0.html" class="">D0</a><a href="p2day1.html" class="">D1</a><a href="p2day2.html" class="">D2</a><a href="p2day3.html" class="">D3</a><a href="p2day4.html" class="active">D4</a><a href="p2day5.html" class="">D5</a><a href="p2day6.html" class="">D6</a><a href="p2day7.html" class="">D7</a><a href="p2day8.html" class="">D8</a><a href="p2day9.html" class="">D9</a><a href="p2day10.html" class="">D10</a><a href="p2day11.html" class="">D11</a><a href="p2day12.html" class="">D12</a><a href="p2day13.html" class="">D13</a><a href="p2day14.html" class="">D14</a><a href="p2day15.html" class="">D15</a></nav>
+</nav><nav class="day-nav"><a href="plan2.html" class="">总览</a><a href="journal-preview.html" class="">旅行实录</a><a href="p2day0.html" class="">D0</a><a href="p2day1.html" class="">D1</a><a href="p2day2.html" class="">D2</a><a href="p2day3.html" class="">D3</a><a href="p2day4.html" class="active">D4</a><a href="p2day5.html" class="">D5</a><a href="p2day6.html" class="">D6</a><a href="p2day7.html" class="">D7</a><a href="p2day8.html" class="">D8</a><a href="p2day9.html" class="">D9</a><a href="p2day10.html" class="">D10</a><a href="p2day11.html" class="">D11</a><a href="p2day12.html" class="">D12</a><a href="p2day13.html" class="">D13</a><a href="p2day14.html" class="">D14</a><a href="p2day15.html" class="">D15</a></nav>
 <main>
   
   <div class="warn-box">🔄 你正在浏览的是 <strong>方案2 · 反向环线</strong>（伊犁先 → 阿勒泰后，含昭苏/夏塔/伊昭公路，放弃那拉提/库尔德宁/白哈巴）。它与 <a href="day4.html">方案1 · 正向的同一天</a> 是<strong>二选一</strong>的关系，机票日期完全相同，不能同时执行。切换到方案2之前，请务必先看<a href="plan2.html">方案2总览页</a>里的「预约总览」和「酒店改期方案」——特别是独库公路的预约风险，以及8/17禾木、8/18贾登峪那两晚不可取消订单的改期问题。</div>
@@ -374,6 +480,41 @@ footer.site-footer {
     <h2>喀拉峻草原（世界自然遗产）→ 傍晚转场昭苏</h2>
     <div class="summary">🏛️全程唯一一处<strong>真正走进去的世界自然遗产</strong>——「新疆天山」四大片区之一的喀拉峻。从特克斯出发仅30公里，景区内自驾＋徒步4-6小时，傍晚开63公里到昭苏，为明天的夏塔做准备</div>
   </div>
+
+<section class="section-card journal-card" id="travel-journal">
+    <h3><span class="icon">✎</span>旅行实录 · 8月19日</h3>
+    <div class="journal-meta">
+      <div class="journal-route">特克斯 → 喀拉峻 → 昭苏</div>
+      <span class="journal-status">喀拉峻骑马</span>
+    </div>
+    <p class="journal-editor-note">按实际发生时间重新编排；精选照片和视频依照对应场景呈现。</p>
+    <div class="journal-detail-list"><article class="journal-detail">
+      <p>喀拉峻是在特克斯城附近的景点，本次旅行唯一一处世界自然遗产，它位于西天山向伊犁河谷的过渡带，南面就是巍峨的天山冰川。喀拉峻的核心地貌是波浪起伏的高山草甸。可惜八月中的喀拉峻草甸已经开始泛黄，而晴天之下依然很晒紫外线很强。喀拉峻的最大视觉特征就是广阔而波浪起伏的草原，牛马羊的天堂。因为草甸是波浪起伏，你会有种无限延伸的感觉和遐想的空间，在太阳照射下，马儿的轮廓健美修长，牛羊顿显温厚而富足，不少羊甚至睡在草甸上，一头扎入怀里，只露出那一团羊毛恣意的晒太阳，简直是无忧无虑的享受。</p>
+<div class="journal-upload has-photos journal-published-media"><div class="journal-photo-grid"><figure class="journal-photo">
+          <img src="media/journal-d4-detail-1-media-1.jpg" alt="旅行照片 1" loading="lazy" decoding="async">
+        </figure><figure class="journal-photo">
+          <img src="media/journal-d4-detail-1-media-2.jpg" alt="旅行照片 2" loading="lazy" decoding="async">
+        </figure><figure class="journal-photo video">
+          <video src="media/journal-d4-detail-1-media-3.m4v" controls playsinline preload="metadata" aria-label="旅行视频 3"></video>
+        </figure></div></div>
+    </article><article class="journal-detail">
+      <p>这里是骑马的好地方，我从猎鹰台骑马一直到大峡谷再回来。这一次骑马让我首次感受到了放松的状态，可以通过喊“驾”和拉住缰绳来控制马的行进速度和方向。当然，马依然只是在走路，而非奔跑，前面还只有另一批马的控制。我想我大概是学会了驾驭马，下次应该可以尝试单独骑马了！这里的大峡谷也值得一看，只是唯一性远不如大草甸那磅礴又温暖的气势。</p>
+<div class="journal-upload has-photos journal-published-media"><div class="journal-photo-grid"><figure class="journal-photo">
+          <img src="media/journal-d4-detail-2-media-1.jpg" alt="旅行照片 1" loading="lazy" decoding="async">
+        </figure><figure class="journal-photo">
+          <img src="media/journal-d4-detail-2-media-2.jpg" alt="旅行照片 2" loading="lazy" decoding="async">
+        </figure><figure class="journal-photo video">
+          <video src="media/journal-d4-detail-2-media-3.m4v" controls playsinline preload="metadata" aria-label="旅行视频 3"></video>
+        </figure></div></div>
+    </article><article class="journal-detail">
+      <p>昭苏是另一个有一定历史文化的城市（特克斯之后），可是我没有兴趣做citywalk，这些城市大都差不多，吃的也都一样。进入城市的大道两侧就是天马图样的大型路灯，城市政府痕迹明显。城区政府相对干净一些。昭苏居然没有电影院！傍晚亲眼看到一场从远处高山直扑而下的雷暴。因为明天很可能夏塔有小雨，我把第二天的行程临时安排了昭苏玉湖。昭苏的酒店是昭苏温度湾S酒店。</p>
+<div class="journal-upload has-photos journal-published-media"><div class="journal-photo-grid"><figure class="journal-photo video">
+          <video src="media/journal-d4-detail-3-media-1.m4v" controls playsinline preload="metadata" aria-label="旅行视频 1"></video>
+        </figure><figure class="journal-photo">
+          <img src="media/journal-d4-detail-3-media-2.jpg" alt="旅行照片 2" loading="lazy" decoding="async">
+        </figure></div></div>
+    </article></div>
+  </section>
 
   <div class="section-card">
     <h3><span class="icon">🗺️</span>路线图</h3>
@@ -704,5 +845,6 @@ window._AMapSecurityConfig = { securityJsCode: "f5122d0c0aae74cc4c4e8f4ce0a196cc
   }
 })();
 </script>
+
 <footer class="site-footer">北疆16日自驾行程 · 生成于本次行程规划对话 · 出行前请务必核实实时信息</footer>
 </body></html>

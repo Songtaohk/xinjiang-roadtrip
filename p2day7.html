@@ -67,6 +67,112 @@ nav.day-nav .nav-sep {
   margin-left: 4px;
   white-space: nowrap;
 }
+.journal-card {
+  border-top: 4px solid #B45F35;
+  padding-top: 16px;
+}
+.journal-card > h3 { color: #8A4326; }
+.journal-meta {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 10px;
+  align-items: start;
+  padding: 10px 12px;
+  background: #F7F3ED;
+  border-left: 3px solid #B45F35;
+  margin-bottom: 8px;
+}
+.journal-route { font-size: 14px; font-weight: 600; }
+.journal-status {
+  color: #7B3F27;
+  background: #F1DED2;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  white-space: nowrap;
+}
+.journal-editor-note { color: var(--muted); font-size: 12px; margin: 0 0 8px; }
+.journal-detail {
+  padding: 18px 0;
+  border-bottom: 1px solid var(--border);
+}
+.journal-detail:last-child { border-bottom: 0; padding-bottom: 0; }
+.journal-detail p { margin: 0; font-size: 15px; line-height: 1.85; }
+.journal-upload {
+  margin-top: 12px;
+  min-height: 104px;
+  border: 1px dashed #B8A999;
+  background: #FAF8F4;
+  display: grid;
+  place-items: center;
+  padding: 10px;
+}
+.journal-upload.has-photos { display: block; }
+.journal-upload-empty { text-align: center; color: var(--muted); font-size: 12px; }
+.journal-upload-empty strong { display: block; color: var(--text); font-size: 13px; margin-bottom: 5px; }
+.journal-upload-button {
+  border: 1px solid var(--teal-light);
+  background: white;
+  color: var(--teal);
+  padding: 6px 10px;
+  border-radius: 6px;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.journal-upload-button:hover { background: #EEF5F2; }
+.journal-photo-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+.journal-photo {
+  position: relative;
+  margin: 0;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  background: #E9E5DE;
+}
+.journal-photo img, .journal-photo video { width: 100%; height: 100%; object-fit: cover; display: block; }
+.journal-photo.video { grid-column: 1 / -1; aspect-ratio: 16 / 9; background: #171717; }
+.journal-photo-remove {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 30px;
+  height: 30px;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(25,25,25,.78);
+  color: white;
+  font-size: 19px;
+  line-height: 1;
+  cursor: pointer;
+}
+.journal-photo-actions { margin-top: 8px; display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.journal-photo-actions[hidden], .journal-upload-empty[hidden] { display: none !important; }
+.journal-photo-count { color: var(--muted); font-size: 12px; }
+.journal-index-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.journal-index-item {
+  display: block;
+  background: white;
+  border: 1px solid var(--border);
+  border-left: 3px solid #B45F35;
+  padding: 12px 14px;
+  text-decoration: none;
+  color: var(--text);
+}
+.journal-index-item:hover { border-color: #B45F35; }
+.journal-index-day { color: #8A4326; font-size: 12px; font-weight: 700; }
+.journal-index-route { font-size: 14px; font-weight: 600; margin: 3px 0; }
+.journal-index-excerpt { color: var(--muted); font-size: 12.5px; }
+@media (max-width: 620px) {
+  .journal-meta { grid-template-columns: 1fr; }
+  .journal-status { justify-self: start; }
+  .journal-index-grid { grid-template-columns: 1fr; }
+  .journal-photo-grid { grid-template-columns: 1fr; }
+}
 /* v32新增：方案1/方案2 切换条与总览页的方案卡片 */
 nav.plan-switch {
   display: flex; gap: 8px; flex-wrap: wrap;
@@ -364,7 +470,7 @@ footer.site-footer {
   <a href="index.html" class="">🏠 首页</a>
   <a href="plan1.html" class="">方案1 · 正向（阿勒泰→伊犁）</a>
   <a href="plan2.html" class="active">方案2 · 反向（伊犁→阿勒泰）</a>
-</nav><nav class="day-nav"><a href="plan2.html" class="">总览</a><a href="p2day0.html" class="">D0</a><a href="p2day1.html" class="">D1</a><a href="p2day2.html" class="">D2</a><a href="p2day3.html" class="">D3</a><a href="p2day4.html" class="">D4</a><a href="p2day5.html" class="">D5</a><a href="p2day6.html" class="">D6</a><a href="p2day7.html" class="active">D7</a><a href="p2day8.html" class="">D8</a><a href="p2day9.html" class="">D9</a><a href="p2day10.html" class="">D10</a><a href="p2day11.html" class="">D11</a><a href="p2day12.html" class="">D12</a><a href="p2day13.html" class="">D13</a><a href="p2day14.html" class="">D14</a><a href="p2day15.html" class="">D15</a></nav>
+</nav><nav class="day-nav"><a href="plan2.html" class="">总览</a><a href="journal-preview.html" class="">旅行实录</a><a href="p2day0.html" class="">D0</a><a href="p2day1.html" class="">D1</a><a href="p2day2.html" class="">D2</a><a href="p2day3.html" class="">D3</a><a href="p2day4.html" class="">D4</a><a href="p2day5.html" class="">D5</a><a href="p2day6.html" class="">D6</a><a href="p2day7.html" class="active">D7</a><a href="p2day8.html" class="">D8</a><a href="p2day9.html" class="">D9</a><a href="p2day10.html" class="">D10</a><a href="p2day11.html" class="">D11</a><a href="p2day12.html" class="">D12</a><a href="p2day13.html" class="">D13</a><a href="p2day14.html" class="">D14</a><a href="p2day15.html" class="">D15</a></nav>
 <main>
   
   <div class="warn-box">🔄 你正在浏览的是 <strong>方案2 · 反向环线</strong>（伊犁先 → 阿勒泰后，含昭苏/夏塔/伊昭公路，放弃那拉提/库尔德宁/白哈巴）。它与 <a href="day7.html">方案1 · 正向的同一天</a> 是<strong>二选一</strong>的关系，机票日期完全相同，不能同时执行。切换到方案2之前，请务必先看<a href="plan2.html">方案2总览页</a>里的「预约总览」和「酒店改期方案」——特别是独库公路的预约风险，以及8/17禾木、8/18贾登峪那两晚不可取消订单的改期问题。</div>
@@ -374,6 +480,50 @@ footer.site-footer {
     <h2>伊宁（六星街）→ 果子沟大桥 → 赛里木湖（傍晚进园）</h2>
     <div class="summary">上午逛六星街，下午北上翻果子沟，按攻略作者强推的方式在傍晚5-6点后进赛里木湖，赶上光线最柔的4小时黄金时段</div>
   </div>
+
+<section class="section-card journal-card" id="travel-journal">
+    <h3><span class="icon">✎</span>旅行实录 · 8月22日</h3>
+    <div class="journal-meta">
+      <div class="journal-route">伊宁 → 惠远古城 → 果子沟大桥 → 赛里木湖</div>
+      <span class="journal-status">傍晚环湖</span>
+    </div>
+    <p class="journal-editor-note">按实际发生时间重新编排；精选照片和视频依照对应场景呈现。</p>
+    <div class="journal-detail-list"><article class="journal-detail">
+      <p>今日行程较为轻松，只求傍晚到赛里木湖。中午出发，先去惠远古城看了一下，颇为失望，城里还住人，古城也修缮一新但没了古城的吵闹和烟火气，多为旅游景点的摆设。清朝乾隆年曾在这里附近7公里的真“惠远古城”设立伊犁将军府，后被沙俄侵略占领并毁城，100多年后清朝又在目前位置新建了惠远城以及新伊犁将军府，即目前所见（位置仍在，房屋重建）。这个古城颇有江南或中原风味。</p>
+<div class="journal-upload has-photos journal-published-media"><div class="journal-photo-grid"><figure class="journal-photo">
+          <img src="media/journal-d7-detail-1-media-1.jpg" alt="旅行照片 1" loading="lazy" decoding="async">
+        </figure><figure class="journal-photo">
+          <img src="media/journal-d7-detail-1-media-2.jpg" alt="旅行照片 2" loading="lazy" decoding="async">
+        </figure><figure class="journal-photo video">
+          <video src="media/journal-d7-detail-1-media-3.m4v" controls playsinline preload="metadata" aria-label="旅行视频 3"></video>
+        </figure></div></div>
+    </article><article class="journal-detail">
+      <p>伊宁到赛里木湖仅200多公里，最后上果子沟大桥进入赛里木湖区域。赛里木湖真的大，是大理洱海的两倍，水更蓝（但没有玉湖那般的玉洁之蓝）。大理洱海是暖水湖，赛里木湖则是冷水湖（年均水温1-5度）。两个湖均在海拔2000米左右。洱海背面是苍山（绿树葱葱、山顶偶尔积雪），南面是平原；赛里木湖则被群山包围，这些山大都是石土之山，估计大半年是白雪覆盖。</p>
+<div class="journal-upload has-photos journal-published-media"><div class="journal-photo-grid"><figure class="journal-photo">
+          <img src="media/journal-d7-detail-2-media-1.jpg" alt="旅行照片 1" loading="lazy" decoding="async">
+        </figure><figure class="journal-photo">
+          <img src="media/journal-d7-detail-2-media-2.jpg" alt="旅行照片 2" loading="lazy" decoding="async">
+        </figure><figure class="journal-photo video">
+          <video src="media/journal-d7-detail-2-media-3.m4v" controls playsinline preload="metadata" aria-label="旅行视频 3"></video>
+        </figure></div></div>
+    </article><article class="journal-detail">
+      <p>令人奇怪的是，整个赛里木湖被行车道围了起来，似乎并无地方可以引入周围山水， 雪山融化后也没有一个途径把雪水汇入湖里，难道整个湖是地下水源？当晚吃了第二次火锅，不过这次是冷水鱼+羊肉火锅，非常棒（除了还是量太大）。冷水鱼是一种鲑鱼，赛里木湖里有生长，但我估计餐厅的冷水鱼应该是圈养的。之后驱车绕湖小半圈到9点看日落，可惜有云层遮挡，景色并不出片。</p>
+<div class="journal-upload has-photos journal-published-media"><div class="journal-photo-grid"><figure class="journal-photo">
+          <img src="media/journal-d7-detail-3-media-1.jpg" alt="旅行照片 1" loading="lazy" decoding="async">
+        </figure><figure class="journal-photo">
+          <img src="media/journal-d7-detail-3-media-2.jpg" alt="旅行照片 2" loading="lazy" decoding="async">
+        </figure><figure class="journal-photo video">
+          <video src="media/journal-d7-detail-3-media-3.m4v" controls playsinline preload="metadata" aria-label="旅行视频 3"></video>
+        </figure></div></div>
+    </article><article class="journal-detail">
+      <p>老实说，香港坚尼地城的日落说不定更漂亮。赛里木湖总体而言，是低于预期了（不能说名不副实，可能是之前名声太大）。不过，赛里木湖的美，更有可能是冰山绝壁下一片蓝湖的冷寂之美，有点像玉湖，但玉湖似乎更暖更玉洁一些，赛里木湖更冷更孤独一些。也许，秋天和冬天的赛里木湖会更美，那时应该是四周雪山环绕，湖面蓝白相间（蓝色的湖水、白色的湖冰），山上还有银装素裹的冷杉。这是遐想，而非现今的夏末之赛里木湖。</p>
+<div class="journal-upload has-photos journal-published-media"><div class="journal-photo-grid"><figure class="journal-photo">
+          <img src="media/journal-d7-detail-4-media-1.jpg" alt="旅行照片 1" loading="lazy" decoding="async">
+        </figure><figure class="journal-photo">
+          <img src="media/journal-d7-detail-4-media-2.jpg" alt="旅行照片 2" loading="lazy" decoding="async">
+        </figure></div></div>
+    </article></div>
+  </section>
 
   <div class="section-card">
     <h3><span class="icon">🗺️</span>路线图</h3>
@@ -702,5 +852,6 @@ window._AMapSecurityConfig = { securityJsCode: "f5122d0c0aae74cc4c4e8f4ce0a196cc
   }
 })();
 </script>
+
 <footer class="site-footer">北疆16日自驾行程 · 生成于本次行程规划对话 · 出行前请务必核实实时信息</footer>
 </body></html>

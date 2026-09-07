@@ -67,6 +67,112 @@ nav.day-nav .nav-sep {
   margin-left: 4px;
   white-space: nowrap;
 }
+.journal-card {
+  border-top: 4px solid #B45F35;
+  padding-top: 16px;
+}
+.journal-card > h3 { color: #8A4326; }
+.journal-meta {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 10px;
+  align-items: start;
+  padding: 10px 12px;
+  background: #F7F3ED;
+  border-left: 3px solid #B45F35;
+  margin-bottom: 8px;
+}
+.journal-route { font-size: 14px; font-weight: 600; }
+.journal-status {
+  color: #7B3F27;
+  background: #F1DED2;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  white-space: nowrap;
+}
+.journal-editor-note { color: var(--muted); font-size: 12px; margin: 0 0 8px; }
+.journal-detail {
+  padding: 18px 0;
+  border-bottom: 1px solid var(--border);
+}
+.journal-detail:last-child { border-bottom: 0; padding-bottom: 0; }
+.journal-detail p { margin: 0; font-size: 15px; line-height: 1.85; }
+.journal-upload {
+  margin-top: 12px;
+  min-height: 104px;
+  border: 1px dashed #B8A999;
+  background: #FAF8F4;
+  display: grid;
+  place-items: center;
+  padding: 10px;
+}
+.journal-upload.has-photos { display: block; }
+.journal-upload-empty { text-align: center; color: var(--muted); font-size: 12px; }
+.journal-upload-empty strong { display: block; color: var(--text); font-size: 13px; margin-bottom: 5px; }
+.journal-upload-button {
+  border: 1px solid var(--teal-light);
+  background: white;
+  color: var(--teal);
+  padding: 6px 10px;
+  border-radius: 6px;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.journal-upload-button:hover { background: #EEF5F2; }
+.journal-photo-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+.journal-photo {
+  position: relative;
+  margin: 0;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  background: #E9E5DE;
+}
+.journal-photo img, .journal-photo video { width: 100%; height: 100%; object-fit: cover; display: block; }
+.journal-photo.video { grid-column: 1 / -1; aspect-ratio: 16 / 9; background: #171717; }
+.journal-photo-remove {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 30px;
+  height: 30px;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(25,25,25,.78);
+  color: white;
+  font-size: 19px;
+  line-height: 1;
+  cursor: pointer;
+}
+.journal-photo-actions { margin-top: 8px; display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.journal-photo-actions[hidden], .journal-upload-empty[hidden] { display: none !important; }
+.journal-photo-count { color: var(--muted); font-size: 12px; }
+.journal-index-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.journal-index-item {
+  display: block;
+  background: white;
+  border: 1px solid var(--border);
+  border-left: 3px solid #B45F35;
+  padding: 12px 14px;
+  text-decoration: none;
+  color: var(--text);
+}
+.journal-index-item:hover { border-color: #B45F35; }
+.journal-index-day { color: #8A4326; font-size: 12px; font-weight: 700; }
+.journal-index-route { font-size: 14px; font-weight: 600; margin: 3px 0; }
+.journal-index-excerpt { color: var(--muted); font-size: 12.5px; }
+@media (max-width: 620px) {
+  .journal-meta { grid-template-columns: 1fr; }
+  .journal-status { justify-self: start; }
+  .journal-index-grid { grid-template-columns: 1fr; }
+  .journal-photo-grid { grid-template-columns: 1fr; }
+}
 /* v32新增：方案1/方案2 切换条与总览页的方案卡片 */
 nav.plan-switch {
   display: flex; gap: 8px; flex-wrap: wrap;
@@ -364,7 +470,7 @@ footer.site-footer {
   <a href="index.html" class="">🏠 首页</a>
   <a href="plan1.html" class="">方案1 · 正向（阿勒泰→伊犁）</a>
   <a href="plan2.html" class="active">方案2 · 反向（伊犁→阿勒泰）</a>
-</nav><nav class="day-nav"><a href="plan2.html" class="">总览</a><a href="p2day0.html" class="">D0</a><a href="p2day1.html" class="">D1</a><a href="p2day2.html" class="">D2</a><a href="p2day3.html" class="active">D3</a><a href="p2day4.html" class="">D4</a><a href="p2day5.html" class="">D5</a><a href="p2day6.html" class="">D6</a><a href="p2day7.html" class="">D7</a><a href="p2day8.html" class="">D8</a><a href="p2day9.html" class="">D9</a><a href="p2day10.html" class="">D10</a><a href="p2day11.html" class="">D11</a><a href="p2day12.html" class="">D12</a><a href="p2day13.html" class="">D13</a><a href="p2day14.html" class="">D14</a><a href="p2day15.html" class="">D15</a></nav>
+</nav><nav class="day-nav"><a href="plan2.html" class="">总览</a><a href="journal-preview.html" class="">旅行实录</a><a href="p2day0.html" class="">D0</a><a href="p2day1.html" class="">D1</a><a href="p2day2.html" class="">D2</a><a href="p2day3.html" class="active">D3</a><a href="p2day4.html" class="">D4</a><a href="p2day5.html" class="">D5</a><a href="p2day6.html" class="">D6</a><a href="p2day7.html" class="">D7</a><a href="p2day8.html" class="">D8</a><a href="p2day9.html" class="">D9</a><a href="p2day10.html" class="">D10</a><a href="p2day11.html" class="">D11</a><a href="p2day12.html" class="">D12</a><a href="p2day13.html" class="">D13</a><a href="p2day14.html" class="">D14</a><a href="p2day15.html" class="">D15</a></nav>
 <main>
   
   <div class="warn-box">🔄 你正在浏览的是 <strong>方案2 · 反向环线</strong>（伊犁先 → 阿勒泰后，含昭苏/夏塔/伊昭公路，放弃那拉提/库尔德宁/白哈巴）。它与 <a href="day3.html">方案1 · 正向的同一天</a> 是<strong>二选一</strong>的关系，机票日期完全相同，不能同时执行。切换到方案2之前，请务必先看<a href="plan2.html">方案2总览页</a>里的「预约总览」和「酒店改期方案」——特别是独库公路的预约风险，以及8/17禾木、8/18贾登峪那两晚不可取消订单的改期问题。</div>
@@ -374,6 +480,48 @@ footer.site-footer {
     <h2>唐布拉 → 尼勒克 → 巩留 → 特克斯（八卦城）⚠ 因孟克特封闭而重排</h2>
     <div class="summary">🔄v40重排：孟克特景区封闭施工，原定的进沟自驾取消，省出的时间用来把落脚点前推到特克斯——<strong>次日去世界自然遗产喀拉峻只需30公里</strong>（从昭苏出发要93公里）。今天全程222公里，比原来到昭苏的285公里轻松</div>
   </div>
+
+<section class="section-card journal-card" id="travel-journal">
+    <h3><span class="icon">✎</span>旅行实录 · 8月18日</h3>
+    <div class="journal-meta">
+      <div class="journal-route">唐布拉 → 尼勒克 / 蜜蜂小镇 → 特克斯</div>
+      <span class="journal-status">轻松转场</span>
+    </div>
+    <p class="journal-editor-note">按实际发生时间重新编排；精选照片和视频依照对应场景呈现。</p>
+    <div class="journal-detail-list"><article class="journal-detail">
+      <p>这一天较为轻松。一早发现天正下小雨，庆幸昨天已经走过了独库公路，而明天喀拉峻的天气又变成了晴天。一早，继续向西穿越唐布拉，路过布隆沟（已去过）和狗熊沟（不让进），最后到达蜜蜂小镇。一路上，开过一座桥，穿越喀什河进入一个不知名的村庄，无限接近于峻岭，后又开出这个村庄回到主干道。蜜蜂小镇是一个意外的发现，好在也算是走马观花了一下，参观了蜂蜜科技园，买了三瓶蜂蜜。</p>
+<div class="journal-upload has-photos journal-published-media"><div class="journal-photo-grid"><figure class="journal-photo video">
+          <video src="media/journal-d3-detail-1-media-1.m4v" controls playsinline preload="metadata" aria-label="旅行视频 1"></video>
+        </figure></div></div>
+    </article><article class="journal-detail">
+      <p>离开蜂蜜小镇（唐布拉尽头）后，已经是午后，天气转好！下午晚些时候到达特克斯，八卦城的名称让人眼前一亮、耳目一新，但实际并无特别之处，只是道路设计如此而已。因为此设计，城区很少有红绿灯，均围绕着中心点做转盘式行车方式。因为到了早，下午4点就去著名的辣八香吃火锅，吃完火锅去看电影《蜘蛛侠》。</p>
+<div class="journal-upload has-photos journal-published-media"><div class="journal-photo-grid"><figure class="journal-photo video">
+          <video src="media/journal-d3-detail-2-media-1.m4v" controls playsinline preload="metadata" aria-label="旅行视频 1"></video>
+        </figure><figure class="journal-photo video">
+          <video src="media/journal-d3-detail-2-media-2.m4v" controls playsinline preload="metadata" aria-label="旅行视频 2"></video>
+        </figure><figure class="journal-photo video">
+          <video src="media/journal-d3-detail-2-media-3.m4v" controls playsinline preload="metadata" aria-label="旅行视频 3"></video>
+        </figure></div></div>
+    </article><article class="journal-detail">
+      <p>特克斯只有一家电影院，而且没有参与线上（无法在大众点评等平台上找到），我一度以为无电影可看。幸好问了酒店前台，她说有电影院，就在附近，一去才发现电影院其实很干净且屏幕很大很舒服。酒店也选的很好：relaxtks设计师酒店，干净位置好，有专门的自助洗衣服务。</p>
+<div class="journal-upload has-photos journal-published-media"><div class="journal-photo-grid"><figure class="journal-photo">
+          <img src="media/journal-d3-detail-3-media-1.jpg" alt="旅行照片 1" loading="lazy" decoding="async">
+        </figure><figure class="journal-photo">
+          <img src="media/journal-d3-detail-3-media-2.jpg" alt="旅行照片 2" loading="lazy" decoding="async">
+        </figure><figure class="journal-photo">
+          <img src="media/journal-d3-detail-3-media-3.jpg" alt="旅行照片 3" loading="lazy" decoding="async">
+        </figure></div></div>
+    </article><article class="journal-detail">
+      <p>八卦城乾街夜市较为有趣，晚上几乎坐满了人。考虑到小城市人口本就不多，感觉多数当地人也经常去夜市，可谓生活煞为惬意。尽管中心城区上空不让你放飞无人机从空中俯瞰八卦城的模样（感觉是留给做无人机生意的人一些机会，哪里拍一张“旱地拔葱”居然要近200元），你依旧可以尽情享受夜生活的美好以及舒适的气温。晚上喝了当地的奶茶（酸奶酪）和小吃，第一次感觉到新疆小城市的那种接地气的繁华和安详。</p>
+<div class="journal-upload has-photos journal-published-media"><div class="journal-photo-grid"><figure class="journal-photo">
+          <img src="media/journal-d3-detail-4-media-1.jpg" alt="旅行照片 1" loading="lazy" decoding="async">
+        </figure><figure class="journal-photo">
+          <img src="media/journal-d3-detail-4-media-2.jpg" alt="旅行照片 2" loading="lazy" decoding="async">
+        </figure><figure class="journal-photo video">
+          <video src="media/journal-d3-detail-4-media-3.m4v" controls playsinline preload="metadata" aria-label="旅行视频 3"></video>
+        </figure></div></div>
+    </article></div>
+  </section>
 
   <div class="section-card">
     <h3><span class="icon">🗺️</span>路线图</h3>
@@ -705,5 +853,6 @@ window._AMapSecurityConfig = { securityJsCode: "f5122d0c0aae74cc4c4e8f4ce0a196cc
   }
 })();
 </script>
+
 <footer class="site-footer">北疆16日自驾行程 · 生成于本次行程规划对话 · 出行前请务必核实实时信息</footer>
 </body></html>

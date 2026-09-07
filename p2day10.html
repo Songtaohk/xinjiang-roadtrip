@@ -67,6 +67,112 @@ nav.day-nav .nav-sep {
   margin-left: 4px;
   white-space: nowrap;
 }
+.journal-card {
+  border-top: 4px solid #B45F35;
+  padding-top: 16px;
+}
+.journal-card > h3 { color: #8A4326; }
+.journal-meta {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 10px;
+  align-items: start;
+  padding: 10px 12px;
+  background: #F7F3ED;
+  border-left: 3px solid #B45F35;
+  margin-bottom: 8px;
+}
+.journal-route { font-size: 14px; font-weight: 600; }
+.journal-status {
+  color: #7B3F27;
+  background: #F1DED2;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  white-space: nowrap;
+}
+.journal-editor-note { color: var(--muted); font-size: 12px; margin: 0 0 8px; }
+.journal-detail {
+  padding: 18px 0;
+  border-bottom: 1px solid var(--border);
+}
+.journal-detail:last-child { border-bottom: 0; padding-bottom: 0; }
+.journal-detail p { margin: 0; font-size: 15px; line-height: 1.85; }
+.journal-upload {
+  margin-top: 12px;
+  min-height: 104px;
+  border: 1px dashed #B8A999;
+  background: #FAF8F4;
+  display: grid;
+  place-items: center;
+  padding: 10px;
+}
+.journal-upload.has-photos { display: block; }
+.journal-upload-empty { text-align: center; color: var(--muted); font-size: 12px; }
+.journal-upload-empty strong { display: block; color: var(--text); font-size: 13px; margin-bottom: 5px; }
+.journal-upload-button {
+  border: 1px solid var(--teal-light);
+  background: white;
+  color: var(--teal);
+  padding: 6px 10px;
+  border-radius: 6px;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.journal-upload-button:hover { background: #EEF5F2; }
+.journal-photo-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+.journal-photo {
+  position: relative;
+  margin: 0;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  background: #E9E5DE;
+}
+.journal-photo img, .journal-photo video { width: 100%; height: 100%; object-fit: cover; display: block; }
+.journal-photo.video { grid-column: 1 / -1; aspect-ratio: 16 / 9; background: #171717; }
+.journal-photo-remove {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 30px;
+  height: 30px;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(25,25,25,.78);
+  color: white;
+  font-size: 19px;
+  line-height: 1;
+  cursor: pointer;
+}
+.journal-photo-actions { margin-top: 8px; display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.journal-photo-actions[hidden], .journal-upload-empty[hidden] { display: none !important; }
+.journal-photo-count { color: var(--muted); font-size: 12px; }
+.journal-index-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.journal-index-item {
+  display: block;
+  background: white;
+  border: 1px solid var(--border);
+  border-left: 3px solid #B45F35;
+  padding: 12px 14px;
+  text-decoration: none;
+  color: var(--text);
+}
+.journal-index-item:hover { border-color: #B45F35; }
+.journal-index-day { color: #8A4326; font-size: 12px; font-weight: 700; }
+.journal-index-route { font-size: 14px; font-weight: 600; margin: 3px 0; }
+.journal-index-excerpt { color: var(--muted); font-size: 12.5px; }
+@media (max-width: 620px) {
+  .journal-meta { grid-template-columns: 1fr; }
+  .journal-status { justify-self: start; }
+  .journal-index-grid { grid-template-columns: 1fr; }
+  .journal-photo-grid { grid-template-columns: 1fr; }
+}
 /* v32新增：方案1/方案2 切换条与总览页的方案卡片 */
 nav.plan-switch {
   display: flex; gap: 8px; flex-wrap: wrap;
@@ -364,7 +470,7 @@ footer.site-footer {
   <a href="index.html" class="">🏠 首页</a>
   <a href="plan1.html" class="">方案1 · 正向（阿勒泰→伊犁）</a>
   <a href="plan2.html" class="active">方案2 · 反向（伊犁→阿勒泰）</a>
-</nav><nav class="day-nav"><a href="plan2.html" class="">总览</a><a href="p2day0.html" class="">D0</a><a href="p2day1.html" class="">D1</a><a href="p2day2.html" class="">D2</a><a href="p2day3.html" class="">D3</a><a href="p2day4.html" class="">D4</a><a href="p2day5.html" class="">D5</a><a href="p2day6.html" class="">D6</a><a href="p2day7.html" class="">D7</a><a href="p2day8.html" class="">D8</a><a href="p2day9.html" class="">D9</a><a href="p2day10.html" class="active">D10</a><a href="p2day11.html" class="">D11</a><a href="p2day12.html" class="">D12</a><a href="p2day13.html" class="">D13</a><a href="p2day14.html" class="">D14</a><a href="p2day15.html" class="">D15</a></nav>
+</nav><nav class="day-nav"><a href="plan2.html" class="">总览</a><a href="journal-preview.html" class="">旅行实录</a><a href="p2day0.html" class="">D0</a><a href="p2day1.html" class="">D1</a><a href="p2day2.html" class="">D2</a><a href="p2day3.html" class="">D3</a><a href="p2day4.html" class="">D4</a><a href="p2day5.html" class="">D5</a><a href="p2day6.html" class="">D6</a><a href="p2day7.html" class="">D7</a><a href="p2day8.html" class="">D8</a><a href="p2day9.html" class="">D9</a><a href="p2day10.html" class="active">D10</a><a href="p2day11.html" class="">D11</a><a href="p2day12.html" class="">D12</a><a href="p2day13.html" class="">D13</a><a href="p2day14.html" class="">D14</a><a href="p2day15.html" class="">D15</a></nav>
 <main>
   
   <div class="warn-box">🔄 你正在浏览的是 <strong>方案2 · 反向环线</strong>（伊犁先 → 阿勒泰后，含昭苏/夏塔/伊昭公路，放弃那拉提/库尔德宁/白哈巴）。它与 <a href="day10.html">方案1 · 正向的同一天</a> 是<strong>二选一</strong>的关系，机票日期完全相同，不能同时执行。切换到方案2之前，请务必先看<a href="plan2.html">方案2总览页</a>里的「预约总览」和「酒店改期方案」——特别是独库公路的预约风险，以及8/17禾木、8/18贾登峪那两晚不可取消订单的改期问题。</div>
@@ -374,6 +480,43 @@ footer.site-footer {
     <h2>布尔津 → 贾登峪（轻松日 / 全程唯一的机动缓冲日）</h2>
     <div class="summary">全程最轻松的一天：上午从布尔津北上进入阿尔泰山腹地，中午抵达贾登峪，下午自由休整。当晚已订贾登峪游客中心对面的酒店；如启用机动方案直接进喀纳斯，需要接受不可取消房费损失。</div>
   </div>
+
+<section class="section-card journal-card" id="travel-journal">
+    <h3><span class="icon">✎</span>旅行实录 · 8月25日</h3>
+    <div class="journal-meta">
+      <div class="journal-route">布尔津 → 白哈巴 → 贾登峪</div>
+      <span class="journal-status">临时加入白哈巴</span>
+    </div>
+    <p class="journal-editor-note">按实际发生时间重新编排；精选照片和视频依照对应场景呈现。</p>
+    <div class="journal-detail-list"><article class="journal-detail">
+      <p>一早决定去县人民医院看膝盖，最后诊断是发炎（骨头完好，软组织炎症），但不能判断是否是痛风，医生建议买进口塞布莱希。中午临时决定跑一趟白哈巴，傍晚在赶往贾登峪（喀纳斯的门户）。白哈巴已经是和哈萨克斯坦边境的村，和喀纳斯村、禾木村同为蒙古族图瓦人的村落。在白哈巴无法驾车直接去喀纳斯，必须绕到贾登峪，再统一做区间车去喀纳斯景区。晚上膝盖便明显好转。</p>
+<div class="journal-upload has-photos journal-published-media"><div class="journal-photo-grid"><figure class="journal-photo">
+          <img src="media/journal-d10-detail-1-media-1.jpg" alt="旅行照片 1" loading="lazy" decoding="async">
+        </figure><figure class="journal-photo">
+          <img src="media/journal-d10-detail-1-media-2.jpg" alt="旅行照片 2" loading="lazy" decoding="async">
+        </figure><figure class="journal-photo">
+          <img src="media/journal-d10-detail-1-media-3.jpg" alt="旅行照片 3" loading="lazy" decoding="async">
+        </figure></div></div>
+    </article><article class="journal-detail">
+      <p>白哈巴需要换边防过境的证，进入白哈巴村时，已经开始时不时的下起小雨。白哈巴村很小，游客很多，自驾车辆已经一路停靠到进村的几百米山路上。村里的屋子密密麻麻，多数已经变成了民宿。白哈巴、喀纳斯、禾木是三个仅有的图瓦族人居住的村落，不过至少白哈巴的商业化已经大于预期了，至少村民是处于被商业化民宿包围的状态，尽管村落总体面貌没有改变（只是密度高了不少）。</p>
+<div class="journal-upload has-photos journal-published-media"><div class="journal-photo-grid"><figure class="journal-photo video">
+          <video src="media/journal-d10-detail-2-media-1.m4v" controls playsinline preload="metadata" aria-label="旅行视频 1"></video>
+        </figure><figure class="journal-photo">
+          <img src="media/journal-d10-detail-2-media-2.jpg" alt="旅行照片 2" loading="lazy" decoding="async">
+        </figure><figure class="journal-photo">
+          <img src="media/journal-d10-detail-2-media-3.jpg" alt="旅行照片 3" loading="lazy" decoding="async">
+        </figure></div></div>
+    </article><article class="journal-detail">
+      <p>这个如果和江南的村落比起来，或许还不像乌镇那样全部商业化，但是形式上是如此照搬了（圈起来，作为景区，要买门票，村落保持原始风貌，什么原住民依然有日常居住生活），不过白哈巴还保持了乡的功能，比如还有医院、党群服务等。这个在后来的喀纳斯，禾木也是如此。下午再驾车回到贾登峪，已经是傍晚时分。这一天本来是可以相对轻松的休息日，缺实际上还是大部分在路上。</p>
+<div class="journal-upload has-photos journal-published-media"><div class="journal-photo-grid"><figure class="journal-photo">
+          <img src="media/journal-d10-detail-3-media-1.jpg" alt="旅行照片 1" loading="lazy" decoding="async">
+        </figure><figure class="journal-photo">
+          <img src="media/journal-d10-detail-3-media-2.jpg" alt="旅行照片 2" loading="lazy" decoding="async">
+        </figure><figure class="journal-photo video">
+          <video src="media/journal-d10-detail-3-media-3.m4v" controls playsinline preload="metadata" aria-label="旅行视频 3"></video>
+        </figure></div></div>
+    </article></div>
+  </section>
 
   <div class="section-card">
     <h3><span class="icon">🗺️</span>路线图</h3>
@@ -690,5 +833,6 @@ window._AMapSecurityConfig = { securityJsCode: "f5122d0c0aae74cc4c4e8f4ce0a196cc
   }
 })();
 </script>
+
 <footer class="site-footer">北疆16日自驾行程 · 生成于本次行程规划对话 · 出行前请务必核实实时信息</footer>
 </body></html>

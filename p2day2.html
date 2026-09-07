@@ -67,6 +67,112 @@ nav.day-nav .nav-sep {
   margin-left: 4px;
   white-space: nowrap;
 }
+.journal-card {
+  border-top: 4px solid #B45F35;
+  padding-top: 16px;
+}
+.journal-card > h3 { color: #8A4326; }
+.journal-meta {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 10px;
+  align-items: start;
+  padding: 10px 12px;
+  background: #F7F3ED;
+  border-left: 3px solid #B45F35;
+  margin-bottom: 8px;
+}
+.journal-route { font-size: 14px; font-weight: 600; }
+.journal-status {
+  color: #7B3F27;
+  background: #F1DED2;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  white-space: nowrap;
+}
+.journal-editor-note { color: var(--muted); font-size: 12px; margin: 0 0 8px; }
+.journal-detail {
+  padding: 18px 0;
+  border-bottom: 1px solid var(--border);
+}
+.journal-detail:last-child { border-bottom: 0; padding-bottom: 0; }
+.journal-detail p { margin: 0; font-size: 15px; line-height: 1.85; }
+.journal-upload {
+  margin-top: 12px;
+  min-height: 104px;
+  border: 1px dashed #B8A999;
+  background: #FAF8F4;
+  display: grid;
+  place-items: center;
+  padding: 10px;
+}
+.journal-upload.has-photos { display: block; }
+.journal-upload-empty { text-align: center; color: var(--muted); font-size: 12px; }
+.journal-upload-empty strong { display: block; color: var(--text); font-size: 13px; margin-bottom: 5px; }
+.journal-upload-button {
+  border: 1px solid var(--teal-light);
+  background: white;
+  color: var(--teal);
+  padding: 6px 10px;
+  border-radius: 6px;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.journal-upload-button:hover { background: #EEF5F2; }
+.journal-photo-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+.journal-photo {
+  position: relative;
+  margin: 0;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  background: #E9E5DE;
+}
+.journal-photo img, .journal-photo video { width: 100%; height: 100%; object-fit: cover; display: block; }
+.journal-photo.video { grid-column: 1 / -1; aspect-ratio: 16 / 9; background: #171717; }
+.journal-photo-remove {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 30px;
+  height: 30px;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(25,25,25,.78);
+  color: white;
+  font-size: 19px;
+  line-height: 1;
+  cursor: pointer;
+}
+.journal-photo-actions { margin-top: 8px; display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.journal-photo-actions[hidden], .journal-upload-empty[hidden] { display: none !important; }
+.journal-photo-count { color: var(--muted); font-size: 12px; }
+.journal-index-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.journal-index-item {
+  display: block;
+  background: white;
+  border: 1px solid var(--border);
+  border-left: 3px solid #B45F35;
+  padding: 12px 14px;
+  text-decoration: none;
+  color: var(--text);
+}
+.journal-index-item:hover { border-color: #B45F35; }
+.journal-index-day { color: #8A4326; font-size: 12px; font-weight: 700; }
+.journal-index-route { font-size: 14px; font-weight: 600; margin: 3px 0; }
+.journal-index-excerpt { color: var(--muted); font-size: 12.5px; }
+@media (max-width: 620px) {
+  .journal-meta { grid-template-columns: 1fr; }
+  .journal-status { justify-self: start; }
+  .journal-index-grid { grid-template-columns: 1fr; }
+  .journal-photo-grid { grid-template-columns: 1fr; }
+}
 /* v32新增：方案1/方案2 切换条与总览页的方案卡片 */
 nav.plan-switch {
   display: flex; gap: 8px; flex-wrap: wrap;
@@ -364,7 +470,7 @@ footer.site-footer {
   <a href="index.html" class="">🏠 首页</a>
   <a href="plan1.html" class="">方案1 · 正向（阿勒泰→伊犁）</a>
   <a href="plan2.html" class="active">方案2 · 反向（伊犁→阿勒泰）</a>
-</nav><nav class="day-nav"><a href="plan2.html" class="">总览</a><a href="p2day0.html" class="">D0</a><a href="p2day1.html" class="">D1</a><a href="p2day2.html" class="active">D2</a><a href="p2day3.html" class="">D3</a><a href="p2day4.html" class="">D4</a><a href="p2day5.html" class="">D5</a><a href="p2day6.html" class="">D6</a><a href="p2day7.html" class="">D7</a><a href="p2day8.html" class="">D8</a><a href="p2day9.html" class="">D9</a><a href="p2day10.html" class="">D10</a><a href="p2day11.html" class="">D11</a><a href="p2day12.html" class="">D12</a><a href="p2day13.html" class="">D13</a><a href="p2day14.html" class="">D14</a><a href="p2day15.html" class="">D15</a></nav>
+</nav><nav class="day-nav"><a href="plan2.html" class="">总览</a><a href="journal-preview.html" class="">旅行实录</a><a href="p2day0.html" class="">D0</a><a href="p2day1.html" class="">D1</a><a href="p2day2.html" class="active">D2</a><a href="p2day3.html" class="">D3</a><a href="p2day4.html" class="">D4</a><a href="p2day5.html" class="">D5</a><a href="p2day6.html" class="">D6</a><a href="p2day7.html" class="">D7</a><a href="p2day8.html" class="">D8</a><a href="p2day9.html" class="">D9</a><a href="p2day10.html" class="">D10</a><a href="p2day11.html" class="">D11</a><a href="p2day12.html" class="">D12</a><a href="p2day13.html" class="">D13</a><a href="p2day14.html" class="">D14</a><a href="p2day15.html" class="">D15</a></nav>
 <main>
   
   <div class="warn-box">🔄 你正在浏览的是 <strong>方案2 · 反向环线</strong>（伊犁先 → 阿勒泰后，含昭苏/夏塔/伊昭公路，放弃那拉提/库尔德宁/白哈巴）。它与 <a href="day2.html">方案1 · 正向的同一天</a> 是<strong>二选一</strong>的关系，机票日期完全相同，不能同时执行。切换到方案2之前，请务必先看<a href="plan2.html">方案2总览页</a>里的「预约总览」和「酒店改期方案」——特别是独库公路的预约风险，以及8/17禾木、8/18贾登峪那两晚不可取消订单的改期问题。</div>
@@ -374,6 +480,59 @@ footer.site-footer {
     <h2>独山子 → 乌苏驿（凭预约进山）→ 独库公路北段 → 乔尔玛 → 唐布拉 ⚠ 长途山路日</h2>
     <div class="summary">全程最硬核的一天：从独山子南下34公里到<strong>乌苏驿（K587+100）凭预约正式进入独库管控段</strong>，翻越哈希勒根达坂（3390m），在乔尔玛转入S315唐布拉百里画廊走完精华段，当晚入住尼勒克良栖山宿酒店（蒙克特景区店）；里程数据网上严重冲突，务必留足时间</div>
   </div>
+
+<section class="section-card journal-card" id="travel-journal">
+    <h3><span class="icon">✎</span>旅行实录 · 8月17日</h3>
+    <div class="journal-meta">
+      <div class="journal-route">奎屯 → 独库公路北段 → 乔尔玛 → 唐布拉 → 布隆沟</div>
+      <span class="journal-status">蒙克特关闭，改游布隆沟</span>
+    </div>
+    <p class="journal-editor-note">按实际发生时间重新编排；精选照片和视频依照对应场景呈现。</p>
+    <div class="journal-detail-list"><article class="journal-detail">
+      <p>这一行程先走著名的独库公路北段，穿越3400米的哈希勒根达坂后进入北天山腹地。这一段公路以蜿蜒曲折、陡峭悬崖、飞沙走石、雪山海子著称。一年大部分时间因过于危险而关闭。今天天公作美，晴到多云，山体稳固，道路畅通！一路盘旋而上，气势辉煌又荒凉。这已经是最炎热干旱之盛夏季节，秋季或春季的山路想来是更为孤寂而寒冷，不愧为独库公路了。</p>
+<div class="journal-upload has-photos journal-published-media"><div class="journal-photo-grid"><figure class="journal-photo">
+          <img src="media/journal-d2-detail-1-media-1.jpeg" alt="旅行照片 1" loading="lazy" decoding="async">
+        </figure><figure class="journal-photo">
+          <img src="media/journal-d2-detail-1-media-2.jpg" alt="旅行照片 2" loading="lazy" decoding="async">
+        </figure><figure class="journal-photo video">
+          <video src="media/journal-d2-detail-1-media-3.m4v" controls playsinline preload="metadata" aria-label="旅行视频 3"></video>
+        </figure></div></div>
+    </article><article class="journal-detail">
+      <p>从山脚下的30+高温酷热的岩土状峡谷山丘，到近山顶达坂处不到10度的低温寒风和雪山悬顶，短短两个多小时便体会到春夏秋冬之奇妙。近达坂处，突然浮现出一片蓝的出奇的小湖泊，简直是天外飞仙般降落到凡间，又悬在人间烟火之上空，令人惊奇又只敢远观不忍近犯。湖泊只有一个停车场那么大，碧蓝而宁静，湖面不起一片皱褶，如少女肌肤之洁玉。</p>
+<div class="journal-upload has-photos journal-published-media"><div class="journal-photo-grid"><figure class="journal-photo">
+          <img src="media/journal-d2-detail-2-media-1.jpg" alt="旅行照片 1" loading="lazy" decoding="async">
+        </figure><figure class="journal-photo">
+          <img src="media/journal-d2-detail-2-media-2.jpg" alt="旅行照片 2" loading="lazy" decoding="async">
+        </figure></div></div>
+    </article><article class="journal-detail">
+      <p>从独库公路达坂处下山，过了乔尔玛，就来到唐布拉高山草甸区域，顿入北欧画境，南北峻岭，云杉草甸层层展开。河谷平原东西向流淌着喀什河，河两岸绿草现牛羊，骏马闲庭信步。唐布拉河谷平原上到处可以看到类似蒙古包一样的圆形白色帐篷，可能是牧人或游客临时住所。唐布拉有几个著名的沟（我个人理解：沟就是山上分流下来的河谷，汇入这个唐布拉大平原），可惜蒙克特沟刚好关闭。</p>
+<div class="journal-upload has-photos journal-published-media"><div class="journal-photo-grid"><figure class="journal-photo">
+          <img src="media/journal-d2-detail-3-media-1.jpg" alt="旅行照片 1" loading="lazy" decoding="async">
+        </figure><figure class="journal-photo">
+          <img src="media/journal-d2-detail-3-media-2.jpg" alt="旅行照片 2" loading="lazy" decoding="async">
+        </figure><figure class="journal-photo video">
+          <video src="media/journal-d2-detail-3-media-3.m4v" controls playsinline preload="metadata" aria-label="旅行视频 3"></video>
+        </figure></div></div>
+    </article><article class="journal-detail">
+      <p>路过布隆沟，听说不错，便长驱直入，最后三公里砂石路的尽头，是一个温泉酒店，那里河水潺潺。不少游客选择在沟的深处停车、静坐、聆听自然之声。回溯之前走过的翻越独山子，可谓人生第一次自驾翻越高山，当日天气极佳，没有想象中的寒风瑟瑟、飞雪连天。山顶附近突显一湖泊，晶莹透蓝、倘若画中。连续的U型向上的山路，两边则是寸草不生的冻土山头，远处雪山照映，令人神往。</p>
+<div class="journal-upload has-photos journal-published-media"><div class="journal-photo-grid"><figure class="journal-photo">
+          <img src="media/journal-d2-detail-4-media-1.jpg" alt="旅行照片 1" loading="lazy" decoding="async">
+        </figure><figure class="journal-photo">
+          <img src="media/journal-d2-detail-4-media-2.jpg" alt="旅行照片 2" loading="lazy" decoding="async">
+        </figure><figure class="journal-photo">
+          <img src="media/journal-d2-detail-4-media-3.jpg" alt="旅行照片 3" loading="lazy" decoding="async">
+        </figure></div></div>
+    </article><article class="journal-detail">
+      <p>当晚住尼勒克良栖山宿酒店，即在蒙克特景区附近。当初考虑到进入唐布拉后，直接去蒙克特景区较为方便，可惜蒙克特8月10日开始维修关闭，我并未因此调整酒店位置。实际旅行发现，唐布拉由东往西依次是蒙克特、布隆沟、狗熊沟，终点附近有蜜蜂小镇。蜜蜂小镇是当地产野山蜂蜜著名的小镇，小镇下的河流与云杉形成一道静谧、世外桃源般的景象。当晚若住在这里，实属最佳。晚饭点了民宿餐厅的牛肉火锅，量大得很，实在难以食完。</p>
+<div class="journal-upload has-photos journal-published-media"><div class="journal-photo-grid"><figure class="journal-photo video">
+          <video src="media/journal-d2-detail-5-media-1.m4v" controls playsinline preload="metadata" aria-label="旅行视频 1"></video>
+        </figure><figure class="journal-photo">
+          <img src="media/journal-d2-detail-5-media-2.jpg" alt="旅行照片 2" loading="lazy" decoding="async">
+        </figure><figure class="journal-photo">
+          <img src="media/journal-d2-detail-5-media-3.jpg" alt="旅行照片 3" loading="lazy" decoding="async">
+        </figure></div></div>
+    </article></div>
+  </section>
 
   <div class="section-card">
     <h3><span class="icon">🗺️</span>路线图</h3>
@@ -695,5 +854,6 @@ window._AMapSecurityConfig = { securityJsCode: "f5122d0c0aae74cc4c4e8f4ce0a196cc
   }
 })();
 </script>
+
 <footer class="site-footer">北疆16日自驾行程 · 生成于本次行程规划对话 · 出行前请务必核实实时信息</footer>
 </body></html>

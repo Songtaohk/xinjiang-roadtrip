@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>北疆环游 · 旅行实录预览</title>
+<style>
+:root {
+  --teal: #1F4E5F;
+  --teal-light: #2E6F86;
+  --sand: #F5EFE6;
+  --warn-bg: #FCEFC7;
+  --warn-border: #E0B94D;
+  --text: #2B2B2B;
+  --muted: #6B6B6B;
+  --card-bg: #FFFFFF;
+  --border: #E3DED3;
+  --radius: 10px;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: "PingFang SC", "Microsoft YaHei", "Helvetica Neue", Arial, sans-serif;
+  background: var(--sand);
+  color: var(--text);
+  line-height: 1.6;
+}
+header.site-header {
+  background: var(--teal);
+  color: white;
+  padding: 20px 24px;
+}
+header.site-header h1 {
+  margin: 0 0 4px 0;
+  font-size: 22px;
+}
+header.site-header p {
+  margin: 0;
+  opacity: 0.85;
+  font-size: 14px;
+}
+nav.day-nav {
+  background: var(--teal-light);
+  padding: 10px 16px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+}
+nav.day-nav a {
+  color: white;
+  text-decoration: none;
+  background: rgba(255,255,255,0.15);
+  padding: 5px 10px;
+  border-radius: 6px;
+  font-size: 13px;
+  white-space: nowrap;
+}
+nav.day-nav a.active {
+  background: white;
+  color: var(--teal);
+  font-weight: 600;
+}
+nav.day-nav .nav-sep {
+  color: rgba(255,255,255,0.7);
+  font-size: 12px;
+  margin-left: 4px;
+  white-space: nowrap;
+}
+.journal-card {
+  border-top: 4px solid #B45F35;
+  padding-top: 16px;
+}
+.journal-card > h3 { color: #8A4326; }
+.journal-meta {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 10px;
+  align-items: start;
+  padding: 10px 12px;
+  background: #F7F3ED;
+  border-left: 3px solid #B45F35;
+  margin-bottom: 8px;
+}
+.journal-route { font-size: 14px; font-weight: 600; }
+.journal-status {
+  color: #7B3F27;
+  background: #F1DED2;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  white-space: nowrap;
+}
+.journal-editor-note { color: var(--muted); font-size: 12px; margin: 0 0 8px; }
+.journal-detail {
+  padding: 18px 0;
+  border-bottom: 1px solid var(--border);
+}
+.journal-detail:last-child { border-bottom: 0; padding-bottom: 0; }
+.journal-detail p { margin: 0; font-size: 15px; line-height: 1.85; }
+.journal-upload {
+  margin-top: 12px;
+  min-height: 104px;
+  border: 1px dashed #B8A999;
+  background: #FAF8F4;
+  display: grid;
+  place-items: center;
+  padding: 10px;
+}
+.journal-upload.has-photos { display: block; }
+.journal-upload-empty { text-align: center; color: var(--muted); font-size: 12px; }
+.journal-upload-empty strong { display: block; color: var(--text); font-size: 13px; margin-bottom: 5px; }
+.journal-upload-button {
+  border: 1px solid var(--teal-light);
+  background: white;
+  color: var(--teal);
+  padding: 6px 10px;
+  border-radius: 6px;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.journal-upload-button:hover { background: #EEF5F2; }
+.journal-photo-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+.journal-photo {
+  position: relative;
+  margin: 0;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  background: #E9E5DE;
+}
+.journal-photo img, .journal-photo video { width: 100%; height: 100%; object-fit: cover; display: block; }
+.journal-photo.video { grid-column: 1 / -1; aspect-ratio: 16 / 9; background: #171717; }
+.journal-photo-remove {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 30px;
+  height: 30px;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(25,25,25,.78);
+  color: white;
+  font-size: 19px;
+  line-height: 1;
+  cursor: pointer;
+}
+.journal-photo-actions { margin-top: 8px; display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.journal-photo-actions[hidden], .journal-upload-empty[hidden] { display: none !important; }
+.journal-photo-count { color: var(--muted); font-size: 12px; }
+.journal-index-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.journal-index-item {
+  display: block;
+  background: white;
+  border: 1px solid var(--border);
+  border-left: 3px solid #B45F35;
+  padding: 12px 14px;
+  text-decoration: none;
+  color: var(--text);
+}
+.journal-index-item:hover { border-color: #B45F35; }
+.journal-index-day { color: #8A4326; font-size: 12px; font-weight: 700; }
+.journal-index-route { font-size: 14px; font-weight: 600; margin: 3px 0; }
+.journal-index-excerpt { color: var(--muted); font-size: 12.5px; }
+@media (max-width: 620px) {
+  .journal-meta { grid-template-columns: 1fr; }
+  .journal-status { justify-self: start; }
+  .journal-index-grid { grid-template-columns: 1fr; }
+  .journal-photo-grid { grid-template-columns: 1fr; }
+}
+/* v32新增：方案1/方案2 切换条与总览页的方案卡片 */
+nav.plan-switch {
+  display: flex; gap: 8px; flex-wrap: wrap;
+  background: #12333f; padding: 8px 12px;
+  border-bottom: 1px solid rgba(255,255,255,0.12);
+}
+nav.plan-switch a {
+  color: rgba(255,255,255,0.72); text-decoration: none;
+  font-size: 13px; font-weight: 600; padding: 5px 12px;
+  border-radius: 999px; border: 1px solid rgba(255,255,255,0.22);
+  white-space: nowrap;
+}
+nav.plan-switch a.active { background: var(--warn-border); color: #2B2B2B; border-color: var(--warn-border); }
+.plan-card {
+  border: 2px solid var(--teal-light); border-radius: var(--radius);
+  padding: 14px 16px; margin-bottom: 16px; background: #fff;
+}
+.plan-card h4 { margin: 0 0 6px; font-size: 16px; color: var(--teal); }
+.plan-card .plan-sub { font-size: 13px; color: var(--muted); margin-bottom: 8px; }
+.plan-card .plan-go {
+  display: inline-block; margin-top: 10px; padding: 7px 16px;
+  background: var(--teal); color: #fff; text-decoration: none;
+  border-radius: 999px; font-size: 13.5px; font-weight: 600;
+}
+.res-item { border-left: 3px solid var(--warn-border); padding: 8px 0 8px 12px; margin-bottom: 16px; }
+.res-item .res-name { font-weight: 700; font-size: 14.5px; color: var(--teal); }
+.res-item .res-when { font-size: 12.5px; color: var(--muted); margin: 2px 0 6px; }
+.res-item .res-body { font-size: 13.5px; }
+.res-item .res-body p { margin: 5px 0; }
+.defer-table { width: 100%; border-collapse: collapse; font-size: 13.5px; margin: 10px 0; }
+.defer-table th, .defer-table td { border: 1px solid var(--border); padding: 7px 9px; text-align: left; vertical-align: top; }
+.defer-table th { background: var(--sand); font-weight: 600; }
+main {
+  max-width: 920px;
+  margin: 0 auto;
+  padding: 20px 16px 60px;
+}
+.day-title-block {
+  margin-bottom: 20px;
+}
+.day-title-block .day-num {
+  display: inline-block;
+  background: var(--teal);
+  color: white;
+  padding: 3px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  margin-bottom: 8px;
+}
+.day-title-block h2 {
+  margin: 6px 0 4px;
+  font-size: 24px;
+  color: var(--teal);
+}
+.day-title-block .date-line {
+  color: var(--muted);
+  font-size: 14px;
+}
+.day-title-block .summary {
+  margin-top: 8px;
+  font-size: 15px;
+  color: var(--text);
+}
+.section-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 18px 20px;
+  margin-bottom: 18px;
+}
+.section-card h3 {
+  margin: 0 0 12px 0;
+  font-size: 16px;
+  color: var(--teal);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.section-card h3 .icon {
+  font-size: 18px;
+}
+.map-frame-wrap {
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  margin-bottom: 8px;
+  width: 100%;
+  height: 380px;
+  background: #eef1ec;
+}
+.map-fallback-link {
+  font-size: 13px;
+  color: var(--muted);
+  min-height: 16px;
+}
+.map-fallback-link a { color: var(--teal-light); }
+.map-note {
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 4px;
+}
+.map-legend {
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 4px;
+}
+table.info-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+table.info-table td {
+  padding: 7px 6px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+}
+table.info-table td.label {
+  width: 92px;
+  color: var(--muted);
+  white-space: nowrap;
+  font-weight: 600;
+}
+.warn-box {
+  background: var(--warn-bg);
+  border: 1px solid var(--warn-border);
+  border-radius: 8px;
+  padding: 10px 14px;
+  margin-top: 10px;
+  font-size: 13.5px;
+}
+.activity-item, .hotel-item {
+  padding: 10px 0;
+  border-bottom: 1px dashed var(--border);
+}
+.activity-item:last-child, .hotel-item:last-child { border-bottom: none; }
+.activity-item .name, .hotel-item .name {
+  font-weight: 600;
+  font-size: 14.5px;
+}
+.activity-item .meta, .hotel-item .meta {
+  color: var(--muted);
+  font-size: 12.5px;
+  margin: 2px 0 4px;
+}
+.activity-item .note, .hotel-item .note {
+  font-size: 13.5px;
+}
+.activity-item .intro {
+  font-size: 13.5px;
+  color: var(--text);
+  background: #F5F8F6;
+  border-left: 3px solid var(--teal-light);
+  padding: 6px 10px;
+  margin: 4px 0 6px;
+  border-radius: 4px;
+}
+.depth-box {
+  margin-top: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.depth-row {
+  font-size: 13px;
+  color: var(--text);
+}
+.depth-tag {
+  display: inline-block;
+  font-size: 11px;
+  padding: 1px 8px;
+  border-radius: 10px;
+  margin-right: 6px;
+  font-weight: 600;
+}
+.depth-tag.shallow {
+  background: #E3EDE8;
+  color: var(--teal-light);
+}
+.depth-tag.deep {
+  background: var(--teal);
+  color: white;
+}
+.food-list {
+  font-size: 14px;
+  padding-left: 18px;
+  margin: 0;
+}
+.food-list li { margin-bottom: 4px; }
+.empty-note {
+  color: var(--muted);
+  font-style: italic;
+  font-size: 14px;
+}
+.disclaimer {
+  font-size: 12.5px;
+  color: var(--muted);
+  background: #FBF8F2;
+  border: 1px dashed var(--border);
+  border-radius: 8px;
+  padding: 12px 14px;
+  margin-top: 24px;
+}
+.index-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.index-list li {
+  margin-bottom: 10px;
+}
+.index-list a {
+  display: block;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+  text-decoration: none;
+  color: var(--text);
+}
+.index-list a:hover { border-color: var(--teal-light); }
+.index-list .idx-day {
+  font-size: 12px;
+  color: white;
+  background: var(--teal);
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 12px;
+  margin-bottom: 4px;
+}
+.index-list .idx-title { font-weight: 600; font-size: 15px; color: var(--teal); }
+.index-list .idx-summary { font-size: 13px; color: var(--muted); margin-top: 2px; }
+.prevnext {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 24px;
+  gap: 10px;
+}
+.prevnext a {
+  flex: 1;
+  text-align: center;
+  padding: 12px;
+  background: var(--teal);
+  color: white;
+  text-decoration: none;
+  border-radius: 8px;
+  font-size: 14px;
+}
+.prevnext a.disabled {
+  background: var(--border);
+  color: var(--muted);
+  pointer-events: none;
+}
+footer.site-footer {
+  text-align: center;
+  color: var(--muted);
+  font-size: 12px;
+  padding: 20px;
+}
+.map-live-note {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--teal);
+  background: #EAF2E9;
+  border-radius: 6px;
+  padding: 6px 10px;
+  margin-top: 6px;
+  min-height: 14px;
+}
+.terrain-box {
+  background: #F1F6F3;
+  border-left: 3px solid var(--teal-light);
+  border-radius: 6px;
+  padding: 10px 14px;
+  font-size: 13.5px;
+  color: var(--text);
+  margin-top: 10px;
+  line-height: 1.6;
+}
+.terrain-box strong { color: var(--teal); }
+.elev-chart-wrap { margin-top: 10px; }
+.elev-chart { width: 100%; height: auto; display: block; }
+.elev-chart-note {
+  font-size: 11.5px;
+  color: var(--muted);
+  margin-top: 2px;
+}
+</style>
+</head>
+<body>
+<header class="site-header">
+  <h1>北疆16日自驾行程</h1>
+  <p>旅行实录文字预览 · 正式网页尚未更新</p>
+</header>
+<nav class="plan-switch">
+  <a href="index.html" class="">🏠 首页</a>
+  <a href="plan1.html" class="">方案1 · 正向（阿勒泰→伊犁）</a>
+  <a href="plan2.html" class="active">方案2 · 反向（伊犁→阿勒泰）</a>
+</nav><nav class="day-nav"><a href="plan2.html" class="">总览</a><a href="journal-preview.html" class="active">旅行实录</a><a href="p2day0.html" class="">D0</a><a href="p2day1.html" class="">D1</a><a href="p2day2.html" class="">D2</a><a href="p2day3.html" class="">D3</a><a href="p2day4.html" class="">D4</a><a href="p2day5.html" class="">D5</a><a href="p2day6.html" class="">D6</a><a href="p2day7.html" class="">D7</a><a href="p2day8.html" class="">D8</a><a href="p2day9.html" class="">D9</a><a href="p2day10.html" class="">D10</a><a href="p2day11.html" class="">D11</a><a href="p2day12.html" class="">D12</a><a href="p2day13.html" class="">D13</a><a href="p2day14.html" class="">D14</a><a href="p2day15.html" class="">D15</a></nav>
+<main>
+  <div class="day-title-block">
+    <span class="day-num">D0–D15</span>
+    <h2>北疆环游 · 旅行实录</h2>
+    <div class="summary">依据 Google Docs 原稿按实际日期重新编排。每个细节的媒体位置已预留，可加入照片或视频，合计最多 3 个。</div>
+  </div>
+  <div class="warn-box"><strong>预览状态：</strong>这是一份独立本地预览。当前正式网页与 GitHub 源文件均未修改；照片暂存在本机浏览器中，不会自动发布到 GitHub。</div>
+  <div class="section-card">
+    <h3><span class="icon">✎</span>逐日实录</h3>
+    <div class="journal-index-grid"><a class="journal-index-item" href="p2day0.html#travel-journal">
+      <div class="journal-index-day">D0 · 8月15日 · 按计划抵达</div>
+      <div class="journal-index-route">香港 → 乌鲁木齐 → 机场酒店 / 取车</div>
+      <div class="journal-index-excerpt">晚上约11点入住机场酒店并取到车。酒店就在机场内，房间干净、宽敞、舒适，对晚上10点才落地的航班来说非常方便。第一晚没有再安排活动，休息好，第二天正式开始北疆自驾。</div>
+    </a><a class="journal-index-item" href="p2day1.html#travel-journal">
+      <div class="journal-index-day">D1 · 8月16日 · 增加 S101 丹霞路段</div>
+      <div class="journal-index-route">天山机场 → G30 → 凤凰湖驿站 → S101 → 沙湾 → 奎屯</div>
+      <div class="journal-index-excerpt">S101公路凤凰湖-肯斯瓦特水库一带，景色独特，丹霞地貌突出，山包虽没有张掖那一带大，但连绵不绝且远处有雪山映衬，听说那雪山就是独山子。上午11点出发，走完这一段精华路线后，下午4点到…</div>
+    </a><a class="journal-index-item" href="p2day2.html#travel-journal">
+      <div class="journal-index-day">D2 · 8月17日 · 蒙克特关闭，改游布隆沟</div>
+      <div class="journal-index-route">奎屯 → 独库公路北段 → 乔尔玛 → 唐布拉 → 布隆沟</div>
+      <div class="journal-index-excerpt">这一行程先走著名的独库公路北段，穿越3400米的哈希勒根达坂后进入北天山腹地。这一段公路以蜿蜒曲折、陡峭悬崖、飞沙走石、雪山海子著称。一年大部分时间因过于危险而关闭。今天天公作美，晴到…</div>
+    </a><a class="journal-index-item" href="p2day3.html#travel-journal">
+      <div class="journal-index-day">D3 · 8月18日 · 轻松转场</div>
+      <div class="journal-index-route">唐布拉 → 尼勒克 / 蜜蜂小镇 → 特克斯</div>
+      <div class="journal-index-excerpt">这一天较为轻松。一早发现天正下小雨，庆幸昨天已经走过了独库公路，而明天喀拉峻的天气又变成了晴天。一早，继续向西穿越唐布拉，路过布隆沟（已去过）和狗熊沟（不让进），最后到达蜜蜂小镇。一路…</div>
+    </a><a class="journal-index-item" href="p2day4.html#travel-journal">
+      <div class="journal-index-day">D4 · 8月19日 · 喀拉峻骑马</div>
+      <div class="journal-index-route">特克斯 → 喀拉峻 → 昭苏</div>
+      <div class="journal-index-excerpt">喀拉峻是在特克斯城附近的景点，本次旅行唯一一处世界自然遗产，它位于西天山向伊犁河谷的过渡带，南面就是巍峨的天山冰川。喀拉峻的核心地貌是波浪起伏的高山草甸。可惜八月中的喀拉峻草甸已经开始…</div>
+    </a><a class="journal-index-item" href="p2day5.html#travel-journal">
+      <div class="journal-index-day">D5 · 8月20日 · 因雨改线</div>
+      <div class="journal-index-route">昭苏 → 昭苏玉湖 → 夏塔住宿区</div>
+      <div class="journal-index-excerpt">一早起床发现果然有小雨，尽管马上转了多云，夏塔景区那边还是回复我“今日有小雨，看不到雪山，明天是晴到多云”。于是果断去玉湖。事实上，玉湖是一大惊喜。纯蓝的湖面被周围广袤草甸和岩石般的山…</div>
+    </a><a class="journal-index-item" href="p2day6.html#travel-journal">
+      <div class="journal-index-day">D6 · 8月21日 · 三段行程合并完成</div>
+      <div class="journal-index-route">夏塔冰川 → 伊特公路 → 伊昭公路 → 伊宁</div>
+      <div class="journal-index-excerpt">这一天内容极为丰富： 1）夏塔冰川 2）伊特公路 3）伊昭公路 冰川不如想象中的宏伟和近距离，可能是因为八月份山腰的雪还没有积上，雪山的白还没有到震撼的地步。游客还是很多，尤其是搞成一…</div>
+    </a><a class="journal-index-item" href="p2day7.html#travel-journal">
+      <div class="journal-index-day">D7 · 8月22日 · 傍晚环湖</div>
+      <div class="journal-index-route">伊宁 → 惠远古城 → 果子沟大桥 → 赛里木湖</div>
+      <div class="journal-index-excerpt">今日行程较为轻松，只求傍晚到赛里木湖。中午出发，先去惠远古城看了一下，颇为失望，城里还住人，古城也修缮一新但没了古城的吵闹和烟火气，多为旅游景点的摆设。清朝乾隆年曾在这里附近7公里的真…</div>
+    </a><a class="journal-index-item" href="p2day8.html#travel-journal">
+      <div class="journal-index-day">D8 · 8月23日 · 因雨取消日出</div>
+      <div class="journal-index-route">赛里木湖 → 松树头 → 奎屯</div>
+      <div class="journal-index-excerpt">今天没有早起看日出，因为天气预告是小雨。天气不太好，但多云时有小雨有一种变幻莫测的景象：湖面时而雾气升腾，时而云开日出，湖面的颜色也随之变化，我想这个是比昨晚更好看。今天是把昨日没去过…</div>
+    </a><a class="journal-index-item" href="p2day9.html#travel-journal">
+      <div class="journal-index-day">D9 · 8月24日 · 五彩滩日落</div>
+      <div class="journal-index-route">奎屯 → 乌尔禾魔鬼城 → 布尔津 → 五彩滩</div>
+      <div class="journal-index-excerpt">中午出发先去魔鬼城，再入住酒店吃晚饭，然后赶在日落前去五彩滩。魔鬼城令人们失望，这到处遍地的雅丹地貌，还被圈起来收费。其实有土路可以免费看到一样的景色。布尔津是一个安静的小县城，也是去…</div>
+    </a><a class="journal-index-item" href="p2day10.html#travel-journal">
+      <div class="journal-index-day">D10 · 8月25日 · 临时加入白哈巴</div>
+      <div class="journal-index-route">布尔津 → 白哈巴 → 贾登峪</div>
+      <div class="journal-index-excerpt">一早决定去县人民医院看膝盖，最后诊断是发炎（骨头完好，软组织炎症），但不能判断是否是痛风，医生建议买进口塞布莱希。中午临时决定跑一趟白哈巴，傍晚在赶往贾登峪（喀纳斯的门户）。白哈巴已经…</div>
+    </a><a class="journal-index-item" href="p2day11.html#travel-journal">
+      <div class="journal-index-day">D11 · 8月26日 · 喀纳斯第一日</div>
+      <div class="journal-index-route">贾登峪 → 喀纳斯三湾 → 喀纳斯湖 / 老村</div>
+      <div class="journal-index-excerpt">一早买票坐区间车进入喀纳斯，一路看过三湾，住入景区内民宿。下午直接去湖边走走，今日已经可以走路（但上下楼略有不便），于是今天一口气走了24000多步，沿着喀纳斯湖向北，一直走到吐鲁克岩…</div>
+    </a><a class="journal-index-item" href="p2day12.html#travel-journal">
+      <div class="journal-index-day">D12 · 8月27日 · 下午转入禾木</div>
+      <div class="journal-index-route">喀纳斯晨雾 → 月亮湾 / 卧龙湾 → 禾木</div>
+      <div class="journal-index-excerpt">喀纳斯晨雾，有专车7-8点直接密集发车。7点整就起床，很快出门赶上一班车，7:30不到就来到了神仙湾。果然湖面和山腰飘起了雾带，有一种神秘、安详、升华、内心宁静的感觉。这一大早，游客也…</div>
+    </a><a class="journal-index-item" href="p2day13.html#travel-journal">
+      <div class="journal-index-day">D13 · 8月28日 · 阿禾公路全天</div>
+      <div class="journal-index-route">禾木晨雾 / 百年老屋 → 阿禾公路 → 阿勒泰</div>
+      <div class="journal-index-excerpt">上午7点照例起床，去看晨雾。不过这一次，我已经做好了不如喀纳斯晨雾的思想准备。走了仅半小时到禾木观景台，那时一个高地，可以俯瞰整个禾木村。一路上，人流攒动，大家又是纷纷往一个目的地而去…</div>
+    </a><a class="journal-index-item" href="p2day14.html#travel-journal">
+      <div class="journal-index-day">D14 · 8月29日 · 长途返乌市</div>
+      <div class="journal-index-route">阿勒泰 → 乌鲁木齐 → 大巴扎 → 机场酒店</div>
+      <div class="journal-index-excerpt">第二天早上逛了一下风情街，人气不旺，但一旁的克兰河清澈而流下，令整个城市出现了生机。</div>
+    </a><a class="journal-index-item" href="p2day15.html#travel-journal">
+      <div class="journal-index-day">D15 · 8月30日 · 返程</div>
+      <div class="journal-index-route">乌鲁木齐 → 香港（CZ603）</div>
+      <div class="journal-index-excerpt">10:20从乌鲁木齐起飞，15:40抵达香港。坐在右边靠窗，尽管没能看到天山天池的雪顶，但意外看到了天山南麓的一大片冰川，以及附近一个湛蓝的圆形小湖泊，之后陆续看到了祁连山以及青海湖。</div>
+    </a></div>
+  </div>
+</main>
+<footer class="site-footer">北疆16日自驾行程 · 生成于本次行程规划对话 · 出行前请务必核实实时信息</footer>
+</body></html>

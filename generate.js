@@ -4,10 +4,21 @@ const { TRIP, DAYS, ALT_DAYS } = require("./data.js");
 // v32新增：方案2（反向环线）。方案1（DAYS）保持完全不变，方案2的数据独立放在 plan2.js，
 // 页面输出为 p2day{n}.html，与方案1的 day{n}.html 完全隔离，互不覆盖。
 const { PLAN2_META, PLAN2_DAYS, PLAN2_CINEMA_NOTES } = require("./plan2.js");
+const { JOURNAL_DAYS } = require("./journal.js");
 // v34新增：两个方案通用的预约总表与车辆故障处理，渲染在首页
 const { ROAD_BOOKINGS, SITE_BOOKINGS, BREAKDOWN, HK_LICENCE, VEHICLES, LEISURE } = require("./common.js");
 
 const OUT = __dirname;
+const MEDIA_MANIFEST_PATH = path.join(OUT, "media", "media-manifest.json");
+const PUBLISHED_MEDIA = fs.existsSync(MEDIA_MANIFEST_PATH)
+  ? JSON.parse(fs.readFileSync(MEDIA_MANIFEST_PATH, "utf8"))
+  : [];
+const PUBLISHED_MEDIA_BY_KEY = new Map();
+for (const item of PUBLISHED_MEDIA) {
+  if (!PUBLISHED_MEDIA_BY_KEY.has(item.key)) PUBLISHED_MEDIA_BY_KEY.set(item.key, []);
+  PUBLISHED_MEDIA_BY_KEY.get(item.key).push(item);
+}
+const IS_PUBLISHED_BUILD = PUBLISHED_MEDIA.length > 0;
 
 // ---- AMap (高德地图) credentials, provided by user ----
 const AMAP_KEY = "1e292eeef1aae1b6eb63c7989ae14dbb";
@@ -315,6 +326,112 @@ nav.day-nav .nav-sep {
   font-size: 12px;
   margin-left: 4px;
   white-space: nowrap;
+}
+.journal-card {
+  border-top: 4px solid #B45F35;
+  padding-top: 16px;
+}
+.journal-card > h3 { color: #8A4326; }
+.journal-meta {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 10px;
+  align-items: start;
+  padding: 10px 12px;
+  background: #F7F3ED;
+  border-left: 3px solid #B45F35;
+  margin-bottom: 8px;
+}
+.journal-route { font-size: 14px; font-weight: 600; }
+.journal-status {
+  color: #7B3F27;
+  background: #F1DED2;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  white-space: nowrap;
+}
+.journal-editor-note { color: var(--muted); font-size: 12px; margin: 0 0 8px; }
+.journal-detail {
+  padding: 18px 0;
+  border-bottom: 1px solid var(--border);
+}
+.journal-detail:last-child { border-bottom: 0; padding-bottom: 0; }
+.journal-detail p { margin: 0; font-size: 15px; line-height: 1.85; }
+.journal-upload {
+  margin-top: 12px;
+  min-height: 104px;
+  border: 1px dashed #B8A999;
+  background: #FAF8F4;
+  display: grid;
+  place-items: center;
+  padding: 10px;
+}
+.journal-upload.has-photos { display: block; }
+.journal-upload-empty { text-align: center; color: var(--muted); font-size: 12px; }
+.journal-upload-empty strong { display: block; color: var(--text); font-size: 13px; margin-bottom: 5px; }
+.journal-upload-button {
+  border: 1px solid var(--teal-light);
+  background: white;
+  color: var(--teal);
+  padding: 6px 10px;
+  border-radius: 6px;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.journal-upload-button:hover { background: #EEF5F2; }
+.journal-photo-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+.journal-photo {
+  position: relative;
+  margin: 0;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  background: #E9E5DE;
+}
+.journal-photo img, .journal-photo video { width: 100%; height: 100%; object-fit: cover; display: block; }
+.journal-photo.video { grid-column: 1 / -1; aspect-ratio: 16 / 9; background: #171717; }
+.journal-photo-remove {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 30px;
+  height: 30px;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(25,25,25,.78);
+  color: white;
+  font-size: 19px;
+  line-height: 1;
+  cursor: pointer;
+}
+.journal-photo-actions { margin-top: 8px; display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.journal-photo-actions[hidden], .journal-upload-empty[hidden] { display: none !important; }
+.journal-photo-count { color: var(--muted); font-size: 12px; }
+.journal-index-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.journal-index-item {
+  display: block;
+  background: white;
+  border: 1px solid var(--border);
+  border-left: 3px solid #B45F35;
+  padding: 12px 14px;
+  text-decoration: none;
+  color: var(--text);
+}
+.journal-index-item:hover { border-color: #B45F35; }
+.journal-index-day { color: #8A4326; font-size: 12px; font-weight: 700; }
+.journal-index-route { font-size: 14px; font-weight: 600; margin: 3px 0; }
+.journal-index-excerpt { color: var(--muted); font-size: 12.5px; }
+@media (max-width: 620px) {
+  .journal-meta { grid-template-columns: 1fr; }
+  .journal-status { justify-self: start; }
+  .journal-index-grid { grid-template-columns: 1fr; }
+  .journal-photo-grid { grid-template-columns: 1fr; }
 }
 /* v32新增：方案1/方案2 切换条与总览页的方案卡片 */
 nav.plan-switch {
@@ -649,12 +766,13 @@ function planSwitchHtml(activePlan) {
 </nav>`;
 }
 
-function navHtml(activeNum, plan, isOverview) {
+function navHtml(activeNum, plan, isOverview, isJournal) {
   plan = plan || 1;
   const days = plan === 2 ? PLAN2_DAYS : DAYS;
   const pfx = plan === 2 ? "p2day" : "day";
   const overviewHref = plan === 2 ? "plan2.html" : "plan1.html";
   let items = `<a href="${overviewHref}" class="${isOverview ? "active" : ""}">总览</a>`;
+  if (plan === 2) items += `<a href="journal-preview.html" class="${isJournal ? "active" : ""}">旅行实录</a>`;
   for (const d of days) {
     items += `<a href="${pfx}${d.num}.html" class="${activeNum === d.num ? "active" : ""}">D${d.num}</a>`;
   }
@@ -963,6 +1081,222 @@ ${JS_HELPERS}
 </script>`;
 }
 
+function escapeHtml(value) {
+  return String(value || "")
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#39;");
+}
+
+function renderJournalSection(dayNum) {
+  const journal = JOURNAL_DAYS.find(day => day.num === Number(dayNum));
+  if (!journal) return "";
+  const details = journal.details.map((detail, index) => {
+    const key = `journal-d${journal.num}-detail-${index + 1}`;
+    const mediaAllowed = !(
+      (journal.num === 6 && index === 1) ||
+      (journal.num === 9 && index === 3)
+    );
+    if (!mediaAllowed) {
+      return `<article class="journal-detail journal-commentary">
+      <p>${escapeHtml(detail)}</p>
+    </article>`;
+    }
+    const publishedMedia = PUBLISHED_MEDIA_BY_KEY.get(key) || [];
+    if (IS_PUBLISHED_BUILD) {
+      const mediaItems = publishedMedia.map((item, mediaIndex) => {
+        const src = `media/${encodeURIComponent(item.filename)}`;
+        if (item.kind === "video") {
+          return `<figure class="journal-photo video">
+          <video src="${src}" controls playsinline preload="metadata" aria-label="旅行视频 ${mediaIndex + 1}"></video>
+        </figure>`;
+        }
+        return `<figure class="journal-photo">
+          <img src="${src}" alt="旅行照片 ${mediaIndex + 1}" loading="lazy" decoding="async">
+        </figure>`;
+      }).join("");
+      return `<article class="journal-detail">
+      <p>${escapeHtml(detail)}</p>
+${mediaItems ? `<div class="journal-upload has-photos journal-published-media"><div class="journal-photo-grid">${mediaItems}</div></div>` : ""}
+    </article>`;
+    }
+    return `<article class="journal-detail">
+      <p>${escapeHtml(detail)}</p>
+      <div class="journal-upload" data-journal-upload="${key}">
+        <div class="journal-upload-empty">
+          <strong>媒体位置 · 照片或视频最多 3 个</strong>
+          <button class="journal-upload-button" type="button" data-photo-add title="为这段记录添加照片或视频">＋ 添加照片 / 视频</button>
+          <input type="file" accept="image/*,video/*" multiple hidden data-photo-input>
+        </div>
+        <div class="journal-photo-grid" data-photo-grid></div>
+        <div class="journal-photo-actions" hidden data-photo-actions>
+          <span class="journal-photo-count" data-photo-count>已添加 0 / 3</span>
+          <button class="journal-upload-button" type="button" data-photo-add title="继续添加照片或视频">＋ 添加</button>
+        </div>
+      </div>
+    </article>`;
+  }).join("");
+
+  return `<section class="section-card journal-card" id="travel-journal">
+    <h3><span class="icon">✎</span>旅行实录 · ${escapeHtml(journal.date)}</h3>
+    <div class="journal-meta">
+      <div class="journal-route">${escapeHtml(journal.route)}</div>
+      <span class="journal-status">${escapeHtml(journal.status)}</span>
+    </div>
+    <p class="journal-editor-note">${IS_PUBLISHED_BUILD
+      ? "按实际发生时间重新编排；精选照片和视频依照对应场景呈现。"
+      : "按实际发生时间重新编排；仅修正明显错别字，保留原文观点与叙述语气。每个细节可加入照片或视频，合计最多 3 个。"}</p>
+    <div class="journal-detail-list">${details || `<p class="empty-note">当天仅记录返程路线。</p>`}</div>
+  </section>`;
+}
+
+function journalUploadScript() {
+  if (IS_PUBLISHED_BUILD) return "";
+  return `<script>
+(function () {
+  var DB_NAME = "xinjiang-roadtrip-journal";
+  var STORE = "detail-photos";
+  var MAX_MEDIA = 3;
+  var MAX_VIDEO_BYTES = 350 * 1024 * 1024;
+
+  function openDb() {
+    return new Promise(function (resolve, reject) {
+      var request = indexedDB.open(DB_NAME, 1);
+      request.onupgradeneeded = function () {
+        if (!request.result.objectStoreNames.contains(STORE)) request.result.createObjectStore(STORE);
+      };
+      request.onsuccess = function () { resolve(request.result); };
+      request.onerror = function () { reject(request.error); };
+    });
+  }
+
+  async function readMedia(key) {
+    var db = await openDb();
+    return new Promise(function (resolve, reject) {
+      var request = db.transaction(STORE, "readonly").objectStore(STORE).get(key);
+      request.onsuccess = function () { resolve(request.result || []); };
+      request.onerror = function () { reject(request.error); };
+    });
+  }
+
+  async function writeMedia(key, media) {
+    var db = await openDb();
+    return new Promise(function (resolve, reject) {
+      var transaction = db.transaction(STORE, "readwrite");
+      transaction.objectStore(STORE).put(media, key);
+      transaction.oncomplete = resolve;
+      transaction.onerror = function () { reject(transaction.error); };
+    });
+  }
+
+  function loadImage(file) {
+    return new Promise(function (resolve, reject) {
+      var url = URL.createObjectURL(file);
+      var img = new Image();
+      img.onload = function () { URL.revokeObjectURL(url); resolve(img); };
+      img.onerror = function () { URL.revokeObjectURL(url); reject(new Error("unsupported image")); };
+      img.src = url;
+    });
+  }
+
+  async function preparePhoto(file) {
+    var img = await loadImage(file);
+    var longest = Math.max(img.naturalWidth, img.naturalHeight);
+    var scale = Math.min(1, 1800 / longest);
+    var canvas = document.createElement("canvas");
+    canvas.width = Math.max(1, Math.round(img.naturalWidth * scale));
+    canvas.height = Math.max(1, Math.round(img.naturalHeight * scale));
+    canvas.getContext("2d").drawImage(img, 0, 0, canvas.width, canvas.height);
+    return { kind: "photo", name: file.name, data: canvas.toDataURL("image/jpeg", 0.84) };
+  }
+
+  function prepareVideo(file) {
+    if (file.size > MAX_VIDEO_BYTES) throw new Error("video too large");
+    return { kind: "video", name: file.name, blob: file };
+  }
+
+  function render(zone, media) {
+    var grid = zone.querySelector("[data-photo-grid]");
+    var empty = zone.querySelector(".journal-upload-empty");
+    var actions = zone.querySelector("[data-photo-actions]");
+    var count = zone.querySelector("[data-photo-count]");
+    grid.querySelectorAll("video").forEach(function (video) {
+      if (video.src.indexOf("blob:") === 0) URL.revokeObjectURL(video.src);
+    });
+    grid.innerHTML = "";
+    media.forEach(function (item, index) {
+      var isVideo = item.kind === "video";
+      var figure = document.createElement("figure");
+      figure.className = "journal-photo" + (isVideo ? " video" : "");
+      var preview = document.createElement(isVideo ? "video" : "img");
+      if (isVideo) {
+        preview.src = URL.createObjectURL(item.blob);
+        preview.controls = true;
+        preview.playsInline = true;
+        preview.preload = "metadata";
+        preview.setAttribute("aria-label", "旅行视频");
+      } else {
+        preview.src = item.data;
+        preview.alt = "旅行照片 " + (index + 1);
+      }
+      var remove = document.createElement("button");
+      remove.type = "button";
+      remove.className = "journal-photo-remove";
+      remove.setAttribute("aria-label", isVideo ? "删除这段视频" : "删除这张照片");
+      remove.title = "删除";
+      remove.textContent = "×";
+      remove.addEventListener("click", async function () {
+        media.splice(index, 1);
+        await writeMedia(zone.dataset.journalUpload, media);
+        render(zone, media);
+      });
+      figure.appendChild(preview);
+      figure.appendChild(remove);
+      grid.appendChild(figure);
+    });
+    zone.classList.toggle("has-photos", media.length > 0);
+    empty.hidden = media.length > 0;
+    actions.hidden = media.length === 0;
+    count.textContent = "已添加 " + media.length + " / " + MAX_MEDIA;
+    actions.querySelector("[data-photo-add]").hidden = media.length >= MAX_MEDIA;
+  }
+
+  document.querySelectorAll("[data-journal-upload]").forEach(async function (zone) {
+    var input = zone.querySelector("[data-photo-input]");
+    zone.querySelectorAll("[data-photo-add]").forEach(function (button) {
+      button.addEventListener("click", function () { input.click(); });
+    });
+    var media = await readMedia(zone.dataset.journalUpload);
+    render(zone, media);
+    input.addEventListener("change", async function () {
+      var room = MAX_MEDIA - media.length;
+      var selected = Array.from(input.files || []).slice(0, room);
+      for (var i = 0; i < selected.length; i += 1) {
+        var file = selected[i];
+        try {
+          if (file.type.indexOf("image/") === 0) {
+            media.push(await preparePhoto(file));
+          } else if (file.type.indexOf("video/") === 0) {
+            media.push(prepareVideo(file));
+          }
+        } catch (error) {
+          var message = file.type.indexOf("video/") === 0
+            ? "视频无法保存。请使用浏览器支持的格式，并将单个文件控制在 350MB 以内。"
+            : "这张照片无法在浏览器中读取，请改用 JPEG、PNG 或 WebP 格式。";
+          window.alert(message);
+        }
+      }
+      input.value = "";
+      await writeMedia(zone.dataset.journalUpload, media);
+      render(zone, media);
+    });
+  });
+})();
+</script>`;
+}
+
 function renderDayPage(d, idx, navOverride, plan) {
   plan = plan || 1;
   const planDays = plan === 2 ? PLAN2_DAYS : DAYS;
@@ -974,6 +1308,7 @@ function renderDayPage(d, idx, navOverride, plan) {
   const points = wpTable[d.num] || [];
   const hotels = hotelListForDay(d, biasTable);
   const rentals = rentalListForDay(d);
+  const journalSection = plan === 2 ? renderJournalSection(d.num) : "";
 
   const legendParts = [];
   if (points.length > 1) legendParts.push("蓝色路线＝高德实时驾车路线规划");
@@ -1111,6 +1446,8 @@ ${navHtml(d.num, plan)}
     <div class="summary">${d.summary}</div>
   </div>
 
+${journalSection}
+
   <div class="section-card">
     <h3><span class="icon">🗺️</span>路线图</h3>
     ${mapSection}
@@ -1149,6 +1486,7 @@ ${navHtml(d.num, plan)}
 </main>
 ${amapLoaderScript()}
 ${amapDayInitScript(d.num, points, hotels, rentals, (plan === 2 ? DRIVING_POLICY_P2 : DRIVING_POLICY_P1)[d.num], (plan === 2 ? HERITAGE_POINTS.p2 : HERITAGE_POINTS.p1)[d.num])}
+${plan === 2 ? journalUploadScript() : ""}
 ${footHtml()}`;
 }
 
@@ -1595,6 +1933,37 @@ ${amapIndexInitScript(plan)}
 ${footHtml()}`;
 }
 
+function renderJournalOverviewPage() {
+  const items = JOURNAL_DAYS.map(day => {
+    const excerpt = day.details[0] || "当天以返程为主。";
+    return `<a class="journal-index-item" href="p2day${day.num}.html#travel-journal">
+      <div class="journal-index-day">D${day.num} · ${escapeHtml(day.date)} · ${escapeHtml(day.status)}</div>
+      <div class="journal-index-route">${escapeHtml(day.route)}</div>
+      <div class="journal-index-excerpt">${escapeHtml(excerpt.slice(0, 92))}${excerpt.length > 92 ? "…" : ""}</div>
+    </a>`;
+  }).join("");
+
+  return `${headHtml("北疆环游 · 旅行实录预览")}
+<header class="site-header">
+  <h1>${TRIP.title}</h1>
+  <p>旅行实录文字预览 · 正式网页尚未更新</p>
+</header>
+${navHtml(null, 2, false, true)}
+<main>
+  <div class="day-title-block">
+    <span class="day-num">D0–D15</span>
+    <h2>北疆环游 · 旅行实录</h2>
+    <div class="summary">依据 Google Docs 原稿按实际日期重新编排。每个细节的媒体位置已预留，可加入照片或视频，合计最多 3 个。</div>
+  </div>
+  <div class="warn-box"><strong>预览状态：</strong>这是一份独立本地预览。当前正式网页与 GitHub 源文件均未修改；照片暂存在本机浏览器中，不会自动发布到 GitHub。</div>
+  <div class="section-card">
+    <h3><span class="icon">✎</span>逐日实录</h3>
+    <div class="journal-index-grid">${items}</div>
+  </div>
+</main>
+${footHtml()}`;
+}
+
 function renderIndexPageLegacy() {
   const listHtml = DAYS.map(d => `
     <li><a href="day${d.num}.html">
@@ -1732,6 +2101,7 @@ ${footHtml()}`;
 fs.writeFileSync(path.join(OUT, "index.html"), renderLandingPage(), "utf8");
 fs.writeFileSync(path.join(OUT, "plan1.html"), renderPlanOverviewPage(1), "utf8");
 fs.writeFileSync(path.join(OUT, "plan2.html"), renderPlanOverviewPage(2), "utf8");
+fs.writeFileSync(path.join(OUT, "journal-preview.html"), renderJournalOverviewPage(), "utf8");
 DAYS.forEach((d, idx) => {
   fs.writeFileSync(path.join(OUT, `day${d.num}.html`), renderDayPage(d, idx), "utf8");
 });

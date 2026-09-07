@@ -67,6 +67,112 @@ nav.day-nav .nav-sep {
   margin-left: 4px;
   white-space: nowrap;
 }
+.journal-card {
+  border-top: 4px solid #B45F35;
+  padding-top: 16px;
+}
+.journal-card > h3 { color: #8A4326; }
+.journal-meta {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 10px;
+  align-items: start;
+  padding: 10px 12px;
+  background: #F7F3ED;
+  border-left: 3px solid #B45F35;
+  margin-bottom: 8px;
+}
+.journal-route { font-size: 14px; font-weight: 600; }
+.journal-status {
+  color: #7B3F27;
+  background: #F1DED2;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  white-space: nowrap;
+}
+.journal-editor-note { color: var(--muted); font-size: 12px; margin: 0 0 8px; }
+.journal-detail {
+  padding: 18px 0;
+  border-bottom: 1px solid var(--border);
+}
+.journal-detail:last-child { border-bottom: 0; padding-bottom: 0; }
+.journal-detail p { margin: 0; font-size: 15px; line-height: 1.85; }
+.journal-upload {
+  margin-top: 12px;
+  min-height: 104px;
+  border: 1px dashed #B8A999;
+  background: #FAF8F4;
+  display: grid;
+  place-items: center;
+  padding: 10px;
+}
+.journal-upload.has-photos { display: block; }
+.journal-upload-empty { text-align: center; color: var(--muted); font-size: 12px; }
+.journal-upload-empty strong { display: block; color: var(--text); font-size: 13px; margin-bottom: 5px; }
+.journal-upload-button {
+  border: 1px solid var(--teal-light);
+  background: white;
+  color: var(--teal);
+  padding: 6px 10px;
+  border-radius: 6px;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.journal-upload-button:hover { background: #EEF5F2; }
+.journal-photo-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+.journal-photo {
+  position: relative;
+  margin: 0;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  background: #E9E5DE;
+}
+.journal-photo img, .journal-photo video { width: 100%; height: 100%; object-fit: cover; display: block; }
+.journal-photo.video { grid-column: 1 / -1; aspect-ratio: 16 / 9; background: #171717; }
+.journal-photo-remove {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 30px;
+  height: 30px;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(25,25,25,.78);
+  color: white;
+  font-size: 19px;
+  line-height: 1;
+  cursor: pointer;
+}
+.journal-photo-actions { margin-top: 8px; display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.journal-photo-actions[hidden], .journal-upload-empty[hidden] { display: none !important; }
+.journal-photo-count { color: var(--muted); font-size: 12px; }
+.journal-index-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.journal-index-item {
+  display: block;
+  background: white;
+  border: 1px solid var(--border);
+  border-left: 3px solid #B45F35;
+  padding: 12px 14px;
+  text-decoration: none;
+  color: var(--text);
+}
+.journal-index-item:hover { border-color: #B45F35; }
+.journal-index-day { color: #8A4326; font-size: 12px; font-weight: 700; }
+.journal-index-route { font-size: 14px; font-weight: 600; margin: 3px 0; }
+.journal-index-excerpt { color: var(--muted); font-size: 12.5px; }
+@media (max-width: 620px) {
+  .journal-meta { grid-template-columns: 1fr; }
+  .journal-status { justify-self: start; }
+  .journal-index-grid { grid-template-columns: 1fr; }
+  .journal-photo-grid { grid-template-columns: 1fr; }
+}
 /* v32新增：方案1/方案2 切换条与总览页的方案卡片 */
 nav.plan-switch {
   display: flex; gap: 8px; flex-wrap: wrap;
@@ -364,7 +470,7 @@ footer.site-footer {
   <a href="index.html" class="">🏠 首页</a>
   <a href="plan1.html" class="">方案1 · 正向（阿勒泰→伊犁）</a>
   <a href="plan2.html" class="active">方案2 · 反向（伊犁→阿勒泰）</a>
-</nav><nav class="day-nav"><a href="plan2.html" class="">总览</a><a href="p2day0.html" class="">D0</a><a href="p2day1.html" class="">D1</a><a href="p2day2.html" class="">D2</a><a href="p2day3.html" class="">D3</a><a href="p2day4.html" class="">D4</a><a href="p2day5.html" class="">D5</a><a href="p2day6.html" class="active">D6</a><a href="p2day7.html" class="">D7</a><a href="p2day8.html" class="">D8</a><a href="p2day9.html" class="">D9</a><a href="p2day10.html" class="">D10</a><a href="p2day11.html" class="">D11</a><a href="p2day12.html" class="">D12</a><a href="p2day13.html" class="">D13</a><a href="p2day14.html" class="">D14</a><a href="p2day15.html" class="">D15</a></nav>
+</nav><nav class="day-nav"><a href="plan2.html" class="">总览</a><a href="journal-preview.html" class="">旅行实录</a><a href="p2day0.html" class="">D0</a><a href="p2day1.html" class="">D1</a><a href="p2day2.html" class="">D2</a><a href="p2day3.html" class="">D3</a><a href="p2day4.html" class="">D4</a><a href="p2day5.html" class="">D5</a><a href="p2day6.html" class="active">D6</a><a href="p2day7.html" class="">D7</a><a href="p2day8.html" class="">D8</a><a href="p2day9.html" class="">D9</a><a href="p2day10.html" class="">D10</a><a href="p2day11.html" class="">D11</a><a href="p2day12.html" class="">D12</a><a href="p2day13.html" class="">D13</a><a href="p2day14.html" class="">D14</a><a href="p2day15.html" class="">D15</a></nav>
 <main>
   
   <div class="warn-box">🔄 你正在浏览的是 <strong>方案2 · 反向环线</strong>（伊犁先 → 阿勒泰后，含昭苏/夏塔/伊昭公路，放弃那拉提/库尔德宁/白哈巴）。它与 <a href="day6.html">方案1 · 正向的同一天</a> 是<strong>二选一</strong>的关系，机票日期完全相同，不能同时执行。切换到方案2之前，请务必先看<a href="plan2.html">方案2总览页</a>里的「预约总览」和「酒店改期方案」——特别是独库公路的预约风险，以及8/17禾木、8/18贾登峪那两晚不可取消订单的改期问题。</div>
@@ -374,6 +480,57 @@ footer.site-footer {
     <h2>昭苏 → 伊昭公路 S237（小独库）→ 伊宁</h2>
     <div class="summary">翻越天山的"小独库"，全长120-122公里的盘山风景路；走反向车流更少，傍晚抵达伊宁</div>
   </div>
+
+<section class="section-card journal-card" id="travel-journal">
+    <h3><span class="icon">✎</span>旅行实录 · 8月21日</h3>
+    <div class="journal-meta">
+      <div class="journal-route">夏塔冰川 → 伊特公路 → 伊昭公路 → 伊宁</div>
+      <span class="journal-status">三段行程合并完成</span>
+    </div>
+    <p class="journal-editor-note">按实际发生时间重新编排；精选照片和视频依照对应场景呈现。</p>
+    <div class="journal-detail-list"><article class="journal-detail">
+      <p>这一天内容极为丰富： 1）夏塔冰川 2）伊特公路 3）伊昭公路 冰川不如想象中的宏伟和近距离，可能是因为八月份山腰的雪还没有积上，雪山的白还没有到震撼的地步。游客还是很多，尤其是搞成一个景区后，所有人都一条线路过去，清静感远不如云南的雪山。离雪山最近的地方（鲜花台），有铁丝网把前进的路阻拦，你无法再往前（也许有小路）。</p>
+<div class="journal-upload has-photos journal-published-media"><div class="journal-photo-grid"><figure class="journal-photo">
+          <img src="media/journal-d6-detail-1-media-1.jpg" alt="旅行照片 1" loading="lazy" decoding="async">
+        </figure><figure class="journal-photo">
+          <img src="media/journal-d6-detail-1-media-2.jpg" alt="旅行照片 2" loading="lazy" decoding="async">
+        </figure><figure class="journal-photo">
+          <img src="media/journal-d6-detail-1-media-3.jpg" alt="旅行照片 3" loading="lazy" decoding="async">
+        </figure></div></div>
+    </article><article class="journal-detail journal-commentary">
+      <p>老实说，天山南麓（地图上显示哈尔克塔乌山）是比北麓更大更高的冰川群体（从地图上感觉），它挡住了大西洋吹来的湿气、也挡住了西伯利亚的寒气，使得南疆盆地出现了巨大的沙漠（塔克拉玛干、罗布泊）。因此，夏塔附近能看到的冰川应当是非常容易的一件事，也许夏塔是相对较容易到达的地方，引起更多的游客。若是在西藏或云南四川的藏区，这些冰川雪山，是不会收取门票的。</p>
+    </article><article class="journal-detail">
+      <p>在新疆，把一个自然景区圈起来收10-20美元的门票，似乎比其它旅游省份来的普遍。夏塔冰川的名字，我不记得了，我看到了五个山峰，高耸在眼前。上次看到此景，还是梅里雪山以及那次旅行一路上看到的其它雪山。而那次旅行，几乎没有为看雪山付过门票（仅仅一个，在国家公园里的当地神山）。</p>
+<div class="journal-upload has-photos journal-published-media"><div class="journal-photo-grid"><figure class="journal-photo">
+          <img src="media/journal-d6-detail-3-media-1.jpg" alt="旅行照片 1" loading="lazy" decoding="async">
+        </figure><figure class="journal-photo">
+          <img src="media/journal-d6-detail-3-media-2.jpg" alt="旅行照片 2" loading="lazy" decoding="async">
+        </figure><figure class="journal-photo video">
+          <video src="media/journal-d6-detail-3-media-3.m4v" controls playsinline preload="metadata" aria-label="旅行视频 3"></video>
+        </figure></div></div>
+    </article><article class="journal-detail">
+      <p>下午从夏塔出发，先走伊特公路，再走伊昭公路到伊宁。伊特公路两岸广袤的田野，令人震撼，再一次感受新疆的广阔疆域。多次呈现公路直达云霄、田野直通远山的气势。不经意之间，有一段公路竟然已经是中哈边境线，有边防民警拦住检查，问我去哪里，并有告示牌提醒不能随便拍照摄像。伊特公路上几乎没有什么车辆，公路两边尽是无尽的田野、稻草、向日葵和远山。</p>
+<div class="journal-upload has-photos journal-published-media"><div class="journal-photo-grid"><figure class="journal-photo">
+          <img src="media/journal-d6-detail-4-media-1.jpg" alt="旅行照片 1" loading="lazy" decoding="async">
+        </figure><figure class="journal-photo">
+          <img src="media/journal-d6-detail-4-media-2.jpg" alt="旅行照片 2" loading="lazy" decoding="async">
+        </figure><figure class="journal-photo">
+          <img src="media/journal-d6-detail-4-media-3.jpg" alt="旅行照片 3" loading="lazy" decoding="async">
+        </figure></div></div>
+    </article><article class="journal-detail">
+      <p>伊特公路之后就回到昭苏，开始著名的伊昭公路。这条路因非常容易临时封闭而需要时刻查询路况。之前从新闻里得知有一段路实行间隔性单向封闭，每一小时换一个封闭的方向，这导致有可能会面临最多一小时的等待。伊昭公路之美，超乎预期。比起唐布拉，更像西欧的山野之美。这一路要翻越天山一条支脉再到平原河谷（伊犁），很多景点可以停车赏景，甚至可以住帐篷过夜。通过翻越，你看到一条完整的天山支脉的生活气息，似乎整个山脉是有生活的，牛羊遍地、绿草茵茵。弯转到下一个山口，突然又变得山石裸露、气宇非凡，再一个转弯，却又大片草甸、溪流潺潺。伊昭公路值得下一次再驾车走一趟，慢慢地逛，边走边停。伊昭公路下来后，有一条长达数十公里（好像有四十多公里）的连续直线下坡直达伊宁！这让人感受到新疆之大。</p>
+<div class="journal-upload has-photos journal-published-media"><div class="journal-photo-grid"><figure class="journal-photo video">
+          <video src="media/journal-d6-detail-5-media-1.m4v" controls playsinline preload="metadata" aria-label="旅行视频 1"></video>
+        </figure><figure class="journal-photo">
+          <img src="media/journal-d6-detail-5-media-2.jpg" alt="旅行照片 2" loading="lazy" decoding="async">
+        </figure><figure class="journal-photo video">
+          <video src="media/journal-d6-detail-5-media-3.m4v" controls playsinline preload="metadata" aria-label="旅行视频 3"></video>
+        </figure></div></div>
+    </article><article class="journal-detail">
+      <p>伊宁是一个人口较多的城市（有几家电影院），可惜时间不太够，六星街没去逛，而是在其周边看了场电影《欢迎来到龙餐馆》。伊宁位于伊犁河谷一带，区域中心城市，南有昭苏、特克斯，北接赛里木湖，东通奎屯-乌鲁木齐。</p>
+
+    </article></div>
+  </section>
 
   <div class="section-card">
     <h3><span class="icon">🗺️</span>路线图</h3>
@@ -698,5 +855,6 @@ window._AMapSecurityConfig = { securityJsCode: "f5122d0c0aae74cc4c4e8f4ce0a196cc
   }
 })();
 </script>
+
 <footer class="site-footer">北疆16日自驾行程 · 生成于本次行程规划对话 · 出行前请务必核实实时信息</footer>
 </body></html>
