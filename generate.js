@@ -385,17 +385,28 @@ nav.day-nav .nav-sep {
 .journal-photo-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: start;
   gap: 8px;
 }
 .journal-photo {
   position: relative;
   margin: 0;
-  aspect-ratio: 4 / 3;
   overflow: hidden;
   background: #E9E5DE;
 }
-.journal-photo img, .journal-photo video { width: 100%; height: 100%; object-fit: cover; display: block; }
-.journal-photo.video { grid-column: 1 / -1; aspect-ratio: 16 / 9; background: #171717; }
+.journal-photo img, .journal-photo video {
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+.journal-photo.video { grid-column: 1 / -1; background: #171717; }
+.journal-photo.video video {
+  width: auto;
+  max-width: 100%;
+  max-height: 75vh;
+  margin: 0 auto;
+}
 .journal-photo-remove {
   position: absolute;
   top: 6px;
